@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textSize">@dimen/text_large</item>
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:checkable">true</item>
+        <item name="android:checked">false</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+        <item name="android:backgroundTint">@color/number_btn_bg_tint_selector</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.NumberButton</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.NumberButton" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.NumberButton.TopLeft" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/number_button_corner_radius</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.NumberButton.TopRight" parent="">
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/number_button_corner_radius</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.NumberButton.BottomLeft" parent="">
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomLeft">@dimen/number_button_corner_radius</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.NumberButton.BottomRight" parent="">
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeBottomRight">@dimen/number_button_corner_radius</item>
+    </style>
+
+    <style name="MyMaterialCard" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeColor">@color/white_100_dark</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:checkable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_margin">@dimen/space_medium</item>
+    </style>
+
+    <style name="MyTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
+    </style>
+    <style name="MyTheme.ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+    </style>
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="MySwitchTheme">
+        <!-- active thumb & track color -->
+        <item name="colorControlActivated">?attr/colorOnPrimary</item>
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">?attr/colorOnPrimary</item>
+        <!-- inactive track color -->
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
+</resources>

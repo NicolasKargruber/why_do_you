@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/wdy_text_why"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_large"
+        android:gravity="center"
+        android:text="Why do you"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/wdy_text_what_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_small"
+        android:drawablePadding="@dimen/space_small"
+        android:gravity="center"
+        android:text="@string/want_to_use"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/text_medium"
+        app:drawableEndCompat="@mipmap/ic_time_keeper_launcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wdy_text_why" />
+
+    <ImageView
+        android:id="@+id/wdy_text_QM"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/space_small"
+        android:src="@drawable/ic_round_help_24"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/text_huge"
+        app:layout_constraintBottom_toBottomOf="@id/wdy_text_what_app"
+        app:layout_constraintStart_toEndOf="@+id/wdy_text_what_app"
+        app:layout_constraintTop_toTopOf="@id/wdy_text_why" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

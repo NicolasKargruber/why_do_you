@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/lock_apps"
+        android:icon="@drawable/ic_round_app_settings_alt_48"
+        android:title="Apps" />
+    <item
+        android:id="@+id/select_game"
+        android:icon="@drawable/ic_baseline_videogame_asset_24"
+        android:title="Games" />
+</menu>

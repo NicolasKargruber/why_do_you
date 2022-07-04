@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PuzzleFragment">
+
+    <include layout="@layout/wdy_view_group" />
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:orientation="vertical"
+        android:rowCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_top_left"
+            style="@style/Button"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NumberButton.TopLeft"
+            tools:text="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_middle_left"
+            style="@style/Button"
+            android:insetTop="-1dp"
+            android:insetBottom="-1dp"
+            tools:text="2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_bottom_left"
+            style="@style/Button"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NumberButton.BottomLeft"
+            tools:text="3" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_top_middle"
+            style="@style/Button"
+            android:insetLeft="-1dp"
+            android:insetRight="-1dp"
+            tools:text="4" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_center"
+            style="@style/Button"
+            android:insetLeft="-1dp"
+            android:insetTop="-1dp"
+            android:insetRight="-1dp"
+            android:insetBottom="-1dp"
+            tools:text="5" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_bottom_middle"
+            style="@style/Button"
+
+            android:layout_marginHorizontal="-2dp"
+            android:insetLeft="-1dp"
+            android:insetRight="-1dp"
+            tools:text="6" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_top_right"
+            style="@style/Button"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NumberButton.TopRight"
+            tools:text="7" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_middle_right"
+            style="@style/Button"
+            android:insetTop="-1dp"
+            android:insetBottom="-1dp"
+            tools:text="8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/number_button_bottom_right"
+            style="@style/Button"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NumberButton.BottomRight"
+            tools:text="9" />
+    </GridLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/puzzle_reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_huge"
+        android:text="Reset"
+        app:icon="@drawable/ic_round_refresh_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

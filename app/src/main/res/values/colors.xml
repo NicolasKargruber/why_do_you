@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray_500">#484848</color>
+    <color name="gray_900">#212121</color>
+    <color name="red_400">#ef5350</color>
+    <color name="red_400_light">#ffa4a2</color>
+    <color name="purple_custom_light">#dd6fff</color>
+    <color name="purple_custom">#a63bfc</color>
+    <color name="purple_custom_dark">#7000c8</color>
+    <color name="white_100">#f5f5f5</color>
+    <color name="white_100_dark">#c2c2c2</color>
+    <color name="red_500">#f4511e</color>
+    <color name="red_500_dark">#b91400</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
