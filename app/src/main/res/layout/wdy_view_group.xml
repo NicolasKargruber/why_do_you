@@ -38,16 +38,10 @@
         android:layout_height="50dp"
         android:layout_marginLeft="@dimen/space_small"
         android:src="@drawable/ic_round_help_24"
-        android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/text_huge"
         app:layout_constraintBottom_toBottomOf="@id/wdy_text_what_app"
         app:layout_constraintStart_toEndOf="@+id/wdy_text_what_app"
-        app:layout_constraintTop_toTopOf="@id/wdy_text_why" />
-
-    git init
-    git remote add origin https://github.com/NicolasKargruber/time_keeper.git
-    git add .
-    git commit -m "first commit"
-    git push -u origin master
+        app:layout_constraintTop_toTopOf="@id/wdy_text_why"
+        app:tint="?attr/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

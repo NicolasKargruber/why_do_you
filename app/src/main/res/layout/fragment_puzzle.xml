@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PuzzleFragment">
+    tools:context=".activities.games.PuzzleFragment">
 
     <include layout="@layout/wdy_view_group" />
 

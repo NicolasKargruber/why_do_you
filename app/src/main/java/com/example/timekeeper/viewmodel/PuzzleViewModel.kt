@@ -1,4 +1,4 @@
-package com.example.timekeeper.model
+package com.example.timekeeper.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

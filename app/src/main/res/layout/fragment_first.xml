@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".FirstFragment"
+    tools:context=".activities.main.FirstFragment"
     android:layout_height="match_parent">
 
     <TextView

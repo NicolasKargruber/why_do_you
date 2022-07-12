@@ -1,4 +1,4 @@
-package com.example.timekeeper
+package com.example.timekeeper.activities.games
 
 import android.content.Context
 import android.os.Bundle
@@ -12,8 +12,9 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentPuzzleBinding
-import com.example.timekeeper.model.PuzzleViewModel
+import com.example.timekeeper.viewmodel.PuzzleViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -137,7 +138,9 @@ class PuzzleFragment : Fragment() {
     private fun setTextColors() {
         numberedButtons.forEach {
             it.setTextColor(
-                ContextCompat.getColorStateList(requireContext(), R.color.number_btn_text_color_selector)
+                ContextCompat.getColorStateList(requireContext(),
+                    R.color.number_btn_text_color_selector
+                )
             )
         }
     }

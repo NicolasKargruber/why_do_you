@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/space_medium"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="@dimen/space_medium">
 
     <ImageView
         android:id="@+id/item_app_icon"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        tools:src="@mipmap/ic_launcher"
+        android:contentDescription="TODO"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="TODO" />
+        tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/item_app_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_marginHorizontal="@dimen/space_small"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/item_app_lock_switch"
         app:layout_constraintStart_toEndOf="@id/item_app_icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_app_lock_switch"
-        tools:text="App name"/>
+        tools:text="App name" />
 
     <TextView
         android:id="@+id/item_app_package"
         android:layout_width="0dp"
-        android:layout_marginTop="@dimen/space_tiny"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_tiny"
+        app:layout_constraintEnd_toEndOf="@id/item_app_name"
         app:layout_constraintStart_toStartOf="@id/item_app_name"
         app:layout_constraintTop_toBottomOf="@id/item_app_name"
-        app:layout_constraintEnd_toEndOf="@id/item_app_name"
-        tools:text="App name"/>
+        tools:text="Package" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/item_app_lock_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:checked="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_app_name"
+        tools:checked="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

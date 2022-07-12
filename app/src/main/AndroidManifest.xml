@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.timekeeper">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,17 +18,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeKeeper"
         tools:targetApi="31">
+        <!--intent-filter with the action name as "restartservice" where the Restarter.java is registered as a receiver:-->
+        <receiver
+            android:name=".broadcast.Restarter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <!--ensures that our custom BroadcastReciever is called
+                whenever the system encounters a broadcast with the given action name.-->
+                <action android:name="restartservice" />
+            </intent-filter>
+        </receiver>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TimeKeeper.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".services.YourService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

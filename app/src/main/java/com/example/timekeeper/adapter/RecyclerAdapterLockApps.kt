@@ -7,14 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timekeeper.R
-import com.example.timekeeper.model.MainViewModel
+import com.example.timekeeper.data.AppModal
+import com.example.timekeeper.viewmodel.MainViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-class RecyclerAdapterLockApps(private val viewModel: MainViewModel) :
+class RecyclerAdapterLockApps(private val appList:List<AppModal>,
+   val setIsLocked: (AppModal,Boolean) -> Unit
+/*private val viewModel: MainViewModel*/) :
     RecyclerView.Adapter<RecyclerAdapterLockApps.ViewHolder>() {
 
     val logTag:String = "RecyclerAdapterLockApps"
-    private val appList get() = viewModel.appList
+    //private val appList get() = viewModel.appList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val appIcon:ImageView = itemView.findViewById(R.id.item_app_icon)
@@ -39,6 +42,10 @@ class RecyclerAdapterLockApps(private val viewModel: MainViewModel) :
                 appName.text = it.name
                 appPackage.text = it.packageName
                 lockSwitch.isChecked = it.isLocked
+                lockSwitch.setOnCheckedChangeListener { _, b ->
+                    //viewModel.appList[position].isLocked = b
+                    setIsLocked(appList[position],b)
+                }
             }
         }
     }

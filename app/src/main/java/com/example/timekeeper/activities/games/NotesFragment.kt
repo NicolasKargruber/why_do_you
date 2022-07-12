@@ -1,8 +1,6 @@
-package com.example.timekeeper
+package com.example.timekeeper.activities.games
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,9 +13,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentNotesBinding
-import com.example.timekeeper.model.NotesViewModel
-import com.google.android.material.button.MaterialButton
+import com.example.timekeeper.viewmodel.NotesViewModel
 
 
 /**
