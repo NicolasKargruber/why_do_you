@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-/*class LockScreenActivity:AppCompatActivity() {
+class LockScreenActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,4 +24,4 @@ import androidx.appcompat.app.AppCompatActivity
         startHomeScreen.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(startHomeScreen)
     }
-}*/
+}

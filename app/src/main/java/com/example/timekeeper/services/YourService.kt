@@ -20,6 +20,8 @@ import java.util.*
 
 
 class YourService : Service() {
+    private val logTag = "YourService"
+
     var counter = 0
 
     // we are starting a foreground service differently for Build versions greater than Android Oreo
@@ -87,8 +89,8 @@ class YourService : Service() {
                     "Count",
                     "=========  " + counter++
                 ) // while incrementing itself every time Log prints.
-                val app = getLauncherTopApp()
-                Log.e("adapter", "Current App in foreground is: $app")
+                val app = getForegroundTask(this@YourService)
+                Log.e(logTag, "Current App in foreground is: $app")
             }
         }
         timer!!.schedule(timerTask, 1000, 1000)
@@ -118,31 +120,6 @@ class YourService : Service() {
         return null
     }
 
-    fun getRecentTask(): String {
-        var topPackageName: String = "nothing here"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val mUsageStatsManager = this.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
-            val time = System.currentTimeMillis()
-            // We get usage stats for the last 10 seconds
-            val stats = mUsageStatsManager.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY,
-                time - 1000 * 10,
-                time
-            )
-            // Sort the stats by the last time used
-            if (stats != null) {
-                val mySortedMap: SortedMap<Long, UsageStats> = TreeMap()
-                for (usageStats in stats) {
-                    mySortedMap[usageStats.lastTimeUsed] = usageStats
-                }
-                if (!mySortedMap.isEmpty()) {
-                    topPackageName = mySortedMap[mySortedMap.lastKey()]!!.packageName
-                }
-            }
-        }
-        return topPackageName
-    }
-
     private fun getForegroundTask(context: Context): String? {
         var currentApp = "NULL"
         val usm = context.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
@@ -159,107 +136,5 @@ class YourService : Service() {
             }
         }
         return currentApp
-    }
-
-    fun getTopAppName(context: Context): String? {
-        val mActivityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        var strName: String? = ""
-        try {
-            strName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getLollipopFGAppPackageName(context)
-            } else {
-                mActivityManager.getRunningTasks(1)[0].topActivity!!.className
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-
-            Log.e("exception", "Exception is: $e")
-        }
-        return strName
-    }
-
-    private fun getLollipopFGAppPackageName(ctx: Context): String? {
-        try {
-            val usageStatsManager = ctx.getSystemService("usagestats") as UsageStatsManager
-            val milliSecs = (60 * 1000).toLong()
-            val date = Date()
-            val queryUsageStats = usageStatsManager.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY,
-                date.time - milliSecs,
-                date.time
-            )
-            if (queryUsageStats.size > 0) {
-                Log.i("LPU", "queryUsageStats size: " + queryUsageStats.size)
-            }
-            var recentTime: Long = 0
-            var recentPkg = ""
-            for (i in queryUsageStats.indices) {
-                val stats = queryUsageStats[i]
-                if (i == 0 && "com.example.timekeeper" != stats.packageName) {
-                    Log.i("LPU", "PackageName: " + stats.packageName + " " + stats.lastTimeStamp)
-                }
-                if (stats.lastTimeStamp > recentTime) {
-                    recentTime = stats.lastTimeStamp
-                    recentPkg = stats.packageName
-                }
-            }
-            return recentPkg
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-        return ""
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    fun getForegroundApp(context: Context): String? {
-        val usageStatsManager = context
-            .getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
-        val ts = System.currentTimeMillis()
-        val queryUsageStats = usageStatsManager
-            .queryUsageStats(
-                UsageStatsManager.INTERVAL_BEST,
-                ts - 2000, ts
-            )
-        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
-            return null
-        }
-        var recentStats: UsageStats? = null
-        for (usageStats in queryUsageStats) {
-            if (recentStats == null
-                || recentStats.lastTimeUsed < usageStats
-                    .lastTimeUsed
-            ) {
-                recentStats = usageStats
-            }
-        }
-        return recentStats!!.packageName
-    }
-
-    fun getLauncherTopApp(): String? {
-        //isLockTypeAccessibility = SpUtil.getInstance().getBoolean(AppConstants.LOCK_TYPE, false);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            val appTasks = activityManager.getRunningTasks(1)
-            if (null != appTasks && appTasks.isNotEmpty()) {
-                return appTasks[0].topActivity!!.packageName
-            }
-        } else {
-            val endTime = System.currentTimeMillis()
-            val beginTime = endTime - 10000
-            var result = ""
-            val event = UsageEvents.Event()
-            val mUsageStatsManager = this.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
-            val usageEvents: UsageEvents = mUsageStatsManager.queryEvents(beginTime, endTime)
-            while (usageEvents.hasNextEvent()) {
-                usageEvents.getNextEvent(event)
-                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                    result = event.packageName
-                }
-            }
-            if (!TextUtils.isEmpty(result)) {
-                return result
-            }
-        }
-        return ""
     }
 }

@@ -8,11 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timekeeper.R
 import com.example.timekeeper.data.AppModal
-import com.example.timekeeper.viewmodel.MainViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class RecyclerAdapterLockApps(private val appList:List<AppModal>,
-   val setIsLocked: (AppModal,Boolean) -> Unit
+   val setIsLocked: (AppModal) -> Unit
 /*private val viewModel: MainViewModel*/) :
     RecyclerView.Adapter<RecyclerAdapterLockApps.ViewHolder>() {
 
@@ -43,8 +42,8 @@ class RecyclerAdapterLockApps(private val appList:List<AppModal>,
                 appPackage.text = it.packageName
                 lockSwitch.isChecked = it.isLocked
                 lockSwitch.setOnCheckedChangeListener { _, b ->
-                    //viewModel.appList[position].isLocked = b
-                    setIsLocked(appList[position],b)
+                    it.isLocked = b
+                    setIsLocked(it)
                 }
             }
         }

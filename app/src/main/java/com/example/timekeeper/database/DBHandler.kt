@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.example.timekeeper.data.AppModal
@@ -16,6 +17,8 @@ import java.io.ByteArrayOutputStream
 
 class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 // creating a constructor for our database handler.
+
+    val logTag = "DBHandler"
 
     companion object {
         // creating a constant variables for our database.
@@ -89,6 +92,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // at last we are closing our
         // database after adding database.
         db.close()
+
+        Log.d(logTag,"Added new app: ${app.name}")
     }
 
     // we have created a new method for reading all the courses.
@@ -110,7 +115,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                 courseModalArrayList.add(
                     AppModal(
                         cursorApps.getString(1),
-                        cursorApps.getDrawable(2)!!,
+                        cursorApps.getDrawable(2),
                         cursorApps.getString(3),
                         cursorApps.getInt(4) > 0
                     )
@@ -121,10 +126,12 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // at last closing our cursor
         // and returning our array list.
         cursorApps.close()
+
+        Log.d(logTag,"Just read DB table")
         return courseModalArrayList
     }
 
-    // below is the method for updating our courses
+    // below is the method for updating our apps
     fun updateApp(originalAppName: String, updatedApp: AppModal) {
 
         // calling a method to get writable database.
@@ -137,13 +144,31 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
             values.put(NAME_COL, name)
             values.putDrawable(ICON_COL, icon)
             values.put(PACKAGE_COL, packageName)
-            values.put(LOCK_COL, isLocked)
         }
 
         // on below line we are calling a update method to update our database and passing our values.
         // and we are comparing it with name of our course which is stored in original name variable.
         db.update(TABLE_NAME, values, "name=?", arrayOf(originalAppName))
+
         db.close()
+
+        Log.d(logTag,"Updated app in DB: $originalAppName")
+    }
+
+    // below is the method for updating our courses
+    fun updateIsLockedOfApp(app: AppModal) {
+        // calling a method to get writable database.
+        val db = this.writableDatabase
+        val values = ContentValues()
+
+        values.put(LOCK_COL, app.isLocked)
+
+        // on below line we are calling a update method to update our database and passing our values.
+        // and we are comparing it with name of our course which is stored in original name variable.
+        db.update(TABLE_NAME, values, "name=?", arrayOf(app.name))
+        db.close()
+
+        Log.d(logTag,"Set isLocked in DB of app ${app.name} to ${app.isLocked}")
     }
 
     // below is the method for deleting our course.
@@ -155,6 +180,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // course and we are comparing it with our course name.
         db.delete(TABLE_NAME, "name=?", arrayOf(appName))
         db.close()
+
+        Log.d(logTag,"Deleted from DB: $appName")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -170,15 +197,9 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         put(key, outputStream.toByteArray())
     }
 
-    private fun Cursor.getDrawable(i: Int): Drawable? {
-        if (this.moveToFirst()) {
-            val imgByte: ByteArray = this.getBlob(i)
-            val bm = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
-            return bm.toDrawable(context!!.resources)
-        }
-        if (!this.isClosed) {
-            this.close()
-        }
-        return null
+    private fun Cursor.getDrawable(i: Int): Drawable {
+        val imgByte: ByteArray = this.getBlob(i)
+        val bm = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
+        return bm.toDrawable(context!!.resources)
     }
 }

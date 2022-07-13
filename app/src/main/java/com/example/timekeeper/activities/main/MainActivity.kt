@@ -1,18 +1,14 @@
 package com.example.timekeeper.activities.main
 
-import android.app.ActivityManager
-import android.app.AppOpsManager
 import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -21,29 +17,21 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.timekeeper.R
 import com.example.timekeeper.databinding.ActivityMainBinding
-import com.example.timekeeper.viewmodel.MainViewModel
 import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
-import com.example.timekeeper.services.YourService
 
 
 class MainActivity : AppCompatActivity() {
-
-    var mServiceIntent: Intent? = null
-    private var mYourService: YourService? = null
-
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private var _viewModel: MainViewModel? = null
+//    private var _viewModel: MainViewModel? = null
 
     private var dbHandler: DBHandler? = null
     private var dbAppList: List<AppModal>? = null
 
     private val logTag = "MainActivity"
-
-    private val PACKAGE_PERMISSION_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,57 +45,34 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        _viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        isAccessGranted()
-
-        // Since the app is already running in foreground,
-        // we need not launch the service as a foreground service
-        // to prevent itself from being terminated.
-//        mYourService = YourService()
-//        mServiceIntent = Intent(this, mYourService!!.javaClass)
-//        if (!isMyServiceRunning(mYourService!!.javaClass)) {
-//            startService(mServiceIntent) // If the service is not running, we start it by using startService().
-//        }
-
+//        _viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         // SQLite Database
-        // creating a new DBhandler class
+        // creating a new DBHandler class
         // and passing our context to it.
         dbHandler = DBHandler(this)
         dbAppList = dbHandler!!.readApps()
         val installedApps = getPackages().toApps() // get Apps
 
         if (dbAppList.isNullOrEmpty()) {
-            dbAppList = installedApps
-            dbAppList!!.forEach {
+            installedApps.forEach {
                 dbHandler!!.addNewApp(it)
             }
+            dbAppList = installedApps
         } else if (dbAppList != installedApps) { // apps have changed
             installedApps.forEach {
-                if (dbAppList!!.any { dbApp -> dbApp.name == it.name }) dbHandler!!.updateApp(
+                //TODO Bitmap seems to change and isLocked is varying
+                if (dbAppList!!.any { dbApp -> dbApp.packageName == it.packageName }) dbHandler!!.updateApp(
                     it.name,
                     it
                 )
                 else dbHandler!!.addNewApp(it)
             }
-        }
-        // else do nothing
-
-
-    }
-
-    // checks the current status of the background service
-    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                Log.i("Service status", "Running")
-                return true
+            dbAppList!!.forEach{
+                if (installedApps.none { instApp -> instApp.packageName == it.packageName }) dbHandler!!.deleteApp(it.name)
             }
         }
-        Log.i("Service status", "Not running")
-        return false
+        // else do nothing
     }
 
 
@@ -123,34 +88,6 @@ class MainActivity : AppCompatActivity() {
         broadcastIntent.setClass(this, Restarter::class.java)
         this.sendBroadcast(broadcastIntent)
         super.onDestroy()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private fun isAccessGranted(): Boolean {
-        try {
-            val packageManager: PackageManager = packageManager
-            val applicationInfo: ApplicationInfo =
-                packageManager.getApplicationInfo(packageName, 0);
-            val appsOpsManager: AppOpsManager =
-                getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-            var mode = 0
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                mode = appsOpsManager.checkOpNoThrow(
-                    AppOpsManager.OPSTR_GET_USAGE_STATS,
-                    applicationInfo.uid,
-                    applicationInfo.packageName
-                )
-            }
-            return (mode == AppOpsManager.MODE_ALLOWED)
-        } catch (e: PackageManager.NameNotFoundException) {
-            return false
-        }
     }
 
     private fun MutableList<ApplicationInfo>.toApps(): MutableList<AppModal> {
@@ -187,7 +124,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(logTag, "Found ${packages.size} in total")
         val nsa = packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null }
             .toMutableList()
-
         Log.d(logTag, "Of which ${nsa.size} non system apps")
         // return only non-system-apps
         return nsa
@@ -203,6 +139,12 @@ class MainActivity : AppCompatActivity() {
             adminName,
             lockApps.map { it.packageName }.toTypedArray()
         )*/
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

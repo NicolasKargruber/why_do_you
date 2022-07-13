@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentSelectGameBinding
-import com.example.timekeeper.viewmodel.MainViewModel
+import com.example.timekeeper.viewmodel.SelectGameViewModel
 import com.google.android.material.card.MaterialCardView
 
 class SelectGameFragment : Fragment() {
@@ -23,7 +23,7 @@ class SelectGameFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private val logTag = "SelectGameFragment"
-    private var _viewModel: MainViewModel? = null
+    private var _viewModel: SelectGameViewModel? = null
     private var matCards = mutableListOf<MaterialCardView>()
     // private var checkedMCid: Int = -1
 
@@ -42,7 +42,7 @@ class SelectGameFragment : Fragment() {
             checkedMCid = savedInstanceState.getInt(SAVED_STATE_CHECKED_MC_ID)
         }*/
 
-        _viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        _viewModel = ViewModelProvider(requireActivity()).get(SelectGameViewModel::class.java)
 
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)

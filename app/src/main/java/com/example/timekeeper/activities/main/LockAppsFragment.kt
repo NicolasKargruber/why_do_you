@@ -12,19 +12,13 @@ import com.example.timekeeper.adapter.RecyclerAdapterLockApps
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.FragmentLockAppsBinding
-import com.example.timekeeper.viewmodel.MainViewModel
+import com.example.timekeeper.viewmodel.LockAppsViewModel
 
 
 class LockAppsFragment : Fragment() {
     private var _binding: FragmentLockAppsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private var _viewModel: MainViewModel? = null
-
-    private var dbHandler: DBHandler? = null
-    private var dbAppList: List<AppModal>? = null
+    private var _viewModel: LockAppsViewModel? = null
 
     private val logTag = "LockAppsFragment"
 
@@ -41,21 +35,21 @@ class LockAppsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        _viewModel = ViewModelProvider(requireActivity()).get(LockAppsViewModel::class.java)
 
-        // get apps from SQLite Database
-        dbHandler = DBHandler(activity)
-        dbAppList = dbHandler!!.readApps()
-        dbAppList!!.sortByName()
+        _viewModel!!.apply {
+            // get apps from SQLite Database
+            dbHandler = DBHandler(activity)
+            dbAppList = dbHandler!!.readApps()
+            dbAppList!!.sortByName()
+        }
 
         binding.lockAppsRecyclerView.apply {
-            adapter = RecyclerAdapterLockApps(dbAppList!!) { app, b ->
-                app.isLocked = b
-                dbHandler!!.updateApp(app.name,app)
+            adapter = RecyclerAdapterLockApps(_viewModel!!.dbAppList!!) { app ->
+                _viewModel!!.dbHandler!!.updateIsLockedOfApp(app)
             }
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
             addItemDecoration(
                 DividerItemDecoration(
                     context,
@@ -63,8 +57,6 @@ class LockAppsFragment : Fragment() {
                 )
             )
         }
-
-//        Log.d(logTag, "Count of apps ${_viewModel!!.appList.size}")
     }
 
     override fun onDestroyView() {

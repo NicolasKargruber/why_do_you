@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.timekeeper.R
 import com.example.timekeeper.data.AppModal
-import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.FragmentMainBinding
-import com.example.timekeeper.viewmodel.MainViewModel
 
 
 /**
@@ -37,7 +35,7 @@ class MainFragment : Fragment() {
 //    private var dbAppList: List<AppModal>? = null
 
     private val logTag = "MainFragment"
-    private var _viewModel: MainViewModel? = null
+//    private var _viewModel: MainViewModel? = null
 
 
     private val lockAppsFragment = LockAppsFragment()
@@ -66,8 +64,7 @@ class MainFragment : Fragment() {
             Log.d(logTag, "Get id: $currentSelectItemId")
         }
 
-        _viewModel =
-            ViewModelProvider(requireActivity()).get(MainViewModel::class.java) // get viewModel
+//        _viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java) // get viewModel
 
 
        /* _viewModel!!.apply {
