@@ -45,6 +45,7 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkPermission(false)
 
         binding.buttonPermission.setOnClickListener {
             checkPermission()
@@ -70,7 +71,8 @@ class FirstFragment : Fragment() {
 
     // checks the current status of the background service
     private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = requireActivity().getSystemService(AppCompatActivity.ACTIVITY_SERVICE) as ActivityManager
+        val manager =
+            requireActivity().getSystemService(AppCompatActivity.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {
             if (serviceClass.name == service.service.className) {
                 Log.i("Service status", "Running")
@@ -95,18 +97,18 @@ class FirstFragment : Fragment() {
     }
 
     // Function to check and request permission.
-    private fun checkPermission(openSettings:Boolean=true) {
+    private fun checkPermission(openSettings: Boolean = true) {
         val action = Settings.ACTION_USAGE_ACCESS_SETTINGS
         val intent = Intent(action)
         val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
         intent.data = uri
 
         if (!isAccessGranted()) {
-            if(openSettings) startActivity(intent) // Requesting the permission
-        }
-        else {
+            if (openSettings) startActivity(intent) // Requesting the permission
+        } else {
             startService()
-            Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT)
+                .show()
             findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
         }
     }

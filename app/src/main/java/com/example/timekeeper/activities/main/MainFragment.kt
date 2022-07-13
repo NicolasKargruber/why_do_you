@@ -3,6 +3,7 @@ package com.example.timekeeper.activities.main
 import android.annotation.SuppressLint
 import android.app.admin.DevicePolicyManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -15,27 +16,24 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.timekeeper.R
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.databinding.FragmentMainBinding
+import com.example.timekeeper.viewmodel.MainViewModel
 
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class MainFragment : Fragment() {
-
-    private val SAVED_STATE_CURRENT_TAB_KEY: String = "SAVED_STATE_CURRENT_TAB_KEY"
-    // private val SAVED_STATE_CONTAINER_KEY: String = "SAVED_STATE_CONTAINER_KEY"
-
-    // private var savedStateSparseArray: SparseArray<Fragment.SavedState>? = null
-    private var currentSelectItemId: Int = R.id.lock_apps
-
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+    private var _viewModel: MainViewModel? = null
 
-//    private var dbHandler: DBHandler? = null
-//    private var dbAppList: List<AppModal>? = null
+    private val CURRENT_TAB_KEY: String = "CURRENT_TAB_KEY"
+
+    val defaultItemId = R.id.lock_apps
+
+    var sharedPrefences: SharedPreferences? = null
 
     private val logTag = "MainFragment"
-//    private var _viewModel: MainViewModel? = null
 
 
     private val lockAppsFragment = LockAppsFragment()
@@ -56,29 +54,16 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState != null) {
-//            savedStateSparseArray = savedInstanceState
-//                .getSparseParcelableArray(SAVED_STATE_CONTAINER_KEY)
-            currentSelectItemId = savedInstanceState
-                .getInt(SAVED_STATE_CURRENT_TAB_KEY)
-            Log.d(logTag, "Get id: $currentSelectItemId")
-        }
+        _viewModel =
+            ViewModelProvider(requireActivity()).get(MainViewModel::class.java) // get viewModel
 
-//        _viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java) // get viewModel
-
-
-       /* _viewModel!!.apply {
-            if (appList.isEmpty()) //do on first call of app
-                appList = getPackages().toApps() // get Apps
-            sortAppsByName() // sort them
-        }*/
-
-        // Log.d(logTag, "Count of apps ${_viewModel!!.appList.size}")
-        // lockApps(_viewModel!!.appList)
+        sharedPrefences =
+            requireActivity().getSharedPreferences(CURRENT_TAB_KEY, Context.MODE_PRIVATE)
+        _viewModel!!.currentSelectItemId = sharedPrefences!!.getInt("id", defaultItemId)
 
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            currentSelectItemId = item.itemId
+            _viewModel!!.currentSelectItemId = item.itemId
             when (item.itemId) {
                 R.id.lock_apps -> {
                     // swapFragments(item.itemId, getString(R.string.apps),lockAppsFragment)
@@ -93,9 +78,10 @@ class MainFragment : Fragment() {
             }
             false
         }
-
-        Log.d(logTag, "Hey I am $currentSelectItemId")
-        binding.bottomNavigation.selectedItemId = currentSelectItemId
+        _viewModel!!.apply {
+            Log.d(logTag, "Hey I am $currentSelectItemId")
+            binding.bottomNavigation.selectedItemId = currentSelectItemId
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -104,16 +90,19 @@ class MainFragment : Fragment() {
             .addToBackStack(null).commit()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    /*override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         // outState.putSparseParcelableArray(SAVED_STATE_CONTAINER_KEY, savedStateSparseArray)
 
         Log.d(logTag, "Put id: $currentSelectItemId")
         outState.putInt(SAVED_STATE_CURRENT_TAB_KEY, currentSelectItemId)
-    }
+    }*/
 
     override fun onDestroyView() {
+        val editor = sharedPrefences!!.edit()
+        editor.putInt("id", binding.bottomNavigation.selectedItemId)
+        editor.apply()
         super.onDestroyView()
         _binding = null
     }

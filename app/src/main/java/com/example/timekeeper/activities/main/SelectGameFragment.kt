@@ -1,5 +1,7 @@
 package com.example.timekeeper.activities.main
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +15,19 @@ import com.example.timekeeper.databinding.FragmentSelectGameBinding
 import com.example.timekeeper.viewmodel.SelectGameViewModel
 import com.google.android.material.card.MaterialCardView
 
+
 class SelectGameFragment : Fragment() {
 
-    private val SAVED_STATE_CHECKED_MC_ID: String = "SAVED_STATE_CHECKED_MC_ID"
+    private val CHECKED_MC_ID: String = "CHECKED_MC_ID"
 
     private var _binding: FragmentSelectGameBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private val logTag = "SelectGameFragment"
+
     private var _viewModel: SelectGameViewModel? = null
+
+    private val logTag = "SelectGameFragment"
+    var sharedPrefences: SharedPreferences? = null
+
     private var matCards = mutableListOf<MaterialCardView>()
     // private var checkedMCid: Int = -1
 
@@ -44,6 +48,13 @@ class SelectGameFragment : Fragment() {
 
         _viewModel = ViewModelProvider(requireActivity()).get(SelectGameViewModel::class.java)
 
+        // MY_PREFS_NAME - a static String variable like:
+//public static final String MY_PREFS_NAME = "MyPrefsFile";
+        // MY_PREFS_NAME - a static String variable like:
+//public static final String MY_PREFS_NAME = "MyPrefsFile";
+        sharedPrefences = requireActivity().getSharedPreferences(CHECKED_MC_ID, MODE_PRIVATE)
+        _viewModel!!.lockGameId = sharedPrefences!!.getInt("id",-1) // -1 is default
+
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
             gameNumbers.setOnClickListener(onClickListener)
@@ -58,6 +69,9 @@ class SelectGameFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        val editor = sharedPrefences!!.edit()
+        editor.putInt("id",_viewModel!!.lockGameId)
+        editor.apply()
         super.onDestroyView()
         _binding = null
     }

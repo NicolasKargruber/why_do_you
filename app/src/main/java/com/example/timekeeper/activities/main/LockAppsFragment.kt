@@ -64,8 +64,8 @@ class LockAppsFragment : Fragment() {
         _binding = null
     }
 
-    private fun List<AppModal>.sortByName() {
-        this.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+    private fun MutableList<AppModal>.sortByName() {
+        this.sortWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
     }
 }
 
