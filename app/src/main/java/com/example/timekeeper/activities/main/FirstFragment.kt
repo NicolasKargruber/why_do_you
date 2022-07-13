@@ -38,19 +38,59 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(logTag, "Fragment create")
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(logTag, "Fragment created")
 
-        checkPermission(false)
-
-        binding.buttonPermission.setOnClickListener {
-            checkPermission()
+        if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS) //ToDo check individually if permissions were already granted
+        ) {
+            if (isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW)) {
+                startService()
+                Toast.makeText(requireContext(), "Permissions already granted", Toast.LENGTH_SHORT)
+                    .show()
+                findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
+            } else binding.firstPermissionSystemAlertWindow.buttonPermission.apply {
+                isEnabled = true
+                text = "Grant"
+            }
+        } else binding.firstPermissionPackageUsageStats.buttonPermission.apply {
+            isEnabled = true
+            text = "Grant"
         }
 
+        binding.firstPermissionPackageUsageStats.textViewPermission.text =
+            "Please grant access to your usage access"
+        binding.firstPermissionPackageUsageStats.buttonPermission.setOnClickListener {
+            checkPermission(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                Settings.ACTION_USAGE_ACCESS_SETTINGS
+            )
+        }
+
+        binding.firstPermissionSystemAlertWindow.textViewPermission.text =
+            "Please grant access to display over other apps"
+        binding.firstPermissionSystemAlertWindow.buttonPermission.setOnClickListener {
+            checkPermission(
+                AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW,
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+            )
+        }
+
+        binding.firstButtonGoNext.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(logTag, "Fragment resume")
+        if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS)&&isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW)) binding.firstButtonGoNext.isEnabled = true
     }
 
     private fun startService() {
@@ -67,6 +107,7 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        Log.d(logTag, "Fragment destroyed")
     }
 
     // checks the current status of the background service
@@ -83,33 +124,26 @@ class FirstFragment : Fragment() {
         return false
     }
 
-    private fun isAccessGranted(): Boolean {
+    // Function to check and request permission.
+    private fun checkPermission(op: String, action: String) {
+        val intent = Intent(action)
+        val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+        intent.data = uri
+
+        if (!isAccessGranted(op)) {
+            startActivity(intent) // Requesting the permission
+        }
+    }
+
+    private fun isAccessGranted(op: String): Boolean {
         val appOps = requireContext().getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                Process.myUid(), requireContext().packageName
+                op, Process.myUid(), requireContext().packageName
             )
         } else {
             TODO("VERSION.SDK_INT < Q")
         }
         return mode == AppOpsManager.MODE_ALLOWED
-    }
-
-    // Function to check and request permission.
-    private fun checkPermission(openSettings: Boolean = true) {
-        val action = Settings.ACTION_USAGE_ACCESS_SETTINGS
-        val intent = Intent(action)
-        val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-        intent.data = uri
-
-        if (!isAccessGranted()) {
-            if (openSettings) startActivity(intent) // Requesting the permission
-        } else {
-            startService()
-            Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT)
-                .show()
-            findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
-        }
     }
 }

@@ -27,6 +27,7 @@ class YourService : Service() {
 
     var counter = 0
 
+    var lockedAppPackage:String? = null
 
     private var dbHandler: DBHandler? = null
     private var dbAppList: List<AppModal>? = null
@@ -103,14 +104,14 @@ class YourService : Service() {
             val app = getForegroundTask(this@YourService)
             Log.e(logTag, "Current App in foreground is: $app")
 
-            if (appIsLocked(app?:"")) {
+            if (appIsLocked(app?:"")&&app!=lockedAppPackage) {
                 Log.e(logTag, "Try to lock current App: $app")
                 // start another activity
                 val lockIntent = Intent(this@YourService, LockScreenActivity::class.java)
                 lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this@YourService.startActivity(lockIntent)
+                lockedAppPackage = app
             }
-
         }
     }
 

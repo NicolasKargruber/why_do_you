@@ -52,8 +52,6 @@ class MainFragment : Fragment() {
     @SuppressLint("QueryPermissionsNeeded")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         Log.d(logTag, "Fragment created")
 
         _viewModel =

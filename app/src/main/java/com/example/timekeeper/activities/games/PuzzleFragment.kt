@@ -102,8 +102,7 @@ class PuzzleFragment : Fragment() {
                     view,
                     "Grid is completed",
                     Snackbar.LENGTH_LONG
-                )
-                    .setAction("Action", null).show()
+                ).setAction("Action", null).show()
                 -2 -> numberedButtons.forEach { nb -> nb.isChecked = false }
             }
         }
@@ -138,7 +137,8 @@ class PuzzleFragment : Fragment() {
     private fun setTextColors() {
         numberedButtons.forEach {
             it.setTextColor(
-                ContextCompat.getColorStateList(requireContext(),
+                ContextCompat.getColorStateList(
+                    requireContext(),
                     R.color.number_btn_text_color_selector
                 )
             )

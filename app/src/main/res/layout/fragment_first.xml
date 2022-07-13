@@ -4,23 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
+    android:paddingHorizontal="@dimen/space_large"
     tools:context=".activities.main.FirstFragment"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please grant the acces to your package usage"/>
+    <include
+        android:id="@+id/first_permission_package_usage_stats"
+        layout="@layout/permission_view_group"/>
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="16dp"/>
+        android:layout_height="@dimen/space_large"/>
+
+    <include
+        android:id="@+id/first_permission_system_alert_window"
+        layout="@layout/permission_view_group" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_huge"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_permission"
+        android:id="@+id/first_button_go_next"
+        android:paddingVertical="@dimen/space_small"
+        android:textSize="@dimen/text_large"
+        android:text="Next"
+        android:enabled="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Grant"
-        />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

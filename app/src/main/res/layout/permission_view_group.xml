@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_view_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Please grant the access to your package usage stats"
+        android:textSize="@dimen/text_medium" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_small" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Granted" />
+
+</LinearLayout>

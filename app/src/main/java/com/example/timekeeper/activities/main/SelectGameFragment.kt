@@ -26,7 +26,7 @@ class SelectGameFragment : Fragment() {
     private var _viewModel: SelectGameViewModel? = null
 
     private val logTag = "SelectGameFragment"
-    var sharedPrefences: SharedPreferences? = null
+    private var sharedPreferences: SharedPreferences? = null
 
     private var matCards = mutableListOf<MaterialCardView>()
     // private var checkedMCid: Int = -1
@@ -52,8 +52,8 @@ class SelectGameFragment : Fragment() {
 //public static final String MY_PREFS_NAME = "MyPrefsFile";
         // MY_PREFS_NAME - a static String variable like:
 //public static final String MY_PREFS_NAME = "MyPrefsFile";
-        sharedPrefences = requireActivity().getSharedPreferences(CHECKED_MC_ID, MODE_PRIVATE)
-        _viewModel!!.lockGameId = sharedPrefences!!.getInt("id",-1) // -1 is default
+        sharedPreferences = requireActivity().getSharedPreferences(CHECKED_MC_ID, MODE_PRIVATE)
+        _viewModel!!.lockGameId = sharedPreferences!!.getInt("id",-1) // -1 is default
 
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
@@ -69,7 +69,7 @@ class SelectGameFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        val editor = sharedPrefences!!.edit()
+        val editor = sharedPreferences!!.edit()
         editor.putInt("id",_viewModel!!.lockGameId)
         editor.apply()
         super.onDestroyView()
@@ -97,9 +97,4 @@ class SelectGameFragment : Fragment() {
         }
         if (action != -1) findNavController().navigate(action)
     }
-
-   /* override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(SAVED_STATE_CHECKED_MC_ID, checkedMCid)
-    }*/
 }
