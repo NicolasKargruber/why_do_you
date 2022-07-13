@@ -43,6 +43,8 @@
             android:name=".services.YourService"
             android:enabled="true" >
         </service>
+        <activity
+            android:name=".activities.lock.LockScreenActivity"/>
     </application>
 
 </manifest>

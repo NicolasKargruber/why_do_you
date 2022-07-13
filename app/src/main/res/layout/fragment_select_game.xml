@@ -9,9 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select the game"
-        android:layout_margin="@dimen/space_large"
-        android:textSize="@dimen/text_large"
         app:layout_constraintBottom_toTopOf="@id/game_numbers"
+        android:layout_margin="@dimen/space_huge"
+        android:textSize="@dimen/text_large"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -23,7 +24,7 @@
         app:layout_constraintEnd_toStartOf="@id/game_notes"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_game_text"
         app:layout_constraintVertical_chainStyle="packed">
 
         <TextView
@@ -62,7 +63,6 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/game_null"
         style="@style/MyMaterialCard"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/game_notes"
         app:layout_constraintStart_toStartOf="@id/game_numbers"
         app:layout_constraintTop_toBottomOf="@id/game_numbers">

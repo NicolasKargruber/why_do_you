@@ -10,16 +10,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.timekeeper.R
-import com.example.timekeeper.databinding.ActivityMainBinding
 import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
+import com.example.timekeeper.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -119,7 +118,6 @@ class MainActivity : AppCompatActivity() {
                 "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName)
             ) // the getLaunchIntentForPackage returns an intent that you can use with startActivity()
         }
-
 
         Log.d(logTag, "Found ${packages.size} in total")
         val nsa = packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null }

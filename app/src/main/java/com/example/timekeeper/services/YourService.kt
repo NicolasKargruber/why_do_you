@@ -15,7 +15,10 @@ import android.util.Log
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.timekeeper.activities.lock.LockScreenActivity
 import com.example.timekeeper.broadcast.Restarter
+import com.example.timekeeper.data.AppModal
+import com.example.timekeeper.database.DBHandler
 import java.util.*
 
 
@@ -23,6 +26,10 @@ class YourService : Service() {
     private val logTag = "YourService"
 
     var counter = 0
+
+
+    private var dbHandler: DBHandler? = null
+    private var dbAppList: List<AppModal>? = null
 
     // we are starting a foreground service differently for Build versions greater than Android Oreo
     // This because of the strict notification policies introduced recently
@@ -33,8 +40,8 @@ class YourService : Service() {
             1,
             Notification()
         )
-
-
+        dbHandler = DBHandler(this)
+        dbAppList = dbHandler!!.readApps()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -83,29 +90,33 @@ class YourService : Service() {
     private var timerTask: TimerTask? = null
     fun startTimer() {
         timer = Timer()
-        timerTask = object : TimerTask() {
-            override fun run() { // prints a counter value every 1 second in the Log
-                Log.i(
-                    "Count",
-                    "=========  " + counter++
-                ) // while incrementing itself every time Log prints.
-                val app = getForegroundTask(this@YourService)
-                Log.e(logTag, "Current App in foreground is: $app")
-            }
-        }
+        timerTask = task
         timer!!.schedule(timerTask, 1000, 1000)
     }
 
     val task = object : TimerTask() {
         override fun run() { // runs every 1 second
-            getForegroundTask(this@YourService)
+            Log.i(
+                "Count",
+                "=========  " + counter++
+            ) // while incrementing itself every time Log prints.
+            val app = getForegroundTask(this@YourService)
+            Log.e(logTag, "Current App in foreground is: $app")
 
-            // start another activity
-//            val lockIntent = Intent(this@YourService, LockScreenActivity::class.java)
-//            lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            this@YourService.startActivity(lockIntent)
+            if (appIsLocked(app?:"")) {
+                Log.e(logTag, "Try to lock current App: $app")
+                // start another activity
+                val lockIntent = Intent(this@YourService, LockScreenActivity::class.java)
+                lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this@YourService.startActivity(lockIntent)
+            }
 
         }
+    }
+
+    fun appIsLocked(appPackage:String) : Boolean{
+        if (dbAppList!!.none { it.packageName == appPackage }) return false
+        return dbAppList!!.first {  it.packageName == appPackage }.isLocked
     }
 
     fun stoptimertask() {
