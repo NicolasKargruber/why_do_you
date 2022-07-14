@@ -1,5 +1,6 @@
 package com.example.timekeeper.activities.games
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -21,7 +22,7 @@ import com.example.timekeeper.viewmodel.NotesViewModel
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class NotesFragment : Fragment() {
+class NotesFragment() : Fragment() {
 
     private var _binding: FragmentNotesBinding? = null
     private var _viewModel: NotesViewModel? = null

@@ -45,9 +45,11 @@ class LockAppsFragment : Fragment() {
         }
 
         binding.lockAppsRecyclerView.apply {
-            adapter = RecyclerAdapterLockApps(_viewModel!!.dbAppList!!) { app ->
-                _viewModel!!.dbHandler!!.updateIsLockedOfApp(app)
-            }
+            adapter = RecyclerAdapterLockApps(
+                _viewModel!!.dbAppList!!,
+                { app -> _viewModel!!.dbHandler!!.updateIsLockedOfApp(app) },
+                requireActivity().packageName
+            )
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(

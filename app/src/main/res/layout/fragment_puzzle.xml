@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".activities.games.PuzzleFragment">
 
-    <include layout="@layout/wdy_view_group" />
+    <include
+        android:id="@+id/wdy_include"
+        layout="@layout/wdy_view_group" />
 
     <GridLayout
         android:id="@+id/gridLayout"

@@ -2,6 +2,8 @@ package com.example.timekeeper.activities.games
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -10,18 +12,22 @@ import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.timekeeper.R
+import com.example.timekeeper.activities.lock.LockScreenActivity
+import com.example.timekeeper.activities.main.MainActivity
 import com.example.timekeeper.databinding.FragmentPuzzleBinding
 import com.example.timekeeper.viewmodel.PuzzleViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import kotlin.system.exitProcess
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class PuzzleFragment : Fragment() {
+class PuzzleFragment() : Fragment() {
 
     private var _binding: FragmentPuzzleBinding? = null
     private var _viewModel: PuzzleViewModel? = null
@@ -31,6 +37,7 @@ class PuzzleFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel
 
+    val parentIsLock get() = requireActivity().javaClass == LockScreenActivity::class.java
 
     private val KEY_SHUFFLED = "KEY_SHUFFLED"
 
@@ -89,6 +96,7 @@ class PuzzleFragment : Fragment() {
                 viewModel!!.currentNum.value = -2
                 resetTextColors()
             }
+            puzzleResetButton.isVisible = !parentIsLock
         }
 
 
@@ -97,13 +105,9 @@ class PuzzleFragment : Fragment() {
         ) { cn ->
             Log.d(logTag, "current Number: $cn")
             when (cn) {
-                -1 -> numberedButtons.forEach { nb -> nb.isChecked = false }
-                numberedButtons.size - 1 -> Snackbar.make(
-                    view,
-                    "Grid is completed",
-                    Snackbar.LENGTH_LONG
-                ).setAction("Action", null).show()
-                -2 -> numberedButtons.forEach { nb -> nb.isChecked = false }
+                -1 -> numberedButtons.forEach { nb -> nb.isChecked = false } // restart
+                numberedButtons.size - 1 -> showSuccessAndQuit() // was correct and is completed
+                -2 -> numberedButtons.forEach { nb -> nb.isChecked = false } // start
             }
         }
     }
@@ -116,6 +120,17 @@ class PuzzleFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showSuccessAndQuit() {
+        Snackbar.make(
+            requireView(),
+            "Grid is completed",
+            Snackbar.LENGTH_LONG
+        ).setAction("Action", null).show()
+        if(parentIsLock) Handler(Looper.getMainLooper()).postDelayed({
+            requireActivity().finishAffinity()
+        }, 3000)
     }
 
     private fun shuffleAndAssign() {

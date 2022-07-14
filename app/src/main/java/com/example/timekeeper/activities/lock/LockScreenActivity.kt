@@ -2,8 +2,10 @@ package com.example.timekeeper.activities.lock
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,8 +16,9 @@ import com.example.timekeeper.activities.games.PuzzleFragment
 import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.databinding.ActivityLockScreenBinding
 import com.example.timekeeper.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.item_app_layout.*
 
-class LockScreenActivity : AppCompatActivity() {
+class LockScreenActivity() : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityLockScreenBinding
 
@@ -39,9 +42,10 @@ class LockScreenActivity : AppCompatActivity() {
             .add(R.id.fragment_container_lock_screen, lockScreenFragment)
             .commit()
 
-    }
+//        binding.fragmentContainerLockScreen.findViewById<TextView>(R.id.wdy_text_what_app).apply {
+//            setCompoundDrawablesRelative(null,null,icon,null)
+//        }
 
-    fun initIconApp(): Unit {
 
     }
 

@@ -10,18 +10,20 @@ import com.example.timekeeper.R
 import com.example.timekeeper.data.AppModal
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-class RecyclerAdapterLockApps(private val appList:List<AppModal>,
-   val setIsLocked: (AppModal) -> Unit
-/*private val viewModel: MainViewModel*/) :
+class RecyclerAdapterLockApps(
+    private val appList: List<AppModal>,
+    val setIsLocked: (AppModal) -> Unit,
+    val applicationPackage: String
+) :
     RecyclerView.Adapter<RecyclerAdapterLockApps.ViewHolder>() {
 
-    val logTag:String = "RecyclerAdapterLockApps"
+    val logTag: String = "RecyclerAdapterLockApps"
     //private val appList get() = viewModel.appList
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val appIcon:ImageView = itemView.findViewById(R.id.item_app_icon)
-        val appName:TextView = itemView.findViewById(R.id.item_app_name)
-        val appPackage:TextView = itemView.findViewById(R.id.item_app_package)
+        val appIcon: ImageView = itemView.findViewById(R.id.item_app_icon)
+        val appName: TextView = itemView.findViewById(R.id.item_app_name)
+        val appPackage: TextView = itemView.findViewById(R.id.item_app_package)
         val lockSwitch: SwitchMaterial = itemView.findViewById(R.id.item_app_lock_switch)
     }
 
@@ -41,10 +43,11 @@ class RecyclerAdapterLockApps(private val appList:List<AppModal>,
                 appName.text = it.name
                 appPackage.text = it.packageName
                 lockSwitch.isChecked = it.isLocked
-                lockSwitch.setOnCheckedChangeListener { _, b ->
-                    it.isLocked = b
-                    setIsLocked(it)
-                }
+                if (applicationPackage==it.packageName) lockSwitch.isEnabled = false
+                    lockSwitch.setOnCheckedChangeListener { _, b ->
+                        it.isLocked = b
+                        setIsLocked(it)
+                    }
             }
         }
     }
