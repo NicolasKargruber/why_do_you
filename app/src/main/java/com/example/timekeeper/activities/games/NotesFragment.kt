@@ -22,7 +22,7 @@ import com.example.timekeeper.viewmodel.NotesViewModel
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class NotesFragment() : Fragment() {
+class NotesFragment : Fragment() {
 
     private var _binding: FragmentNotesBinding? = null
     private var _viewModel: NotesViewModel? = null
@@ -46,7 +46,6 @@ class NotesFragment() : Fragment() {
     ): View? {
         _binding = FragmentNotesBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,8 +65,6 @@ class NotesFragment() : Fragment() {
                 textCreateFirstMemo.isVisible = false
             }
         }
-
-
     }
 
     override fun onDestroyView() {

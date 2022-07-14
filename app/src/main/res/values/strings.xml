@@ -12,4 +12,36 @@
     <string name="want_to_use">want to use</string>
     <string name="apps">Apps</string>
     <string name="games">Games</string>
+
+    <string name="lock_time_intervals">Lock Time Intervals</string>
+    <string name="set_time_intervals">Set time intervals</string>
+    <string name="key_lock_time_intervals">key_lock_time_intervals</string>
+
+<!--
+    <string-array name="pref_seek_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+-->
+
+    <string-array name="pref_lock_time_intervals">
+        <item>1 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+
+    <string-array name="pref_intervals">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 </resources>

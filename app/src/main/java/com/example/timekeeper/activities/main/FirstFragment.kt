@@ -1,6 +1,5 @@
 package com.example.timekeeper.activities.main
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.content.Context
@@ -15,20 +14,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentFirstBinding
 import com.example.timekeeper.services.YourService
-import com.example.timekeeper.viewmodel.PuzzleViewModel
-
 
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
-    private var _viewModel: PuzzleViewModel? = null
     private val binding get() = _binding!!
 
     var mServiceIntent: Intent? = null
@@ -72,8 +67,6 @@ class FirstFragment : Fragment() {
             }
         }
 
-
-
         binding.firstPermissionPackageUsageStats.textViewPermission.text =
             "Please grant access to your usage access"
         binding.firstPermissionPackageUsageStats.buttonPermission.setOnClickListener {
@@ -115,6 +108,12 @@ class FirstFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.d(logTag, "Fragment destroyed")
+    }
+
     private fun startService() {
         // Since the app is already running in foreground,
         // we need not launch the service as a foreground service
@@ -124,12 +123,6 @@ class FirstFragment : Fragment() {
         if (!isMyServiceRunning(mYourService!!.javaClass)) {
             requireContext().startService(mServiceIntent) // If the service is not running, we start it by using startService().
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        Log.d(logTag, "Fragment destroyed")
     }
 
     // checks the current status of the background service

@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.timekeeper.R
+import com.example.timekeeper.activities.settings.SettingsActivity
 import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
@@ -67,8 +68,10 @@ class MainActivity : AppCompatActivity() {
                 )
                 else dbHandler!!.addNewApp(it)
             }
-            dbAppList!!.forEach{
-                if (installedApps.none { instApp -> instApp.packageName == it.packageName }) dbHandler!!.deleteApp(it.name)
+            dbAppList!!.forEach {
+                if (installedApps.none { instApp -> instApp.packageName == it.packageName }) dbHandler!!.deleteApp(
+                    it.name
+                )
             }
         }
         // else do nothing
@@ -119,8 +122,9 @@ class MainActivity : AppCompatActivity() {
             ) // the getLaunchIntentForPackage returns an intent that you can use with startActivity()
         }
         Log.d(logTag, "Found ${packages.size} packages in total")
-        val apps = packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
-            .toMutableList()
+        val apps =
+            packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
+                .toMutableList()
         Log.d(logTag, "Of which ${apps.size} apps have an intent")
         val nsa = apps.filter { it.flags != ApplicationInfo.FLAG_SYSTEM } // non system apps
         return apps
@@ -148,8 +152,14 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        // opening a new intent to open settings activity.
+
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

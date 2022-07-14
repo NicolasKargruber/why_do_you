@@ -46,6 +46,8 @@
         </service>
         <activity
             android:name=".activities.lock.LockScreenActivity"/>
+        <activity
+            android:name=".activities.settings.SettingsActivity"/>
     </application>
 
 </manifest>
