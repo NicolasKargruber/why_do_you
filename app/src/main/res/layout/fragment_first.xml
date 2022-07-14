@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
-    android:paddingHorizontal="@dimen/space_large"
+    android:paddingHorizontal="@dimen/space_medium"
     tools:context=".activities.main.FirstFragment"
     android:layout_height="match_parent">
 
@@ -22,7 +22,7 @@
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_huge"/>
+        android:layout_height="@dimen/space_large"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/first_button_go_next"

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/drawable/outlined_background.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/activity_lock_screen.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/content_main.xml" value="0.22826086956521738" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/fragment_puzzle.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/fragment_select_game.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/hallo.xml" value="0.1" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/hello.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/item_app_layout.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/permission_view_group.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/wdy_view_group.xml" value="0.22826086956521738" />

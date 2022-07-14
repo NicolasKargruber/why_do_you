@@ -118,13 +118,12 @@ class MainActivity : AppCompatActivity() {
                 "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName)
             ) // the getLaunchIntentForPackage returns an intent that you can use with startActivity()
         }
-
-        Log.d(logTag, "Found ${packages.size} in total")
-        val nsa = packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null }
+        Log.d(logTag, "Found ${packages.size} packages in total")
+        val apps = packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
             .toMutableList()
-        Log.d(logTag, "Of which ${nsa.size} non system apps")
-        // return only non-system-apps
-        return nsa
+        Log.d(logTag, "Of which ${apps.size} apps have an intent")
+        val nsa = apps.filter { it.flags != ApplicationInfo.FLAG_SYSTEM } // non system apps
+        return apps
     }
 
     private fun lockApps(apps: MutableList<AppModal>) {
