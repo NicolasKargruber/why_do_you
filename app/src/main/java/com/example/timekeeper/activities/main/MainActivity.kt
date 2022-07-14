@@ -20,6 +20,10 @@ import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.ActivityMainBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,14 +63,16 @@ class MainActivity : AppCompatActivity() {
                 dbHandler!!.addNewApp(it)
             }
             dbAppList = installedApps
-        } else if (dbAppList != installedApps) { // apps have changed
+        } else if (appsAreEqual(dbAppList!!, installedApps)) { // apps have changed
             installedApps.forEach {
                 //TODO Bitmap seems to change and isLocked is varying
-                if (dbAppList!!.any { dbApp -> dbApp.packageName == it.packageName }) dbHandler!!.updateApp(
+                val app = dbAppList!!.filter { dbApp -> dbApp.packageName == it.packageName }
+                if (app.isEmpty()) dbHandler!!.addNewApp(it)
+                else if (!app.first().isEqual(it)) dbHandler!!.updateApp(
                     it.name,
                     it
                 )
-                else dbHandler!!.addNewApp(it)
+                // else app remained the same
             }
             dbAppList!!.forEach {
                 if (installedApps.none { instApp -> instApp.packageName == it.packageName }) dbHandler!!.deleteApp(
@@ -75,6 +81,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // else do nothing
+    }
+
+    private fun appsAreEqual(dbApps: List<AppModal>, instApps: MutableList<AppModal>): Boolean {
+        if (dbApps.size!=instApps.size) return false
+        instApps.forEach {
+            val apps = dbApps.filter { dbApp -> dbApp.packageName == it.packageName }
+            if (apps.isEmpty()) return false
+            apps.first().let {
+                dbApp -> if (!dbApp.isEqual(it)) return false
+            }
+        }
+        return true
     }
 
 
@@ -98,9 +116,16 @@ class MainActivity : AppCompatActivity() {
                 it.loadLabel(this@MainActivity.packageManager).toString(),
                 it.loadIcon(this@MainActivity.packageManager),
                 it.packageName,
-                it.getIsLocked()
+                it.getIsLocked(),
+                dateOneDayAgo
             )
         }.toMutableList()
+    }
+
+    val dateOneDayAgo:Date get() {
+        val calendar:Calendar = Calendar.getInstance(); // this would default to now
+        calendar.add(Calendar.DAY_OF_MONTH, -1)
+        return calendar.time
     }
 
     private fun ApplicationInfo.getIsLocked(): Boolean {

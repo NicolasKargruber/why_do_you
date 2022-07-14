@@ -13,12 +13,16 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import com.example.timekeeper.data.AppModal
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import kotlin.collections.ArrayList
 
 
 class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 // creating a constructor for our database handler.
 
     val logTag = "DBHandler"
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
 
     companion object {
         // creating a constant variables for our database.
@@ -44,7 +48,10 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         private const val PACKAGE_COL = "package"
 
         // below variable is for our course tracks column.
-        private const val LOCK_COL = "locked"
+        private const val IS_LOCKED_COL = "isLocked"
+
+        // below variable is for our course tracks column.
+        private const val LAST_LOCKED_COL = "lastLocked"
     }
 
     // below method is for creating a database by running a sqlite query
@@ -58,7 +65,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                 + NAME_COL + " TEXT,"
                 + ICON_COL + " BLOB,"
                 + PACKAGE_COL + " TEXT,"
-                + LOCK_COL + " INTEGER)")
+                + IS_LOCKED_COL + " INTEGER,"
+                + LAST_LOCKED_COL + " TEXT)")
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -82,7 +90,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
             values.put(NAME_COL, name)
             values.putDrawable(ICON_COL, icon)
             values.put(PACKAGE_COL, packageName)
-            values.put(LOCK_COL, isLocked)
+            values.put(IS_LOCKED_COL, isLocked)
+            values.put(LAST_LOCKED_COL,sdf.format(lastTimeLocked))
         }
 
         // after adding all values we are passing
@@ -93,7 +102,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // database after adding database.
         db.close()
 
-        Log.d(logTag,"Added new app: ${app.name}")
+        Log.d(logTag, "Added new app: ${app.name}")
     }
 
     // we have created a new method for reading all the courses.
@@ -117,7 +126,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                         cursorApps.getString(1),
                         cursorApps.getDrawable(2),
                         cursorApps.getString(3),
-                        cursorApps.getInt(4) > 0
+                        cursorApps.getInt(4) > 0,
+                        sdf.parse(cursorApps.getString(5))!!
                     )
                 )
             } while (cursorApps.moveToNext())
@@ -127,7 +137,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // and returning our array list.
         cursorApps.close()
 
-        Log.d(logTag,"Just read DB table")
+        Log.d(logTag, "Just read DB table")
         return courseModalArrayList
     }
 
@@ -152,23 +162,29 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
         db.close()
 
-        Log.d(logTag,"Updated app in DB: $originalAppName")
+        Log.d(logTag, "Updated app in DB: $originalAppName")
     }
 
-    // below is the method for updating our courses
+    // below is the method for updating the isLocked value of an app
     fun updateIsLockedOfApp(app: AppModal) {
-        // calling a method to get writable database.
         val db = this.writableDatabase
         val values = ContentValues()
-
-        values.put(LOCK_COL, app.isLocked)
-
-        // on below line we are calling a update method to update our database and passing our values.
-        // and we are comparing it with name of our course which is stored in original name variable.
+        values.put(IS_LOCKED_COL, app.isLocked)
         db.update(TABLE_NAME, values, "name=?", arrayOf(app.name))
         db.close()
 
-        Log.d(logTag,"Set isLocked in DB of app ${app.name} to ${app.isLocked}")
+        Log.d(logTag, "Set isLocked in DB of app ${app.name} to ${app.isLocked}")
+    }
+
+    // below is the method for updating the lastLocked date of an app
+    fun updateLastLockedOfApp(app: AppModal) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(LAST_LOCKED_COL, sdf.format(app.lastTimeLocked))
+        db.update(TABLE_NAME, values, "name=?", arrayOf(app.name))
+        db.close()
+
+        Log.d(logTag, "Set lastLocked in DB of app ${app.name} to ${app.lastTimeLocked}")
     }
 
     // below is the method for deleting our course.
@@ -181,7 +197,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         db.delete(TABLE_NAME, "name=?", arrayOf(appName))
         db.close()
 
-        Log.d(logTag,"Deleted from DB: $appName")
+        Log.d(logTag, "Deleted from DB: $appName")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

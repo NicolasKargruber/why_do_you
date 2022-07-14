@@ -1,20 +1,20 @@
 package com.example.timekeeper.services
 
-import android.annotation.TargetApi
 import android.app.*
-import android.app.usage.UsageEvents
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
-import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
+import com.example.timekeeper.R
 import com.example.timekeeper.activities.lock.LockScreenActivity
 import com.example.timekeeper.broadcast.Restarter
 import com.example.timekeeper.data.AppModal
@@ -24,6 +24,7 @@ import java.util.*
 
 class YourService : Service() {
     private val logTag = "YourService"
+    var prefs: SharedPreferences? = null
 
     var counter = 0
 
@@ -41,6 +42,7 @@ class YourService : Service() {
         )
         dbHandler = DBHandler(this)
         dbAppList = dbHandler!!.readApps()
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -99,22 +101,48 @@ class YourService : Service() {
                 "Count",
                 "=========  " + counter++
             ) // while incrementing itself every time Log prints.
-            val app = getForegroundTask(this@YourService)
-            Log.e(logTag, "Current App in foreground is: $app")
-
-            if (appIsLocked(app?:"")) {
-                Log.e(logTag, "Try to lock current App: $app")
-                // start another activity
-                val lockIntent = Intent(this@YourService, LockScreenActivity::class.java)
-                lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this@YourService.startActivity(lockIntent)
+            val appPackage = getForegroundTask(this@YourService)
+            Log.e(logTag, "Current App in foreground is: $appPackage")
+            val app = getApp(appPackage ?: "") // find app in DB
+            if (app != null) Log.e(logTag, "Found app in DB")
+            if (appIsLocked(app)) {
+                if (passedLockInterval(app!!.lastTimeLocked)) {
+                    Log.e(logTag, "Try to lock current App: $app.name")
+                    // start another activity
+                    val lockIntent = Intent(this@YourService, LockScreenActivity::class.java)
+                    lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    this@YourService.startActivity(lockIntent)
+                    app.lastTimeLocked = Calendar.getInstance().time
+                    dbHandler!!.updateLastLockedOfApp(app)
+                } else Log.e(logTag, "Waiting some more minutes to lock this App: $app.name")
             }
         }
     }
 
-    fun appIsLocked(appPackage:String) : Boolean{
-        if (dbAppList!!.none { it.packageName == appPackage }) return false
-        return dbAppList!!.first {  it.packageName == appPackage }.isLocked
+    fun passedLockInterval(lastTimeLocked: Date): Boolean {
+        val now = Calendar.getInstance().time
+        val diff: Long = now.time - lastTimeLocked.time
+        val seconds = diff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+        if (days > 0 || hours > 0) return true // days or even hours have passed
+        else if (minutes > prefs!!.getInt(
+                getString(R.string.key_lock_time_intervals),
+                0
+            )
+        ) return true // lock interval is passed
+        return false
+    }
+
+    private fun getApp(appPackage: String): AppModal? {
+        return if (dbAppList!!.none { it.packageName == appPackage }) null
+        else dbAppList!!.first { it.packageName == appPackage }
+    }
+
+    fun appIsLocked(app: AppModal?): Boolean {
+        if (app == null) return false
+        return app.isLocked
     }
 
     fun stoptimertask() {
