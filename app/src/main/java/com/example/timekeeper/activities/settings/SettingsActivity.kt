@@ -13,7 +13,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // below line is to change
         // the title of our action bar.
-        supportActionBar!!.title = "Settings"
+//        supportActionBar!!.title = "Settings"
 
         // below line is used to check if
         // frame layout is empty or not.

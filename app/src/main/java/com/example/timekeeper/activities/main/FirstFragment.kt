@@ -14,20 +14,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentFirstBinding
-import com.example.timekeeper.services.YourService
+
+
+
 
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
-
-    var mServiceIntent: Intent? = null
-    private var mYourService: YourService? = null
 
     // var requestMultiplePermissions: ActivityResultLauncher<Array<String>>? = null
 
@@ -49,7 +47,6 @@ class FirstFragment : Fragment() {
         isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS).let { usGranted ->
             isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW).let { sawGranted ->
                 if (usGranted && sawGranted) {
-                    startService()
                     Toast.makeText(
                         requireContext(), "Permissions already granted", Toast.LENGTH_SHORT
                     ).show()
@@ -84,7 +81,6 @@ class FirstFragment : Fragment() {
         }
 
         binding.firstButtonGoNext.setOnClickListener {
-            startService()
             findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
         }
 
@@ -98,10 +94,12 @@ class FirstFragment : Fragment() {
                 if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS)) pusBtn.apply {
                     isEnabled = false
                     text = "Granted"
+                    Log.d(logTag,"Usage Stats granted")
                 }
                 if (isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW)) sawBtn.apply {
                     isEnabled = false
                     text = "Granted"
+                    Log.d(logTag,"Manage Overlay granted")
                 }
                 binding.firstButtonGoNext.isEnabled = !pusBtn.isEnabled && !sawBtn.isEnabled
             }
@@ -114,30 +112,16 @@ class FirstFragment : Fragment() {
         Log.d(logTag, "Fragment destroyed")
     }
 
-    private fun startService() {
-        // Since the app is already running in foreground,
-        // we need not launch the service as a foreground service
-        // to prevent itself from being terminated.
-        mYourService = YourService()
-        mServiceIntent = Intent(requireContext(), mYourService!!.javaClass)
-        if (!isMyServiceRunning(mYourService!!.javaClass)) {
-            requireContext().startService(mServiceIntent) // If the service is not running, we start it by using startService().
-        }
-    }
-
-    // checks the current status of the background service
-    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager =
-            requireActivity().getSystemService(AppCompatActivity.ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                Log.i("Service status", "Running")
-                return true
-            }
-        }
-        Log.i("Service status", "Not running")
-        return false
-    }
+//    // checks the current status of the background service
+//    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+//        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+//        for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
+//            if (serviceClass.name.equals(service.service.className)) {
+//                return true
+//            }
+//        }
+//        return false
+//    }
 
     // Function to check and request permission.
     private fun checkPermission(action: String) {

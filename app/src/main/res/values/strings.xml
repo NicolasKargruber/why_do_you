@@ -16,16 +16,17 @@
     <string name="lock_time_intervals">Lock Time Intervals</string>
     <string name="set_time_intervals">Set time intervals</string>
     <string name="key_lock_time_intervals">key_lock_time_intervals</string>
+    <string name="settings">settings</string>
 
-<!--
-    <string-array name="pref_seek_values">
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>30</item>
-    </string-array>
--->
+    <!--
+        <string-array name="pref_seek_values">
+            <item>5</item>
+            <item>10</item>
+            <item>15</item>
+            <item>20</item>
+            <item>30</item>
+        </string-array>
+    -->
 
     <string-array name="pref_lock_time_intervals">
         <item>1 min</item>

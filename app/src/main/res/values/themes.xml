@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TimeKeeper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.TimeKeeper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gray_900</item>
         <item name="colorPrimaryVariant">@color/gray_500</item>
@@ -20,9 +20,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.TimeKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="Theme.TimeKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="actionOverflowButtonStyle">@style/Theme.TimeKeeper.OverflowButtonStyle</item>
     </style>
 
     <style name="Theme.TimeKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    </style>
+
+    <style name="Theme.TimeKeeper.OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/black</item>
     </style>
 </resources>

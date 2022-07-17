@@ -37,7 +37,7 @@ class PuzzleFragment() : Fragment() {
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel
 
-    val parentIsLock get() = requireActivity().javaClass == LockScreenActivity::class.java
+    private val parentIsLock get() = requireActivity().javaClass == LockScreenActivity::class.java
 
     private val KEY_SHUFFLED = "KEY_SHUFFLED"
 
@@ -95,8 +95,11 @@ class PuzzleFragment() : Fragment() {
                 shuffleAndAssign()
                 viewModel!!.currentNum.value = -2
                 resetTextColors()
+                it.isVisible = false
+                binding.puzzleTvInstruction.isVisible = true
             }
-            puzzleResetButton.isVisible = !parentIsLock
+
+            // puzzleResetButton.isVisible = !parentIsLock
         }
 
 
@@ -128,6 +131,7 @@ class PuzzleFragment() : Fragment() {
             "Grid is completed",
             Snackbar.LENGTH_LONG
         ).setAction("Action", null).show()
+        binding.puzzleResetButton.isVisible = !parentIsLock
         if(parentIsLock) Handler(Looper.getMainLooper()).postDelayed({
             requireActivity().finishAffinity()
         }, 3000)
@@ -170,6 +174,7 @@ class PuzzleFragment() : Fragment() {
 
     private val onClick = View.OnClickListener {
         (it as MaterialButton).getNumber().let { num ->
+            binding.puzzleTvInstruction.isVisible = false
             viewModel!!.currentNum.apply {
                 //initially it is -2
                 if (value!! == -2) {
@@ -184,9 +189,6 @@ class PuzzleFragment() : Fragment() {
                 if (num <= value!!) it.isChecked = true
             }
         }
-    }
-
-    private fun onTextChanged() {
     }
 
     @ColorInt

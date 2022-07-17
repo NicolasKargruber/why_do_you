@@ -17,14 +17,19 @@ import androidx.preference.PreferenceManager
 import com.example.timekeeper.R
 import com.example.timekeeper.activities.lock.LockScreenActivity
 import com.example.timekeeper.broadcast.Restarter
-import com.example.timekeeper.data.AppModal
+import com.example.timekeeper.model.AppModal
 import com.example.timekeeper.database.DBHandler
 import java.util.*
 
 
-class YourService : Service() {
+class YourService() : Service() {
     private val logTag = "YourService"
-    var prefs: SharedPreferences? = null
+
+    // shared Preferences
+    var defPrefs: SharedPreferences? = null
+//    var sharedPreferences: SharedPreferences? = null
+//    private val MY_PREFS: String = "MY_PREFS"
+//    private val SERVICE_RUNNING: String = "is_running"
 
     var counter = 0
 
@@ -42,7 +47,8 @@ class YourService : Service() {
         )
         dbHandler = DBHandler(this)
         dbAppList = dbHandler!!.readApps()
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        defPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+//        sharedPreferences = this.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,7 +82,7 @@ class YourService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stoptimertask()
+        stopTimerTask()
         val broadcastIntent = Intent()
         broadcastIntent.action = "restartservice"
         broadcastIntent.setClass(
@@ -88,14 +94,16 @@ class YourService : Service() {
 
     // Here we have defined a simple Timer task
     private var timer: Timer? = null
-    private var timerTask: TimerTask? = null
-    fun startTimer() {
+    private fun startTimer() {
+        if (timer == null) { // timer causes error if task executed twice
         timer = Timer()
-        timerTask = task
-        timer!!.schedule(timerTask, 1000, 1000)
+        Timer().schedule(timerTask, 1000, 1000)
+//        sharedPreferences!!.edit().putBoolean(SERVICE_RUNNING,true).apply()
+        }
+        else Log.d(logTag,"timerTask already running")
     }
 
-    val task = object : TimerTask() {
+    private val timerTask = object : TimerTask() {
         override fun run() { // runs every 1 second
             Log.i(
                 "Count",
@@ -119,6 +127,15 @@ class YourService : Service() {
         }
     }
 
+    private fun stopTimerTask() {
+        if (timer != null) {
+            timer!!.cancel()
+            timer = null
+        }
+//        sharedPreferences!!.edit().putBoolean(SERVICE_RUNNING,false).apply()
+    }
+
+
     fun passedLockInterval(lastTimeLocked: Date): Boolean {
         val now = Calendar.getInstance().time
         val diff: Long = now.time - lastTimeLocked.time
@@ -127,7 +144,7 @@ class YourService : Service() {
         val hours = minutes / 60
         val days = hours / 24
         if (days > 0 || hours > 0) return true // days or even hours have passed
-        else if (minutes > prefs!!.getInt(
+        else if (minutes > defPrefs!!.getInt(
                 getString(R.string.key_lock_time_intervals),
                 0
             )
@@ -143,13 +160,6 @@ class YourService : Service() {
     fun appIsLocked(app: AppModal?): Boolean {
         if (app == null) return false
         return app.isLocked
-    }
-
-    fun stoptimertask() {
-        if (timer != null) {
-            timer!!.cancel()
-            timer = null
-        }
     }
 
     @Nullable

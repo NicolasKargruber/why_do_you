@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.timekeeper.R
-import com.example.timekeeper.data.AppModal
+import com.example.timekeeper.model.AppModal
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class RecyclerAdapterLockApps(

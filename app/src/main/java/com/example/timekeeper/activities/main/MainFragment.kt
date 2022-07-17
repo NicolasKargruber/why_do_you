@@ -2,18 +2,18 @@ package com.example.timekeeper.activities.main
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.timekeeper.R
 import com.example.timekeeper.databinding.FragmentMainBinding
+import com.example.timekeeper.services.YourService
 import com.example.timekeeper.viewmodel.MainViewModel
 
 
@@ -25,11 +25,17 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     private var _viewModel: MainViewModel? = null
 
-    private val CURRENT_TAB_KEY: String = "CURRENT_TAB_KEY"
+    var mServiceIntent: Intent? = null
+    private var mYourService: YourService? = null
 
-    val defaultItemId = R.id.lock_apps
+    // Shared Preferences
+    private var sharedPreferences: SharedPreferences? = null
+    private val MY_PREFS: String = "MY_PREFS"
+    private val CURRENT_TAB_ID: String = "tab_id"
+//    private val SERVICE_RUNNING: String = "is_running"
 
-    var sharedPrefences: SharedPreferences? = null
+    private val defaultItemId = R.id.lock_apps
+
 
     private val logTag = "MainFragment"
 
@@ -55,11 +61,14 @@ class MainFragment : Fragment() {
         Log.d(logTag, "Fragment created")
 
         _viewModel =
-            ViewModelProvider(requireActivity()).get(MainViewModel::class.java) // get viewModel
+            ViewModelProvider(requireActivity())[MainViewModel::class.java] // get viewModel
 
-        sharedPrefences =
-            requireActivity().getSharedPreferences(CURRENT_TAB_KEY, Context.MODE_PRIVATE)
-        _viewModel!!.currentSelectItemId = sharedPrefences!!.getInt("id", defaultItemId)
+        sharedPreferences =
+            requireActivity().getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE)
+
+        startService() // start background service (find fg-app)
+
+        _viewModel!!.currentSelectItemId = sharedPreferences!!.getInt(CURRENT_TAB_ID, defaultItemId)
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             Log.d(logTag, "Item was selected")
@@ -91,8 +100,20 @@ class MainFragment : Fragment() {
             .addToBackStack(null).commit()
     }
 
+
+    private fun startService() {
+//        if (!sharedPreferences!!.getBoolean(SERVICE_RUNNING,true)) {
+        // Since the app is already running in foreground,
+        // we need not launch the service as a foreground service
+        // to prevent itself from being terminated.
+        mYourService = YourService()
+        mServiceIntent = Intent(requireContext(), mYourService!!.javaClass)
+
+        requireContext().startService(mServiceIntent) // If the service is not running, we start it by using startService().
+    }
+
     override fun onDestroyView() {
-        val editor = sharedPrefences!!.edit()
+        val editor = sharedPreferences!!.edit()
         editor.putInt("id", binding.bottomNavigation.selectedItemId)
         editor.apply()
         super.onDestroyView()

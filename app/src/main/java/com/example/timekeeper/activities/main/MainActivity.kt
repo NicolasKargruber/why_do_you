@@ -1,7 +1,5 @@
 package com.example.timekeeper.activities.main
 
-import android.app.admin.DevicePolicyManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -17,12 +15,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.timekeeper.R
 import com.example.timekeeper.activities.settings.SettingsActivity
 import com.example.timekeeper.broadcast.Restarter
-import com.example.timekeeper.data.AppModal
 import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.ActivityMainBinding
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import com.example.timekeeper.model.AppModal
 import java.util.*
 
 
@@ -43,18 +38,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        binding.toolbar.apply {
+            setSupportActionBar(this) // title
+        }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration) // back button
 
 //        _viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         // SQLite Database
-        // creating a new DBHandler class
-        // and passing our context to it.
-        dbHandler = DBHandler(this)
+        dbHandler = DBHandler(this) // creating a new DBHandler class
         dbAppList = dbHandler!!.readApps()
         val installedApps = getPackages().toApps() // get Apps
 
@@ -96,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // Note that in onDestroy() we are dedicatedly calling stopService(),
+    // Note that in onDestroy() we are delicately calling stopService(),
     // so that our overridden method gets invoked.
     // If this was not done,
     // then the service would have ended automatically after app is killed
@@ -122,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         }.toMutableList()
     }
 
-    val dateOneDayAgo:Date get() {
-        val calendar:Calendar = Calendar.getInstance(); // this would default to now
+    private val dateOneDayAgo:Date get() {
+        val calendar:Calendar = Calendar.getInstance() // this would default to now
         calendar.add(Calendar.DAY_OF_MONTH, -1)
         return calendar.time
     }
@@ -137,15 +132,7 @@ class MainActivity : AppCompatActivity() {
         val pm = this.packageManager
         val packages =
             pm.getInstalledApplications(PackageManager.GET_META_DATA) //get a list of installed apps.
-        for (packageInfo in packages) {
-            Log.d(logTag, "Installed app name :" + packageInfo.loadLabel(pm))
-            Log.d(logTag, "Installed package :" + packageInfo.packageName)
-            Log.d(logTag, "Source dir : " + packageInfo.sourceDir)
-            Log.d(
-                logTag,
-                "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName)
-            ) // the getLaunchIntentForPackage returns an intent that you can use with startActivity()
-        }
+
         Log.d(logTag, "Found ${packages.size} packages in total")
         val apps =
             packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
@@ -155,32 +142,16 @@ class MainActivity : AppCompatActivity() {
         return apps
     }
 
-    private fun lockApps(apps: MutableList<AppModal>) {
-        val context = this
-        val dpm =
-            context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val adminName = this.componentName
-        val lockApps = apps.filter { it.isLocked }
-        /*if (lockApps.isNotEmpty()) dpm.setLockTaskPackages(
-            adminName,
-            lockApps.map { it.packageName }.toTypedArray()
-        )*/
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.custom_toolbar_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        // opening a new intent to open settings activity.
 
         return when (item.itemId) {
-            R.id.action_settings -> {
+            R.id.nav_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 true

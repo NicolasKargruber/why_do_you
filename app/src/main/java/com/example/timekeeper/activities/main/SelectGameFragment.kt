@@ -53,7 +53,7 @@ class SelectGameFragment : Fragment() {
         // MY_PREFS_NAME - a static String variable like:
 //public static final String MY_PREFS_NAME = "MyPrefsFile";
         sharedPreferences = requireActivity().getSharedPreferences(CHECKED_MC_ID, MODE_PRIVATE)
-        _viewModel!!.lockGameId = sharedPreferences!!.getInt("id",-1) // -1 is default
+        _viewModel!!.lockGameId = sharedPreferences!!.getInt("id", -1) // -1 is default
 
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
@@ -64,13 +64,15 @@ class SelectGameFragment : Fragment() {
         }
 
         // check MatCard
-        if (_viewModel!!.lockGameId!=-1) requireActivity().findViewById<MaterialCardView>(_viewModel!!.lockGameId).performClick()
+        if (_viewModel!!.lockGameId != -1) requireActivity().findViewById<MaterialCardView>(
+            _viewModel!!.lockGameId
+        ).performClick()
 
     }
 
     override fun onDestroyView() {
         val editor = sharedPreferences!!.edit()
-        editor.putInt("id",_viewModel!!.lockGameId)
+        editor.putInt("id", _viewModel!!.lockGameId)
         editor.apply()
         super.onDestroyView()
         _binding = null
@@ -79,13 +81,13 @@ class SelectGameFragment : Fragment() {
     private val onClickListener = View.OnClickListener {
         it as MaterialCardView
         if (!matCards.contains(it)) matCards.add(it)
-        it.isChecked = !it.isChecked
+        if(!it.isChecked) it.isChecked = true // cannot be unchecked by click
 
-        //uncheck other matCards
         val checkedMatCard = matCards.filter { mc -> mc.isChecked }
-        checkedMatCard.filterNot { mc -> mc == it }.forEach { cMC -> cMC.isChecked = false }
+        checkedMatCard.filterNot { mc -> mc == it }
+            .forEach { cMC -> cMC.isChecked = false } //uncheck other matCards
         // get id of checked mat card and set UI
-        _viewModel!!.lockGameId = checkedMatCard.first {mc -> mc.isChecked }.id
+        _viewModel!!.lockGameId = checkedMatCard.first { mc -> mc.isChecked }.id
         binding.openGame.isVisible = checkedMatCard.isNotEmpty()
     }
 

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".activities.games.PuzzleFragment">
 
     <include
@@ -11,7 +13,7 @@
         layout="@layout/wdy_view_group" />
 
     <GridLayout
-        android:id="@+id/gridLayout"
+        android:id="@+id/puzzle_gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="3"
@@ -88,15 +90,26 @@
             tools:text="9" />
     </GridLayout>
 
+    <TextView
+        android:id="@+id/puzzle_tv_instruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_medium"
+        android:gravity="center"
+        android:textSize="@dimen/space_medium"
+        android:text="Click grid to start"
+        app:layout_constraintTop_toBottomOf="@id/puzzle_gridLayout" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/puzzle_reset_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_huge"
         android:text="Reset"
+        android:visibility="gone"
         app:icon="@drawable/ic_round_refresh_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gridLayout" />
+        app:layout_constraintTop_toBottomOf="@id/puzzle_gridLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

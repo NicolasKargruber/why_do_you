@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timekeeper.adapter.RecyclerAdapterLockApps
-import com.example.timekeeper.data.AppModal
+import com.example.timekeeper.model.AppModal
 import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.FragmentLockAppsBinding
 import com.example.timekeeper.viewmodel.LockAppsViewModel

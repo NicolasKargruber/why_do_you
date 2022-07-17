@@ -1,7 +1,8 @@
 package com.example.timekeeper.activities.games
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,8 +16,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.timekeeper.R
+import com.example.timekeeper.activities.lock.LockScreenActivity
+import com.example.timekeeper.database.DBHandler
 import com.example.timekeeper.databinding.FragmentNotesBinding
 import com.example.timekeeper.viewmodel.NotesViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -31,14 +36,18 @@ class NotesFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel
 
+    private val parentIsLock get() = requireActivity().javaClass == LockScreenActivity::class.java
+
     private val logTag = "NotesFragment"
 
-    private val arrayAdapter by lazy { ArrayAdapter<String>(
-        requireContext(),
-        R.layout.note_list_item,
-        R.id.mat_btn_note,
-        viewModel!!.notes
-    ) }
+    private val arrayAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            R.layout.note_list_item,
+            R.id.mat_btn_note,
+            viewModel!!.getNotes()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,18 +60,22 @@ class NotesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _viewModel = ViewModelProvider(requireActivity()).get(NotesViewModel::class.java)
+        _viewModel = ViewModelProvider(requireActivity())[NotesViewModel::class.java]
+
+        if(parentIsLock) _viewModel!!.apply {
+            dbHandler = DBHandler(requireContext())
+            readNotes()
+        } else _viewModel!!.updateDB = false
 
         binding.apply {
             notesList.adapter = arrayAdapter
             notesList.onItemClickListener = OnItemClickListener { arrayView, _, pos, _ ->
                 val txt = arrayView.getItemAtPosition(pos) as String
-                createAlertDialog(txt,pos)
-                Log.d(logTag,"I come bis here") }
+                createAlertDialog(txt, pos)
+            }
 
             fabAddNote.setOnClickListener {
                 createAlertDialog()
-                textCreateFirstMemo.isVisible = false
             }
         }
     }
@@ -70,9 +83,11 @@ class NotesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _viewModel!!.emptyNotes()
+        Log.d(logTag, "Fragment destroyed")
     }
 
-    private fun createAlertDialog(txt:String = "", pos:Int=-1) {
+    private fun createAlertDialog(txt: String = "", pos: Int = -1) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Note")
 
@@ -87,24 +102,28 @@ class NotesFragment : Fragment() {
         // Set up the buttons
         builder.setPositiveButton("OK") { _, _ ->
             editText.text.toString().let {
-                if (it.isNotEmpty()){
-                    if (pos==-1) viewModel!!.notes.add(it)
-                    else viewModel!!.notes[pos] = it
+                if (it.isNotEmpty()) {
+                    if (pos == -1) viewModel!!.addNote(it)
+                    else viewModel!!.setNote(pos,it)
+                    arrayAdapter.notifyDataSetChanged()
+                    binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+                    showSuccessAndQuit()
                 }
-                arrayAdapter.notifyDataSetChanged()
             }
-
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
 
         builder.show()
     }
 
-//    private fun updateMapEntry() { // is called when a new note was created
-//        viewModel!!.apply {
-//            val btn = binding.notesList.getChildAt(notes.size) as MaterialButton
-//            notes[btn] = notes.filter { it.key == null }.values.toString()
-//            notes.remove(null)
-//        }
-//    }
+    private fun showSuccessAndQuit() {
+        Snackbar.make(
+            binding.notesCoordinatorLayout,
+            "Task is completed",
+            Snackbar.LENGTH_LONG
+        ).setAction("Action", null).show()
+        if(parentIsLock) Handler(Looper.getMainLooper()).postDelayed({
+            requireActivity().finishAffinity()
+        }, 3000)
+    }
 }
