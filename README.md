@@ -1,4 +1,4 @@
-﻿# time_keeper
+﻿# why_do_you
 
 This is a project i am currently working on. The result should be an application that features a lock screen that opens when using a social media (and other) application.
 
