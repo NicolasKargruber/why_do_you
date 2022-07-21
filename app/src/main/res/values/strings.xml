@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Time Keeper</string>
+    <string name="app_name">Why do you</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -13,6 +13,13 @@
     <string name="apps">Apps</string>
     <string name="games">Games</string>
 
+
+    <string name="MY_PREFS">MY_PREFS</string>
+    <string name="CHECKED_MC_CARD">CHECKED_MC_CARD</string>
+    <string name="LOCKED_PACKAGE">LOCKED_PACKAGE</string>
+    <string name="CURRENT_TAB_ID">CURRENT_TAB_ID</string>
+
+    <string name="default_lock_time_interval">5</string>
     <string name="lock_time_intervals">Lock Time Intervals</string>
     <string name="set_time_intervals">Set time intervals</string>
     <string name="key_lock_time_intervals">key_lock_time_intervals</string>
@@ -38,11 +45,12 @@
     </string-array>
 
     <string-array name="pref_intervals">
-        <item>0</item>
         <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
     </string-array>
 
 </resources>

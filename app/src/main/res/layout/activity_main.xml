@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:elevation="4dp"
-            style="Widget.MaterialComponents.Toolbar.Surface"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            android:background="?attr/colorSurface"
+            android:theme="@style/Theme.TimeKeeper.AppBarOverlay"
             app:popupTheme="@style/Theme.TimeKeeper.PopupOverlay"/>
 
     </com.google.android.material.appbar.AppBarLayout>

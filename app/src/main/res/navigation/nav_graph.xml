@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/PuzzleFragment"
-        android:name="com.example.timekeeper.activities.games.PuzzleFragment"
+        android:name="com.nicokarg.whydoyou.activities.games.PuzzleFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_puzzle"/>
     <fragment
         android:id="@+id/MainFragment"
-        android:name="com.example.timekeeper.activities.main.MainFragment"
+        android:name="com.nicokarg.whydoyou.activities.main.MainFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_main">
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.timekeeper.activities.main.FirstFragment"
+        android:name="com.nicokarg.whydoyou.activities.main.FirstFragment"
         android:label="fragment_first"
         tools:layout="@layout/fragment_first" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/notesFragment"
-        android:name="com.example.timekeeper.activities.games.NotesFragment"
+        android:name="com.nicokarg.whydoyou.activities.games.NotesFragment"
         android:label="fragment_notes"
         tools:layout="@layout/fragment_notes" />
 </navigation>

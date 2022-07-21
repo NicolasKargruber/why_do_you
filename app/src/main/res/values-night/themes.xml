@@ -22,6 +22,7 @@
 
     <style name="Theme.TimeKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" >
         <item name="actionOverflowButtonStyle">@style/Theme.TimeKeeper.OverflowButtonStyle</item>
+        <item name="colorSurface">@color/blue_gray_500</item>
     </style>
 
     <style name="Theme.TimeKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >

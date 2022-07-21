@@ -16,7 +16,7 @@
             title is use to add title to our list preferences.-->
         <!--this list preference is for remind me option-->
         <ListPreference
-            android:defaultValue="5"
+            android:defaultValue="@string/default_lock_time_interval"
             android:entries="@array/pref_lock_time_intervals"
             android:entryValues="@array/pref_intervals"
             android:key="@string/key_lock_time_intervals"

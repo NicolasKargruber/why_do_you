@@ -3,14 +3,15 @@
     <style name="Theme.TimeKeeper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gray_900</item>
-        <item name="colorPrimaryVariant">@color/gray_500</item>
+        <item name="colorPrimaryVariant">@color/blue_gray_500</item>
+        <item name="colorPrimaryDark">@color/gray_500</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/purple_custom</item>
         <item name="colorSecondaryVariant">@color/purple_custom_dark</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="colorOutline">#1E000000</item>
     </style>
@@ -22,6 +23,7 @@
 
     <style name="Theme.TimeKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
         <item name="actionOverflowButtonStyle">@style/Theme.TimeKeeper.OverflowButtonStyle</item>
+        <item name="colorSurface">@color/gray_050</item>
     </style>
 
     <style name="Theme.TimeKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
