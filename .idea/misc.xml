@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/drawable/ic_time_keeper_launcher_background.xml" value="0.2385" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/drawable/ic_time_keeper_launcher_foreground.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/drawable/outlined_background.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/activity_lock_screen.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
@@ -18,11 +20,13 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/hallo.xml" value="0.1" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/hello.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/item_app_layout.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/note_list_item.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/permission_view_group.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/layout/wdy_view_group.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/menu/bottom_menu.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/menu/custom_toolbar_menu.xml" value="0.23125" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/menu/menu_main.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/mipmap-anydpi-v26/ic_time_keeper_launcher.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/time_keeper/app/src/main/res/xml/preferences.xml" value="0.23125" />
         <entry key="..\:/Users/nicol/Downloads/TimeKeeper/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5265" />
         <entry key="..\:/Users/nicol/Downloads/TimeKeeper/app/src/main/res/drawable/btn_top_left_round.xml" value="0.5255" />

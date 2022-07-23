@@ -47,8 +47,8 @@ class YourService : Service() {
 //        dbAppList = dbHandler!!.readApps()
         defPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences = this.getSharedPreferences(
-            resources.getString(R.string.MY_PREFS)
-            , Context.MODE_PRIVATE)
+            resources.getString(R.string.MY_PREFS), Context.MODE_PRIVATE
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -96,11 +96,10 @@ class YourService : Service() {
     private var timer: Timer? = null
     private fun startTimer() {
         if (timer == null) { // timer causes error if task executed twice
-        timer = Timer()
-        Timer().schedule(timerTask, 1000, 1000)
+            timer = Timer()
+            Timer().schedule(timerTask, 1000, 1000)
 //        sharedPreferences!!.edit().putBoolean(SERVICE_RUNNING,true).apply()
-        }
-        else Log.d(logTag,"timerTask already running")
+        } else Log.d(logTag, "timerTask already running")
     }
 
     private val timerTask = object : TimerTask() {
@@ -111,7 +110,7 @@ class YourService : Service() {
             ) // while incrementing itself every time Log prints.
             val appPackage = getForegroundTask(this@YourService)
             Log.e(logTag, "Current App in foreground is: $appPackage")
-            val app =  dbHandler!!.getAppFromDB(appPackage) // find app in DB
+            val app = dbHandler!!.getAppFromDB(appPackage) // find app in DB
             if (app != null) Log.e(logTag, "Found app in DB")
             if (appIsLocked(app)) {
                 if (passedLockInterval(app!!.lastTimeLocked)) {
@@ -143,11 +142,14 @@ class YourService : Service() {
     fun passedLockInterval(lastTimeLocked: Date): Boolean {
         val now = Calendar.getInstance().time
         val diff: Long = now.time - lastTimeLocked.time
-        val seconds = diff / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        val days = hours / 24
-        val lockInterval = defPrefs!!.getString(resources.getString(R.string.key_lock_time_intervals),"0")!!.toInt()
+        val seconds = diff / 1000 // total difference in seconds
+        val minutes = seconds / 60 // total difference in min
+        val hours = minutes / 60 // total difference in hours
+        val days = hours / 24 // total difference in days
+        val lockInterval = defPrefs!!.getString(
+            resources.getString(R.string.key_lock_time_intervals),
+            resources.getString(R.string.default_lock_time_interval)
+        )!!.toInt()
         if (days > 0 || hours > 0) return true // days or even hours have passed
         else if (minutes >= lockInterval) return true // lock interval is passed
         Log.e(logTag, "Time passed since last locked $minutes:$seconds of $lockInterval min")

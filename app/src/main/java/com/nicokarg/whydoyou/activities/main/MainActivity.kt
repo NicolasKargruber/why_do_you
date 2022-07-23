@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,6 +18,7 @@ import com.nicokarg.whydoyou.broadcast.Restarter
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.ActivityMainBinding
 import com.nicokarg.whydoyou.model.AppModal
+import com.nicokarg.whydoyou.viewmodel.MainActivityViewModel
 import java.util.*
 
 
@@ -24,10 +26,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-//    private var _viewModel: MainViewModel? = null
-
-    private var dbHandler: DBHandler? = null
-    private var dbAppList: List<AppModal>? = null
+    private var _viewModel: MainActivityViewModel? = null
+//
+//    private var dbHandler: DBHandler? = null
+//    private var dbAppList: List<AppModal>? = null
 
     private val logTag = "MainActivity"
 
@@ -45,47 +47,85 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 //        setupActionBarWithNavController(navController, appBarConfiguration) // back button
 
-//        _viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        _viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
-        // SQLite Database
-        dbHandler = DBHandler(this) // creating a new DBHandler class
-        dbAppList = dbHandler!!.readApps()
-        val installedApps = getPackages().toApps() // get installed Apps
+        _viewModel!!.apply {
 
-        if (dbAppList.isNullOrEmpty()) {
-            installedApps.forEach {
-                dbHandler!!.addNewApp(it)
+            // SQLite Database
+            dbHandler = DBHandler(this@MainActivity) // creating a new DBHandler class
+            dbAppList = dbHandler!!.readApps()
+            val installedApps = getPackages().toApps() // get installed Apps
+            var updateAppAtIndex = listOf(0) // index of installed apps
+            var removeAppAtIndex = listOf(0) // index of database apps
+
+            if (dbAppList.isNullOrEmpty()) {
+                installedApps.forEach {
+                    dbHandler!!.addNewApp(it)
+                }
+                dbAppList = installedApps
+            } else {
+                updateAppAtIndex = appIndicesToUpdate(dbAppList!!, installedApps)
+                removeAppAtIndex = appIndicesToRemove(dbAppList!!, installedApps)
             }
-            dbAppList = installedApps
-        } else if (appsAreEqual(dbAppList!!, installedApps)) { // apps have changed
-            installedApps.forEach {
-                //TODO Bitmap seems to change and isLocked is varying
-                val app = dbAppList!!.filter { dbApp -> dbApp.packageName == it.packageName }
-                if (app.isEmpty()) dbHandler!!.addNewApp(it)
-                else if (!app.first().isEqual(it)) dbHandler!!.updateApp(it)
-                // else app remained the same
+
+            if (updateAppAtIndex.sum() > 0) { // installed apps list has updated
+                updateAppAtIndex.forEachIndexed { index, i ->
+                    installedApps[index].let { instApp ->
+                        when (i) {
+                            1 -> dbHandler!!.addNewApp(instApp)
+                            2 -> dbHandler!!.updateApp(instApp)
+                            // else app remained the same (i==0)
+                        }
+                    }
+                }
             }
-            dbAppList!!.forEach {
-                if (installedApps.none { instApp -> instApp.packageName == it.packageName }) dbHandler!!.deleteApp(
-                    it.packageName
+            if (removeAppAtIndex.sum() > 0) { // got apps to delete: installed apps list has updated
+                removeAppAtIndex.forEachIndexed { index, i ->
+                    dbAppList!![index].let { dbApp ->
+                        if (i == 1) dbHandler!!.deleteApp(dbApp.packageName)
+                    }
+                }
+            }
+            // else do nothing as apps have not changed
+        }
+    }
+
+    private fun appIndicesToUpdate(
+        dbApps: List<AppModal>,
+        instApps: MutableList<AppModal>
+    ): List<Int> {
+        val updateIndexList = mutableListOf<Int>()
+        // if (dbApps.size != instApps.size) return updateIndexList
+        instApps.forEach { instApp ->
+            val apps = dbApps.filter { dbApp -> dbApp.packageName == instApp.packageName }
+            if (apps.isEmpty()) updateIndexList.add(1)
+            else if (!appsAreEqual(
+                    apps.first(),
+                    instApp
                 )
-            }
+            ) updateIndexList.add(2) // apps should hold only one app
+            else updateIndexList.add(0)
         }
-        // else do nothing
+        return updateIndexList // index of installed apps
     }
 
-    private fun appsAreEqual(dbApps: List<AppModal>, instApps: MutableList<AppModal>): Boolean {
-        if (dbApps.size!=instApps.size) return false
-        instApps.forEach {
-            val apps = dbApps.filter { dbApp -> dbApp.packageName == it.packageName }
-            if (apps.isEmpty()) return false
-            apps.first().let {
-                dbApp -> if (!dbApp.isEqual(it)) return false
-            }
+    private fun appIndicesToRemove(
+        dbApps: List<AppModal>,
+        instApps: MutableList<AppModal>
+    ): List<Int> {
+        val removeIndexList = mutableListOf<Int>()
+        dbApps.forEach {
+            if (instApps.none { instApp -> instApp.packageName == it.packageName }) removeIndexList.add(
+                -1
+            )
+            else removeIndexList.add(0)
         }
-        return true
+        return removeIndexList // index of database apps
     }
 
+    private fun appsAreEqual(dbApp: AppModal, instApp: AppModal): Boolean {
+        return instApp.name == dbApp.name && instApp.icon.first == dbApp.icon.first
+    }
 
     // Note that in onDestroy() we are delicately calling stopService(),
     // so that our overridden method gets invoked.
@@ -103,9 +143,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun MutableList<ApplicationInfo>.toApps(): MutableList<AppModal> {
         return this.map {
+            Log.d(logTag, "This is the icon id: ${it.icon}")
             AppModal(
                 it.loadLabel(this@MainActivity.packageManager).toString(),
-                it.loadIcon(this@MainActivity.packageManager),
+                Pair(
+                    it.icon,
+                    it.loadIcon(this@MainActivity.packageManager)
+                ), // icon id and drawbable
                 it.packageName,
                 it.getIsLocked(),
                 dateOneDayAgo
@@ -113,15 +157,18 @@ class MainActivity : AppCompatActivity() {
         }.toMutableList()
     }
 
-    private val dateOneDayAgo:Date get() {
-        val calendar:Calendar = Calendar.getInstance() // this would default to now
-        calendar.add(Calendar.DAY_OF_MONTH, -1)
-        return calendar.time
-    }
+    private val dateOneDayAgo: Date
+        get() {
+            val calendar: Calendar = Calendar.getInstance() // this would default to now
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+            return calendar.time
+        }
 
+    // finds app in list of apps of DB and returns isLocked of app
     private fun ApplicationInfo.getIsLocked(): Boolean {
-        val temp = dbAppList?.filter { it.name == this.name }
-        return !temp.isNullOrEmpty() && temp.first().isLocked
+        val temp = _viewModel!!.dbAppList?.filter { it.packageName == this.packageName }
+        return if (temp.isNullOrEmpty()) false // app not found
+        else temp.first().isLocked
     }
 
     private fun getPackages(): MutableList<ApplicationInfo> {
@@ -145,7 +192,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         return when (item.itemId) {
             R.id.nav_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)

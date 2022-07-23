@@ -24,10 +24,6 @@ class SelectGameFragment : Fragment() {
     private var _viewModel: SelectGameViewModel? = null
 
     private val logTag = "SelectGameFragment"
-    private var sharedPreferences: SharedPreferences? = null
-
-    private var matCards = mutableListOf<MaterialCardView>()
-    // private var checkedMCid: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,16 +42,15 @@ class SelectGameFragment : Fragment() {
 
         _viewModel = ViewModelProvider(requireActivity())[SelectGameViewModel::class.java]
 
-        // MY_PREFS_NAME - a static String variable like:
-//public static final String MY_PREFS_NAME = "MyPrefsFile";
-        // MY_PREFS_NAME - a static String variable like:
-//public static final String MY_PREFS_NAME = "MyPrefsFile";
+        _viewModel!!.apply {
+
         sharedPreferences = requireActivity().getSharedPreferences(
             resources.getString(R.string.MY_PREFS), MODE_PRIVATE
         )
         _viewModel!!.lockGameId = sharedPreferences!!.getInt(
             resources.getString(R.string.CHECKED_MC_CARD), -1
         ) // -1 is default
+    }
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
             gameNumbers.setOnClickListener(onClickListener)
@@ -73,20 +68,22 @@ class SelectGameFragment : Fragment() {
 
     private val onClickListener = View.OnClickListener {
         it as MaterialCardView
-        if (!matCards.contains(it)) matCards.add(it)
-        if (!it.isChecked) it.isChecked = true // cannot be unchecked by click
+        _viewModel!!.apply {
+            if (!matCards.contains(it)) matCards.add(it)
+            if (!it.isChecked) it.isChecked = true // cannot be unchecked by click
 
-        val checkedMatCard = matCards.filter { mc -> mc.isChecked }
-        checkedMatCard.filterNot { mc -> mc == it }
-            .forEach { cMC -> cMC.isChecked = false } //uncheck other matCards
-        // get id of checked mat card and set UI
-        _viewModel!!.lockGameId = checkedMatCard.first { mc -> mc.isChecked }.id
-        binding.openGame.isVisible = checkedMatCard.isNotEmpty()
+            val checkedMatCard = matCards.filter { mc -> mc.isChecked }
+            checkedMatCard.filterNot { mc -> mc == it }
+                .forEach { cMC -> cMC.isChecked = false } //uncheck other matCards
+            // get id of checked mat card and set UI
+            _viewModel!!.lockGameId = checkedMatCard.first { mc -> mc.isChecked }.id
+            binding.openGame.isVisible = checkedMatCard.isNotEmpty()
 
-        sharedPreferences!!.edit().putInt(
+            sharedPreferences!!.edit().putInt(
                 resources.getString(R.string.CHECKED_MC_CARD),
                 _viewModel!!.lockGameId
             ).apply()
+        }
     }
 
     private val goToNextFragment = View.OnClickListener {

@@ -37,35 +37,20 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // below variable is for our apps table name.
         private const val APPS_TABLE_NAME = "my_apps"
 
-        // below variable is for our app id column.
         private const val APP_ID_COL = "app_id"
-
-        // below variable is for our app name column
         private const val NAME_COL = "name"
-
-        // below variable id for our app duration column.
+        private const val ICON_ID_COL = "icon_id"
         private const val ICON_COL = "icon"
-
-        // below variable for our app description column.
         private const val PACKAGE_COL = "package"
-
-        // below variable is for our app tracks column.
         private const val IS_LOCKED_COL = "isLocked"
-
-        // below variable is for our app tracks column.
         private const val LAST_LOCKED_COL = "lastLocked"
 
         // ------------------------------------
         // below variable is for our notes table name.
         private const val NOTES_TABLE_NAME = "my_notes"
 
-        // below variable is for our note id column.
         private const val NOTES_ID_COL = "notes_id"
-
-        // below variable is for our note position column
         private const val POSITION_COL = "position"
-
-        // below variable is for our note content column
         private const val CONTENT_COL = "content"
     }
 
@@ -79,6 +64,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         val queryApps = ("CREATE TABLE " + APPS_TABLE_NAME + " ("
                 + APP_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + NAME_COL + " TEXT,"
+                + ICON_ID_COL + " INTEGER,"
                 + ICON_COL + " BLOB,"
                 + PACKAGE_COL + " TEXT,"
                 + IS_LOCKED_COL + " INTEGER,"
@@ -109,7 +95,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         // along with its key and value pair.
         app.apply {
             values.put(NAME_COL, name)
-            values.putDrawable(ICON_COL, icon)
+            values.put(ICON_ID_COL, icon.first)
+            values.putDrawable(ICON_COL, icon.second)
             values.put(PACKAGE_COL, packageName)
             values.put(IS_LOCKED_COL, isLocked)
             values.put(LAST_LOCKED_COL, sdf.format(lastTimeLocked))
@@ -145,10 +132,12 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                 appModalArrayList.add(
                     AppModal(
                         cursorApps.getString(1),
-                        cursorApps.getDrawable(2),
-                        cursorApps.getString(3),
-                        cursorApps.getInt(4) > 0,
-                        sdf.parse(cursorApps.getString(5))!!
+                        Pair(
+                            cursorApps.getInt(2), cursorApps.getDrawable(3)
+                        ),
+                        cursorApps.getString(4),
+                        cursorApps.getInt(5) > 0,
+                        sdf.parse(cursorApps.getString(6))!!
                     )
                 )
                 //ToDo check if id works
@@ -166,23 +155,14 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // below is the method for updating our apps
     fun updateApp(updatedApp: AppModal) {
-
-        // calling a method to get writable database.
         val db = this.writableDatabase
         val values = ContentValues()
-
-        // on below line we are passing all values
-        // along with its key and value pair.
-        updatedApp.apply {
+        updatedApp.apply { // updates only name and icon
             values.put(NAME_COL, name)
-            values.putDrawable(ICON_COL, icon)
-//            values.put(PACKAGE_COL, packageName)
+            values.put(ICON_ID_COL, icon.first)
+            values.putDrawable(ICON_COL, icon.second)
         }
-
-        // on below line we are calling a update method to update our database and passing our values.
-        // and we are comparing it with name of our app which is stored in original name variable.
-        db.update(APPS_TABLE_NAME, values, "$PACKAGE_COL=?", arrayOf(updatedApp.packageName))
-
+        db.update(APPS_TABLE_NAME, values, "$PACKAGE_COL=?", arrayOf(updatedApp.packageName)) // package name remains the sam always
         db.close()
 
         Log.d(logTag, "Updated app in DB: ${updatedApp.name}")
@@ -213,41 +193,30 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // below is the method for checking weather an app is in db
     fun getAppFromDB(appPackage: String): AppModal? {
-        // on below line we are creating a
-        // database for reading our database.
         val db = this.readableDatabase
-
-        // on below line we are creating a cursor with query to read data from database.
         val cursorApps =
             db.rawQuery("SELECT * FROM $APPS_TABLE_NAME WHERE $PACKAGE_COL=?", arrayOf(appPackage))
-
-        // on below line we are creating a new array list.
         var appModal: AppModal? = null
-
-        // moving our cursor to first position.
-        if (cursorApps.moveToFirst()) {
+        if (cursorApps.moveToFirst()) { // moving our cursor to first position.
             appModal = AppModal(
-                cursorApps.getString(1),
-                cursorApps.getDrawable(2),
-                cursorApps.getString(3),
-                cursorApps.getInt(4) > 0,
-                sdf.parse(cursorApps.getString(5))!!
-            )
+                    cursorApps.getString(1),
+                    Pair(
+                        cursorApps.getInt(2), cursorApps.getDrawable(3)
+                    ),
+                    cursorApps.getString(4),
+                    cursorApps.getInt(5) > 0,
+                    sdf.parse(cursorApps.getString(6))!!
+                )
             //ToDo check if id works
             appModal.id = cursorApps.getInt(0) // get id of in DB
         }
-
         cursorApps.close()
         return appModal
     }
 
     // below is the method for deleting our app.
     fun deleteApp(appPackage: String) {
-        // on below line we are creating
-        // a variable to write our database.
         val db = this.writableDatabase
-        // on below line we are calling a method to delete our
-        // app and we are comparing it with our app name.
         db.delete(APPS_TABLE_NAME, "$PACKAGE_COL=?", arrayOf(appPackage))
         db.close()
 
@@ -256,28 +225,13 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // this method is use to add new app to our sqlite database.
     fun addNewNote(note: NoteModal) {
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
         val db = this.writableDatabase
-
-        // on below line we are creating a
-        // variable for content values.
         val values = ContentValues()
-
-        // on below line we are passing all values
-        // along with its key and value pair.
         note.apply {
             values.put(POSITION_COL, position)
             values.put(CONTENT_COL, content)
         }
-
-        // after adding all values we are passing
-        // content values to our table.
         db.insert(NOTES_TABLE_NAME, null, values)
-
-        // at last we are closing our
-        // database after adding database.
         db.close()
 
         Log.d(logTag, "Added new note: ${note.content}")
@@ -285,17 +239,9 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // we have created a new method for reading all the apps.
     fun readNotes(): ArrayList<NoteModal> {
-        // on below line we are creating a
-        // database for reading our database.
         val db = this.readableDatabase
-
-        // on below line we are creating a cursor with query to read data from database.
         val cursorNotes = db.rawQuery("SELECT * FROM $NOTES_TABLE_NAME", null)
-
-        // on below line we are creating a new array list.
         val noteModalArrayList: ArrayList<NoteModal> = ArrayList()
-
-        // moving our cursor to first position.
         if (cursorNotes.moveToFirst()) {
             do {
                 // on below line we are adding the data from cursor to our array list.
@@ -305,12 +251,11 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                         cursorNotes.getString(2)
                     )
                 )
-                noteModalArrayList.last().id = cursorNotes.getInt(0) // get android of noteModalArrayList in DB
+                noteModalArrayList.last().id =
+                    cursorNotes.getInt(0) // get android of noteModalArrayList in DB
             } while (cursorNotes.moveToNext())
             // moving our cursor to next.
         }
-        // at last closing our cursor
-        // and returning our array list.
         cursorNotes.close()
 
         Log.d(logTag, "Just read DB table to get NOTES")
@@ -319,22 +264,13 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // below is the method for updating our notes
     fun updateNote(originalPos: Int, updatedNote: NoteModal) {
-
-        // calling a method to get writable database.
         val db = this.writableDatabase
         val values = ContentValues()
-
-        // on below line we are passing all values
-        // along with its key and value pair.
         updatedNote.apply {
             values.put(POSITION_COL, position)
             values.put(CONTENT_COL, content)
         }
-
-        // on below line we are calling a update method to update our database and passing our values.
-        // and we are comparing it with name of our app which is stored in original name variable.
         db.update(NOTES_TABLE_NAME, values, "$POSITION_COL=?", arrayOf(originalPos.toString()))
-
         db.close()
 
         Log.d(logTag, "Updated note in DB to: ${updatedNote.content}")
@@ -343,11 +279,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
 
     // below is the method for deleting our app.
     fun deleteNote(notePos: Int) {
-        // on below line we are creating
-        // a variable to write our database.
         val db = this.writableDatabase
-        // on below line we are calling a method to delete our
-        // app and we are comparing it with our app name.
         db.delete(NOTES_TABLE_NAME, "$POSITION_COL=?", arrayOf(notePos.toString()))
         db.close()
 

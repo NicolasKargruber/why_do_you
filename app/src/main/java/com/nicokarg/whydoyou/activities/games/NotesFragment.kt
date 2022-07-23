@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +23,7 @@ import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.FragmentNotesBinding
 import com.nicokarg.whydoyou.viewmodel.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_notes.*
 
 
 /**
@@ -72,9 +75,12 @@ class NotesFragment : Fragment() {
                 val txt = arrayView.getItemAtPosition(pos) as String
                 createAlertDialog(txt, pos)
             }
-
             fabAddNote.setOnClickListener {
                 createAlertDialog()
+            }
+            textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+            if (parentIsLock) {
+                (requireActivity() as LockScreenActivity).initIcon(wdyInclude.wdyTextWhatApp)
             }
         }
     }
@@ -95,23 +101,25 @@ class NotesFragment : Fragment() {
 
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        editText.setText(txt)
+        // editText.setText(txt)
         builder.setView(editText)
 
+        // ToDo show error message
         // Set up the buttons
         builder.setPositiveButton("OK") { _, _ ->
             editText.text.toString().let {
-                //ToDo check if text remained the same
+                viewModel!!.apply {
                 if (it.isNotEmpty()) {
-                    if (pos == -1) viewModel!!.addNote(it)
-                    else viewModel!!.setNote(pos,it)
+                    if (pos == -1) addNote(it)
+                    else if(it!=getNote(pos)) return@setPositiveButton // entered the same text
+//                    else setNote(pos,it)
                     arrayAdapter.notifyDataSetChanged()
                     binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
                     showSuccessAndQuit()
-                }
+                }}
             }
         }
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() } // dismiss is redundant
 
         builder.show()
     }

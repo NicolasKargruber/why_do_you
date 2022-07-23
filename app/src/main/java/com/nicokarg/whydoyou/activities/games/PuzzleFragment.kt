@@ -44,7 +44,6 @@ class PuzzleFragment() : Fragment() {
     private var shuffled = listOf<Int>()
 
     private val logTag = "PuzzleFragment"
-    private var sharedPreferences: SharedPreferences? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +99,10 @@ class PuzzleFragment() : Fragment() {
             }
 
             // puzzleResetButton.isVisible = !parentIsLock
+
+            if (parentIsLock) {
+                (requireActivity() as LockScreenActivity).initIcon(wdyInclude.wdyTextWhatApp)
+            }
         }
 
 

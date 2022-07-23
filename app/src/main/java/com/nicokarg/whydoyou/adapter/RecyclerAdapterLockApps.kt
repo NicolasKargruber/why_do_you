@@ -39,7 +39,7 @@ class RecyclerAdapterLockApps(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
             appList[position].let {
-                appIcon.setImageDrawable(it.icon)
+                appIcon.setImageDrawable(it.icon.second)
                 appName.text = it.name
                 appPackage.text = it.packageName
                 lockSwitch.isChecked = it.isLocked

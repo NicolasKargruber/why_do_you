@@ -5,7 +5,7 @@ import java.util.*
 
 data class AppModal(
     val name: String,
-    val icon: Drawable,
+    val icon: Pair <Int,Drawable>,
     val packageName: String,
     var isLocked: Boolean,
     var lastTimeLocked: Date
