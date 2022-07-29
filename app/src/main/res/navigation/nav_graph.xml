@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_MainFragment_to_notesFragment"
             app:destination="@id/notesFragment" />
+        <action
+            android:id="@+id/action_MainFragment_to_activitiesFragment"
+            app:destination="@id/activitiesFragment" />
     </fragment>
     <fragment
         android:id="@+id/FirstFragment"
@@ -36,4 +39,9 @@
         android:name="com.nicokarg.whydoyou.activities.games.NotesFragment"
         android:label="fragment_notes"
         tools:layout="@layout/fragment_notes" />
+    <fragment
+        android:id="@+id/activitiesFragment"
+        android:name="com.nicokarg.whydoyou.activities.games.ActivitiesFragment"
+        android:label="ActivitiesFragment"
+        tools:layout="@layout/fragment_activities" />
 </navigation>

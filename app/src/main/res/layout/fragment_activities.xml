@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.games.PuzzleFragment">
+
+    <include
+        android:id="@+id/wdy_include"
+        layout="@layout/wdy_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/activities_tv_activity_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click icon to select Activity"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintBottom_toTopOf="@id/activities_mc_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wdy_include"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/activities_mc_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wdy_include"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/space_small"
+        app:layout_constraintBottom_toTopOf="@id/activities_tv_timer_instruction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activities_tv_activity_instruction"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/space_medium">
+
+            <ImageView
+                android:id="@+id/activities_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_activities_48"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/activities_tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_tiny"
+                android:gravity="center"
+                android:text="No activity selected!"
+                android:textSize="@dimen/space_medium" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/activities_tv_timer_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_huge"
+        android:text="Click time to set new Timer"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintBottom_toTopOf="@id/activities_mc_timer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activities_mc_activity"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/activities_mc_timer"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activities_tv_timer_instruction">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/space_small">
+
+            <TextView
+                android:id="@+id/activity_tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0:00"
+                android:textSize="@dimen/text_large" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/activity_btn_start_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="Start"
+                app:layout_constraintTop_toBottomOf="@id/activity_tv_timer" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

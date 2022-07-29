@@ -62,13 +62,14 @@ class MainFragment : Fragment() {
 
         sharedPreferences =
             requireActivity().getSharedPreferences(
-                resources.getString(R.string.MY_PREFS)
-                , Context.MODE_PRIVATE)
+                resources.getString(R.string.MY_PREFS), Context.MODE_PRIVATE
+            )
 
         startService() // start background service (find fg-app)
 
         _viewModel!!.currentSelectItemId = sharedPreferences!!.getInt(
-            resources.getString(R.string.CURRENT_TAB_ID), defaultItemId)
+            resources.getString(R.string.CURRENT_TAB_ID), defaultItemId
+        )
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             Log.d(logTag, "Item was selected")
@@ -114,7 +115,10 @@ class MainFragment : Fragment() {
 
     override fun onDestroyView() {
         val editor = sharedPreferences!!.edit()
-        editor.putInt("id", binding.bottomNavigation.selectedItemId)
+        editor.putInt(
+            resources.getString(R.string.CURRENT_TAB_ID),
+            binding.bottomNavigation.selectedItemId
+        )
         editor.apply()
         super.onDestroyView()
         _binding = null

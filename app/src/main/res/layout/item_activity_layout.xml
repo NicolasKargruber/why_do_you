@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="?attr/selectableItemBackground"
+    android:padding="@dimen/space_small"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/activities_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:src="@drawable/ic_directions_run_fill0_wght700_grad0_opsz48"
+        app:tint="?attr/colorPrimary" />
+
+    <TextView
+        android:id="@+id/activity_tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_tiny"
+        android:gravity="center"
+        tools:text="Go for a run" />
+
+</LinearLayout>

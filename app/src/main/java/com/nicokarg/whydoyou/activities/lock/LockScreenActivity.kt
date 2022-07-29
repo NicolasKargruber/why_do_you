@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
 import com.nicokarg.whydoyou.R
+import com.nicokarg.whydoyou.activities.games.ActivitiesFragment
 import com.nicokarg.whydoyou.activities.games.NotesFragment
 import com.nicokarg.whydoyou.activities.games.PuzzleFragment
 import com.nicokarg.whydoyou.database.DBHandler
@@ -57,9 +58,10 @@ class LockScreenActivity : AppCompatActivity() {
             Log.d(logTag, "this is the found package: $lockedPackage")
             findLockedAppIcon() // finds app icon drawable in db
         }
-        lockScreenFragment = getLockScreenFragment
+
         // Adding a Fragment instance to the FragmentContainerView
-        supportFragmentManager.beginTransaction()
+        lockScreenFragment = getLockScreenFragment
+        if(lockScreenFragment!=null) supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container_lock_screen, lockScreenFragment!!,LOCK_SCREEN_FRAGMENT_TAG)
             .commit()
     }
@@ -68,13 +70,13 @@ class LockScreenActivity : AppCompatActivity() {
         tv.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,_viewModel!!.appIcon,null)
     }
 
-    private val getLockScreenFragment: Fragment
+    private val getLockScreenFragment: Fragment?
         get() = when (_viewModel!!.lockGameId) {
             R.id.game_numbers -> PuzzleFragment()
             R.id.game_notes -> NotesFragment()
-            else -> PuzzleFragment() // default fragment
+            R.id.game_activities -> ActivitiesFragment()
+            else -> null
         }
-
 
     // closes the application and shows the home screen of the device:
     override fun onBackPressed() {

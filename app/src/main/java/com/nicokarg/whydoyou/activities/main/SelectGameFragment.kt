@@ -1,8 +1,8 @@
 package com.nicokarg.whydoyou.activities.main
 
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.databinding.FragmentSelectGameBinding
 import com.nicokarg.whydoyou.viewmodel.SelectGameViewModel
 import com.google.android.material.card.MaterialCardView
+import java.lang.Exception
 
 
 class SelectGameFragment : Fragment() {
@@ -54,15 +55,18 @@ class SelectGameFragment : Fragment() {
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
             gameNumbers.setOnClickListener(onClickListener)
-            gameNull.setOnClickListener(onClickListener)
+            gameActivities.setOnClickListener(onClickListener)
 
             openGame.setOnClickListener(goToNextFragment)
         }
 
         // check MatCard
-        if (_viewModel!!.lockGameId != -1) requireActivity().findViewById<MaterialCardView>(
+        if (_viewModel!!.lockGameId != -1)
+            try{ requireActivity().findViewById<MaterialCardView>(
             _viewModel!!.lockGameId
-        ).performClick()
+        ).performClick()}catch (e:Exception){
+            Log.e(logTag,"$e")
+        }
 
     }
 
@@ -90,8 +94,12 @@ class SelectGameFragment : Fragment() {
         val action = when (_viewModel!!.lockGameId) {
             R.id.game_numbers -> R.id.action_MainFragment_to_PuzzleFragment
             R.id.game_notes -> R.id.action_MainFragment_to_notesFragment
+            R.id.game_activities -> R.id.action_MainFragment_to_activitiesFragment
             else -> -1
         }
-        if (action != -1) findNavController().navigate(action)
+        if (action != -1) {
+            findNavController().navigate(action)
+            Log.e(logTag,"No applicable material card id was found")
+        }
     }
 }

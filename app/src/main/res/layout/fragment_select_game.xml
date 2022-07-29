@@ -20,7 +20,7 @@
         android:id="@+id/game_numbers"
         style="@style/MyMaterialCard"
         android:layout_margin="@dimen/space_small"
-        app:layout_constraintBottom_toTopOf="@id/game_null"
+        app:layout_constraintBottom_toTopOf="@id/game_activities"
         app:layout_constraintEnd_toStartOf="@id/game_notes"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/game_null"
+        android:id="@+id/game_activities"
         style="@style/MyMaterialCard"
         app:layout_constraintEnd_toEndOf="@id/game_notes"
         app:layout_constraintStart_toStartOf="@id/game_numbers"
@@ -74,9 +74,9 @@
             android:layout_margin="@dimen/space_medium"
             android:drawablePadding="@dimen/space_tiny"
             android:gravity="center"
-            android:text="Null"
+            android:text="Activities"
             app:drawableTint="?attr/colorPrimary"
-            app:drawableTopCompat="@drawable/ic_round_settings_24" />
+            app:drawableTopCompat="@drawable/ic_directions_run_fill0_wght700_grad0_opsz48" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
@@ -89,6 +89,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_null" />
+        app:layout_constraintTop_toBottomOf="@id/game_activities" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
