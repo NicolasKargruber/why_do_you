@@ -9,8 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.databinding.FragmentMainBinding
 import com.nicokarg.whydoyou.services.YourService
@@ -41,6 +44,16 @@ class MainFragment : Fragment() {
     private val selectGameFragment = SelectGameFragment()
 
     // private var activeFragment: Fragment = lockAppsFragment
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // in here you can do logic when backPress is clicked
+                // more here: https://proandroiddev.com/backpress-handling-in-android-fragments-the-old-and-the-new-method-c41d775fb776
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +113,7 @@ class MainFragment : Fragment() {
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null).commit()
     }
+
 
 
     private fun startService() {

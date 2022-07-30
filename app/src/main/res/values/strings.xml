@@ -18,6 +18,8 @@
     <string name="CHECKED_MC_CARD">CHECKED_MC_CARD</string>
     <string name="LOCKED_PACKAGE">LOCKED_PACKAGE</string>
     <string name="CURRENT_TAB_ID">CURRENT_TAB_ID</string>
+    <string name="ACTIVITY_POS">ACTIVITY_POS</string>
+    <string name="ACTIVITY_TIMER">ACTIVITY_TIMER</string>
 
     <string name="default_lock_time_interval">5</string>
     <string name="lock_time_intervals">Lock Time Intervals</string>
