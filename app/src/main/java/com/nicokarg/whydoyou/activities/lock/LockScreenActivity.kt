@@ -1,14 +1,10 @@
 package com.nicokarg.whydoyou.activities.lock
 
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,8 +15,6 @@ import com.nicokarg.whydoyou.activities.games.PuzzleFragment
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.ActivityLockScreenBinding
 import com.nicokarg.whydoyou.viewmodel.LockScreenActivityViewModel
-import com.nicokarg.whydoyou.viewmodel.NotesViewModel
-import kotlinx.android.synthetic.main.fragment_notes.*
 import java.util.*
 
 class LockScreenActivity : AppCompatActivity() {

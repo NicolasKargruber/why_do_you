@@ -22,14 +22,8 @@
     </style>
 
     <style name="Theme.TimeKeeper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
-        <item name="actionOverflowButtonStyle">@style/Theme.TimeKeeper.OverflowButtonStyle</item>
-        <item name="colorSurface">@color/gray_050</item>
     </style>
 
     <style name="Theme.TimeKeeper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-    </style>
-
-    <style name="Theme.TimeKeeper.OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/black</item>
     </style>
 </resources>

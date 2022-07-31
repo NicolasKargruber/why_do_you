@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.adapter.RecyclerAdapterLockApps
 import com.nicokarg.whydoyou.model.AppModal
 import com.nicokarg.whydoyou.database.DBHandler
@@ -27,7 +30,7 @@ class LockAppsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentLockAppsBinding.inflate(inflater, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_lock_apps, container, false)
         return binding.root
 
     }
@@ -38,16 +41,19 @@ class LockAppsFragment : Fragment() {
         _viewModel = ViewModelProvider(requireActivity())[LockAppsViewModel::class.java]
 
         _viewModel!!.apply {
+            lockedTotal.observe(viewLifecycleOwner) {
+                binding.lockAppsTvLockedTotal.text = String.format("Locked in total: %d", it)
+            }
             // get apps from SQLite Database
             dbHandler = DBHandler(activity)
-            dbAppList = dbHandler!!.readApps()
-            dbAppList!!.sortByName()
+            dbAppList.value = dbHandler!!.readApps()
+            dbAppList.value!!.sortByName()
         }
 
         binding.lockAppsRecyclerView.apply {
             adapter = RecyclerAdapterLockApps(
-                _viewModel!!.dbAppList!!,
-                { pack,il -> _viewModel!!.dbHandler!!.updateIsLockedOfApp(pack, il) },
+                _viewModel!!.dbAppList.value!!,
+                { pack, il -> _viewModel!!.updateIsLockedOfApp(pack, il) },
                 requireActivity().packageName
             )
             layoutManager =

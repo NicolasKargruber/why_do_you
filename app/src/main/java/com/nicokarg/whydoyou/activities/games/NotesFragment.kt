@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +21,6 @@ import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.FragmentNotesBinding
 import com.nicokarg.whydoyou.viewmodel.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_notes.*
 
 
 /**
@@ -124,6 +121,13 @@ class NotesFragment : Fragment() {
         builder.show()
     }
 
+    private fun disableViews() {
+        binding.apply {
+            fabAddNote.isEnabled = false
+            notesList.isEnabled = false
+        }
+    }
+
     private fun showSuccessAndQuit() {
         Snackbar.make(
             binding.notesCoordinatorLayout,
@@ -131,7 +135,7 @@ class NotesFragment : Fragment() {
             Snackbar.LENGTH_LONG
         ).setAction("Action", null).show()
         if(parentIsLock) {
-            binding.fabAddNote.isEnabled = false
+            disableViews()
             (activity as LockScreenActivity).updateLastLocked()
             Handler(Looper.getMainLooper()).postDelayed({
                 requireActivity().finishAffinity()

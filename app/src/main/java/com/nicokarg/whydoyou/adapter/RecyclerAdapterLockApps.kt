@@ -43,13 +43,18 @@ class RecyclerAdapterLockApps(
                 appName.text = it.name
                 appPackage.text = it.packageName
                 lockSwitch.isChecked = it.isLocked
-                if (applicationPackage==it.packageName) lockSwitch.isEnabled = false
+                lockSwitch.isEnabled = applicationPackage!=it.packageName
                     lockSwitch.setOnCheckedChangeListener { _, b ->
                         it.isLocked = b
                         setIsLocked(it.packageName,b)
                     }
             }
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.lockSwitch.setOnCheckedChangeListener { _, _ ->  } // prevent this from calling the previous function
     }
 
     override fun getItemCount(): Int {

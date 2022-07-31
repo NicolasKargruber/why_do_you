@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 Pair(
                     it.icon,
                     it.loadIcon(this@MainActivity.packageManager)
-                ), // icon id and drawbable
+                ), // icon id and drawable
                 it.packageName,
                 it.getIsLocked(),
                 dateOneDayAgo
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.custom_toolbar_menu, menu)
+        menuInflater.inflate(R.menu.top_app_bar, menu)
         return true
     }
 

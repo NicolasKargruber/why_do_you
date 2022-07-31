@@ -154,7 +154,7 @@ class ActivitiesFragment : Fragment() {
         }
     }
 
-    fun runCountdown(tim: Int) {
+    private fun runCountdown(tim: Int) {
         object : CountDownTimer(tim.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 binding.activityTvTimer.text = viewModel.oneSecPassed() ?: "-:--"
@@ -166,11 +166,11 @@ class ActivitiesFragment : Fragment() {
         }.start()
     }
 
-    fun createTimerDialog(tp: Pair<Int, Int>): Unit {
+    private fun createTimerDialog(tp: Pair<Int, Int>): Unit {
         binding.apply {
             val mTimePicker = TimePickerDialog(
                 requireContext(),
-                { timePicker, minute, seconds ->
+                { _, minute, seconds ->
                     viewModel.setTime(minute, seconds)
                     activityTvTimer.text = viewModel.getTimeString() ?: "-:--"
                     activityBtnStartTimer.isEnabled = activityIsSetUp

@@ -25,7 +25,15 @@
     <string name="lock_time_intervals">Lock Time Intervals</string>
     <string name="set_time_intervals">Set time intervals</string>
     <string name="key_lock_time_intervals">key_lock_time_intervals</string>
+    <string name="locked_apps_count">Locked in total: %1$d</string>
+
     <string name="settings">settings</string>
+    <string name="more">more</string>
+    <string name="about">about</string>
+    <string name="favorite">favorite</string>
+    <string name="content_description_favorite">find favourites, Image View, tap to find</string>
+    <string name="content_description_settings">open settings, Image View, tap to open</string>
+    <string name="content_description_more">open menu, Image View, tap to inflate menu</string>
 
     <!--
         <string-array name="pref_seek_values">
