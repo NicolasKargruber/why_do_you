@@ -1,5 +1,6 @@
 package com.nicokarg.whydoyou.activities.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.nicokarg.whydoyou.R
+import com.nicokarg.whydoyou.activities.about.AboutMeActivity
 import com.nicokarg.whydoyou.activities.settings.SettingsActivity
 import com.nicokarg.whydoyou.broadcast.Restarter
 import com.nicokarg.whydoyou.database.DBHandler
@@ -41,6 +43,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.apply {
             setSupportActionBar(this) // title
+//            setOnMenuItemClickListener { menuItem ->
+//                when(menuItem.itemId){
+//
+//                }
+//                return@setOnMenuItemClickListener false
+//            }
         }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -171,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         else temp.first().isLocked
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun getPackages(): MutableList<ApplicationInfo> {
         val pm = this.packageManager
         val packages =
@@ -187,7 +196,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.top_app_bar, menu)
+        menuInflater.inflate(R.menu.top_app_bar_main, menu)
         return true
     }
 
@@ -195,6 +204,11 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.nav_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.more -> {
+                val intent = Intent(this, AboutMeActivity::class.java)
                 startActivity(intent)
                 true
             }

@@ -48,6 +48,8 @@
             android:name="com.nicokarg.whydoyou.activities.lock.LockScreenActivity"/>
         <activity
             android:name="com.nicokarg.whydoyou.activities.settings.SettingsActivity"/>
+        <activity
+            android:name="com.nicokarg.whydoyou.activities.about.AboutMeActivity"/>
     </application>
 
 </manifest>

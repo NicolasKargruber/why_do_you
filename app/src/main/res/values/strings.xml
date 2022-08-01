@@ -22,18 +22,21 @@
     <string name="ACTIVITY_TIMER">ACTIVITY_TIMER</string>
 
     <string name="default_lock_time_interval">5</string>
-    <string name="lock_time_intervals">Lock Time Intervals</string>
-    <string name="set_time_intervals">Set time intervals</string>
+    <string name="lock_time_interval">Lock Time Interval</string>
+    <string name="set_time_interval">Set time interval</string>
     <string name="key_lock_time_intervals">key_lock_time_intervals</string>
     <string name="locked_apps_count">Locked in total: %1$d</string>
 
-    <string name="settings">settings</string>
-    <string name="more">more</string>
-    <string name="about">about</string>
-    <string name="favorite">favorite</string>
-    <string name="content_description_favorite">find favourites, Image View, tap to find</string>
-    <string name="content_description_settings">open settings, Image View, tap to open</string>
-    <string name="content_description_more">open menu, Image View, tap to inflate menu</string>
+    <string name="settings">Settings</string>
+    <string name="more">More</string>
+    <string name="about">About</string>
+    <string name="favorite">Favorite</string>
+    <string name="content_description_favorite">Find favourites, Image View, tap to find</string>
+    <string name="content_description_settings">Open settings, Image View, tap to open</string>
+    <string name="content_description_more">Open menu, Image View, tap to inflate menu</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="task_completed">Task  completed</string>
 
     <!--
         <string-array name="pref_seek_values">
@@ -45,7 +48,7 @@
         </string-array>
     -->
 
-    <string-array name="pref_lock_time_intervals">
+    <string-array name="pref_lock_time_interval">
         <item>1 min</item>
         <item>5 min</item>
         <item>10 min</item>
@@ -54,7 +57,7 @@
         <item>60 min</item>
     </string-array>
 
-    <string-array name="pref_intervals">
+    <string-array name="pref_interval">
         <item>1</item>
         <item>5</item>
         <item>10</item>

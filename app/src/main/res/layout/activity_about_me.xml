@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.lock.LockScreenActivity">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_round_arrow_back_24"
+            app:navigationIconTint="?attr/colorOnPrimary"
+            app:title="@string/about"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/about_me_picture"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_why_do_you_about_me"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/about_me_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/account_bg_drawable"
+        android:src="@drawable/ic_round_account_circle_24"
+        app:layout_constraintBottom_toBottomOf="@id/about_me_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/about_me_picture" />
+
+    <TextView
+        android:id="@+id/about_me_developer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nicolas Kargruber"
+        android:textSize="@dimen/space_medium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/about_me_icon" />
+
+    <TextView
+        android:id="@+id/about_me_developer_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mobile Developer"
+        android:textSize="@dimen/space_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/about_me_developer_name" />
+
+    <TextView
+        android:id="@+id/about_me_developer_brief"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_medium"
+        android:gravity="center_horizontal"
+        android:text="I am excited using mobile technologies \nto grow my knowledge and help other people"
+        android:textSize="@dimen/space_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/about_me_developer_subtitle" />
+
+    <ImageView
+        android:id="@+id/about_me_divider"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginHorizontal="@dimen/space_medium"
+        android:layout_marginTop="@dimen/space_huge"
+        android:layerType="software"
+        android:src="@drawable/dotted"
+        app:layout_constraintTop_toBottomOf="@id/about_me_developer_brief" />
+
+    <TextView
+        android:id="@+id/about_me_github"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_medium"
+        android:layout_marginTop="@dimen/space_medium"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:text="GitHub"
+        android:textSize="@dimen/text_medium"
+        app:drawableTint="?attr/colorPrimary"
+        app:drawableTopCompat="@drawable/ic_github"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/about_me_linkedin"
+        app:layout_constraintTop_toTopOf="@id/about_me_divider" />
+
+    <TextView
+        android:id="@+id/about_me_linkedin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_medium"
+        android:layout_marginTop="@dimen/space_medium"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:text="LinkedIn"
+        android:textSize="@dimen/text_medium"
+        app:drawableTint="?attr/colorPrimary"
+        app:drawableTopCompat="@drawable/ic_linkedin_circled"
+        app:layout_constraintEnd_toStartOf="@id/about_me_github"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/about_me_divider" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

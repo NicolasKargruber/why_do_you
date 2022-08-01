@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Window
+import android.widget.EditText
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nicokarg.whydoyou.R
@@ -26,5 +28,6 @@ class SelectActivityAD(val c: Context, val activitiesList: List<ListActivity>, v
             }
             layoutManager = GridLayoutManager(c, 3)
         }
+        val ed = findViewById<EditText>(R.id.select_activity_search_bar)
     }
 }

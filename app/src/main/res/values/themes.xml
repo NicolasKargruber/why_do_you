@@ -14,6 +14,8 @@
         <item name="android:statusBarColor" >?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="colorOutline">#1E000000</item>
+        <item name="errorIconTint">@color/onError</item>
+
     </style>
 
     <style name="Theme.TimeKeeper.NoActionBar">

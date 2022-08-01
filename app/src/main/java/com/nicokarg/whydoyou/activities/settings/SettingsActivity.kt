@@ -1,29 +1,41 @@
 package com.nicokarg.whydoyou.activities.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.nicokarg.whydoyou.R
+import com.nicokarg.whydoyou.databinding.ActivityMainBinding
+import com.nicokarg.whydoyou.databinding.ActivitySettingsBinding
 
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val logTag: String = "SettingsActivity"
+    private lateinit var binding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
 
-        // below line is to change
-        // the title of our action bar.
-//        supportActionBar!!.title = "Settings"
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // below line is used to check if
-        // frame layout is empty or not.
-        if (findViewById<View?>(R.id.idFrameLayout) != null) {
-            if (savedInstanceState != null) {
-                return
-            }
+        binding.apply {
+            // below line is used to check if
+            // frame layout is empty or not.
+            if (savedInstanceState == null)
             // below line is to inflate our fragment.
-            supportFragmentManager.beginTransaction().add(R.id.idFrameLayout, SettingsFragment())
+            supportFragmentManager.beginTransaction()
+                .add(R.id.idFrameLayout, SettingsFragment())
                 .commit()
+
+            setSupportActionBar(toolbar) // to interact with icon in toolbar
+            // give the back button functionality
+            toolbar.setNavigationOnClickListener {
+                Log.d(logTag,"Navigation icon clicked")
+                onBackPressed()
+            }
         }
+
     }
 }

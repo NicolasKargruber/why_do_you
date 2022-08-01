@@ -159,7 +159,6 @@ class ActivitiesFragment : Fragment() {
             override fun onTick(millisUntilFinished: Long) {
                 binding.activityTvTimer.text = viewModel.oneSecPassed() ?: "-:--"
             }
-
             override fun onFinish() {
                 showSuccessAndQuit()
             }
@@ -187,7 +186,7 @@ class ActivitiesFragment : Fragment() {
     private fun showSuccessAndQuit() {
         Snackbar.make(
             requireView(),
-            "Task is completed",
+            getString(R.string.task_completed),
             Snackbar.LENGTH_LONG
         ).setAction("Action", null).show()
         viewModel.apply { // edit activity and time

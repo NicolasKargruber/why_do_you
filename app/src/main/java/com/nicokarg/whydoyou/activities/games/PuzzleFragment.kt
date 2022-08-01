@@ -131,7 +131,7 @@ class PuzzleFragment() : Fragment() {
     private fun showSuccessAndQuit() {
         Snackbar.make(
             requireView(),
-            "Grid is completed",
+            getString(R.string.task_completed),
             Snackbar.LENGTH_LONG
         ).setAction("Action", null).show()
         binding.puzzleResetButton.isVisible = !parentIsLock

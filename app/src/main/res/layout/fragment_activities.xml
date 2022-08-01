@@ -16,7 +16,7 @@
         android:id="@+id/activities_tv_activity_instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click icon to select Activity"
+        android:text="Click emoji to select Activity"
         android:textSize="@dimen/text_medium"
         app:layout_constraintBottom_toTopOf="@id/activities_mc_activity"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                 android:id="@+id/activities_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_activities_48"
+                android:src="@drawable/ic_round_sentiment_dissatisfied_24"
                 app:tint="?attr/colorPrimary" />
 
             <TextView

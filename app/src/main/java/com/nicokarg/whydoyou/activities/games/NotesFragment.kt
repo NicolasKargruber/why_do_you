@@ -21,6 +21,7 @@ import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.FragmentNotesBinding
 import com.nicokarg.whydoyou.viewmodel.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.nicokarg.whydoyou.alertdialog.EditNoteAD
 
 
 /**
@@ -34,6 +35,24 @@ class NotesFragment : Fragment() {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel
+
+    val minWords = 6
+    val minChars = 33
+
+    val empty = "empty"
+    val invalid = "invalid"
+    val more_words = "more_words"
+    val more_letters = "more_letters"
+    val incorrect = "incorrect"
+
+    val errorMap = mapOf(
+        empty to "Your note cannot be empty",
+        invalid to "Your note must consist of at least 6 words and 28 letters",
+        more_words to "You need %d more words",
+        more_letters to "Your need %d more letters",
+        incorrect to "Your entry does not equal the text note"
+    )
+
 
     private val parentIsLock get() = requireActivity().javaClass == LockScreenActivity::class.java
 
@@ -61,7 +80,7 @@ class NotesFragment : Fragment() {
 
         _viewModel = ViewModelProvider(requireActivity())[NotesViewModel::class.java]
 
-        if(parentIsLock) _viewModel!!.apply {
+        if (parentIsLock) _viewModel!!.apply {
             dbHandler = DBHandler(requireContext())
             readNotes()
         } else _viewModel!!.updateDB = false
@@ -89,36 +108,46 @@ class NotesFragment : Fragment() {
         Log.d(logTag, "Fragment destroyed")
     }
 
-    private fun createAlertDialog(txt: String = "", pos: Int = -1) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Note")
+    private fun createAlertDialog(noteText: String = "", pos: Int = -1) {
+        val ad = EditNoteAD(requireContext(), noteText) { t -> onPositive(t, pos) }
+        ad.show(requireActivity().supportFragmentManager, "")
+    }
 
-        // Set up the input
-        val editText = EditText(requireContext())
-
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        // editText.setText(txt)
-        builder.setView(editText)
-
-        // ToDo show error message
-        // Set up the buttons
-        builder.setPositiveButton("OK") { _, _ ->
-            editText.text.toString().let {
-                viewModel!!.apply {
-                if (it.isNotEmpty()) {
-                    if (pos == -1) addNote(it)
-                    else if(it!=getNote(pos)) return@setPositiveButton // entered the same text
-//                    else setNote(pos,it)
-                    arrayAdapter.notifyDataSetChanged()
-                    binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
-                    showSuccessAndQuit()
-                }}
-            }
+    // onPositive will cancel the dialog when true and will not if false is returned
+    private fun onPositive(noteText: String, pos: Int): String? {
+        viewModel!!.apply {
+            Log.d(logTag, "${noteText.length} chars long and ${noteText.wordCount()} words")
+            if (noteText.isBlank()) return errorMap[empty]
+            else if (pos == -1) {
+                if (!noteText.isLongEnough() && !noteText.isEnoughWords()) return errorMap[invalid] // min. 6 words and 28 letters (33 chars)
+                else if (!noteText.isLongEnough()) return String.format(
+                    errorMap[more_letters]!!,
+                    minChars - noteText.length
+                )
+                else if (!noteText.isEnoughWords()) return String.format(
+                    errorMap[more_words]!!,
+                    minWords - noteText.wordCount()
+                )
+                else addNote(noteText) // note is not yet in array
+            } else if (noteText.lowercase() != getNote(pos).lowercase()) return errorMap[incorrect] // did not enter the same text
+            // else text was the same and task was completed
         }
-        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() } // dismiss is redundant
+        arrayAdapter.notifyDataSetChanged()
+        binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+        showSuccessAndQuit() // show success
+        return null // onPositive will cancel the dialog
+    }
 
-        builder.show()
+    private fun String.isLongEnough(): Boolean {
+        return this.length >= 33
+    }
+
+    private fun String.isEnoughWords(): Boolean {
+        return this.trim().split(" ").size >= 6
+    }
+
+    private fun String.wordCount(): Int {
+        return this.trim().split(" ").size
     }
 
     private fun disableViews() {
@@ -131,10 +160,10 @@ class NotesFragment : Fragment() {
     private fun showSuccessAndQuit() {
         Snackbar.make(
             binding.notesCoordinatorLayout,
-            "Task is completed",
+            getString(R.string.task_completed),
             Snackbar.LENGTH_LONG
         ).setAction("Action", null).show()
-        if(parentIsLock) {
+        if (parentIsLock) {
             disableViews()
             (activity as LockScreenActivity).updateLastLocked()
             Handler(Looper.getMainLooper()).postDelayed({
