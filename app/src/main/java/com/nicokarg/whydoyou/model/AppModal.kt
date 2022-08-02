@@ -7,6 +7,7 @@ data class AppModal(
     val name: String,
     val icon: Pair <Int,Drawable>,
     val packageName: String,
+    val isSystemApp: Boolean,
     var isLocked: Boolean,
     var lastTimeLocked: Date
 ) {

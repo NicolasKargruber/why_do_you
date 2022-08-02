@@ -1,20 +1,23 @@
 package com.nicokarg.whydoyou.activities.main
 
+import android.annotation.SuppressLint
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.adapter.RecyclerAdapterLockApps
-import com.nicokarg.whydoyou.model.AppModal
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.FragmentLockAppsBinding
+import com.nicokarg.whydoyou.model.AppModal
 import com.nicokarg.whydoyou.viewmodel.LockAppsViewModel
 
 
@@ -24,6 +27,10 @@ class LockAppsFragment : Fragment() {
     private var _viewModel: LockAppsViewModel? = null
 
     private val logTag = "LockAppsFragment"
+
+    companion object{
+        var systemAppsPrefChanged = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +42,7 @@ class LockAppsFragment : Fragment() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,7 +50,8 @@ class LockAppsFragment : Fragment() {
 
         _viewModel!!.apply {
             lockedTotal.observe(viewLifecycleOwner) {
-                binding.lockAppsTvLockedTotal.text = String.format("Locked in total: %d", it)
+                // binding.lockAppsTvLockedTotal.text = String.format("Locked in total: %d", it)
+                binding.lockAppsTvLockedTotalCount.text = String.format("%d apps", it)
             }
             // get apps from SQLite Database
             dbHandler = DBHandler(activity)
@@ -52,19 +61,27 @@ class LockAppsFragment : Fragment() {
 
         binding.lockAppsRecyclerView.apply {
             adapter = RecyclerAdapterLockApps(
+                requireContext(),
                 _viewModel!!.dbAppList.value!!,
                 { pack, il -> _viewModel!!.updateIsLockedOfApp(pack, il) },
                 requireActivity().packageName
             )
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(
+            /*addItemDecoration(
                 DividerItemDecoration(
                     context,
                     (layoutManager as LinearLayoutManager).orientation
                 )
-            )
+            )*/
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        if(systemAppsPrefChanged) binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
+        systemAppsPrefChanged = false
     }
 
     override fun onDestroyView() {

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -41,6 +42,7 @@ class ActivitiesFragment : Fragment() {
     private val logTag = "ActivitiesFragment"
 
     private val activityIsSetUp: Boolean get() = viewModel.selectedActivity != null && viewModel.getTimeString() != null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

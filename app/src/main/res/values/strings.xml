@@ -27,6 +27,10 @@
     <string name="key_lock_time_intervals">key_lock_time_intervals</string>
     <string name="locked_apps_count">Locked in total: %1$d</string>
 
+    <string name="system_apps_switch">Show system apps</string>
+    <string name="summary_system_apps_switch">Turn on to show system apps</string>
+    <string name="key_system_apps_switch">key_system_apps_switch</string>
+
     <string name="settings">Settings</string>
     <string name="more">More</string>
     <string name="about">About</string>
@@ -37,6 +41,13 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="task_completed">Task  completed</string>
+
+    <string name="uri_github_nicolas_kargruber">https://github.com/NicolasKargruber</string>
+    <string name="uri_linkedin_nicolas_kargruber">https://www.linkedin.com/in/nicolas-kargruber-78a34123b/?locale=en_US</string>
+
+    <string name="locked">Locked</string>
+    <string name="not_locked">Not locked</string>
+    <string name="locked_in_total">Locked in total:</string>
 
     <!--
         <string-array name="pref_seek_values">

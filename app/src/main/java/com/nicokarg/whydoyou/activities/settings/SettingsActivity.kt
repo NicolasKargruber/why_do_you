@@ -28,7 +28,6 @@ class SettingsActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .add(R.id.idFrameLayout, SettingsFragment())
                 .commit()
-
             setSupportActionBar(toolbar) // to interact with icon in toolbar
             // give the back button functionality
             toolbar.setNavigationOnClickListener {

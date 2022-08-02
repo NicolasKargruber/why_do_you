@@ -3,15 +3,12 @@ package com.nicokarg.whydoyou.activities.games
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -61,7 +58,7 @@ class NotesFragment : Fragment() {
     private val arrayAdapter by lazy {
         ArrayAdapter(
             requireContext(),
-            R.layout.note_list_item,
+            R.layout.item_note_layout,
             R.id.mat_btn_note,
             viewModel!!.getNotes()
         )

@@ -3,19 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--below line is to create preference category-->
-    <PreferenceCategory
-        app:allowDividerBelow="false">
+    <PreferenceCategory app:allowDividerBelow="false">
 
         <ListPreference
-            app:icon="@drawable/ic_round_lock_clock_24"
             android:defaultValue="@string/default_lock_time_interval"
             android:entries="@array/pref_lock_time_interval"
             android:entryValues="@array/pref_interval"
             android:key="@string/key_lock_time_intervals"
-            app:allowDividerAbove="true"
-            app:useSimpleSummaryProvider="true"
             android:summary="@string/set_time_interval"
-            android:title="@string/lock_time_interval" />
+            android:title="@string/lock_time_interval"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_round_lock_clock_24"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_system_apps_switch"
+            android:summary="@string/summary_system_apps_switch"
+            android:title="@string/system_apps_switch"
+            app:allowDividerAbove="true"
+            app:icon="@drawable/ic_round_android_24" />
 
     </PreferenceCategory>
 

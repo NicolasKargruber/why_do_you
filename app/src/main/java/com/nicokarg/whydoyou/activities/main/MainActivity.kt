@@ -159,6 +159,7 @@ class MainActivity : AppCompatActivity() {
                     it.loadIcon(this@MainActivity.packageManager)
                 ), // icon id and drawable
                 it.packageName,
+                it.isSystemApp(),
                 it.getIsLocked(),
                 dateOneDayAgo
             )
@@ -179,6 +180,14 @@ class MainActivity : AppCompatActivity() {
         else temp.first().isLocked
     }
 
+    // finds app in list of apps of DB and returns isLocked of app
+    private fun ApplicationInfo.isSystemApp(): Boolean {
+        val isSystem =
+            (this.flags and ApplicationInfo.FLAG_SYSTEM != 0) || (this.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0)
+        Log.d(logTag, "Is a System app: $isSystem")
+        return isSystem
+    }
+
     @SuppressLint("QueryPermissionsNeeded")
     private fun getPackages(): MutableList<ApplicationInfo> {
         val pm = this.packageManager
@@ -190,7 +199,6 @@ class MainActivity : AppCompatActivity() {
             packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
                 .toMutableList()
         Log.d(logTag, "Of which ${apps.size} apps have an intent")
-        val nsa = apps.filter { it.flags != ApplicationInfo.FLAG_SYSTEM } // non system apps
         return apps
     }
 

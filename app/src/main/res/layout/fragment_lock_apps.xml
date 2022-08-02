@@ -8,25 +8,41 @@
             type="com.nicokarg.whydoyou.viewmodel.LockAppsViewModel" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lock_apps_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
         <TextView
             android:id="@+id/lock_apps_tv_locked_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="?attr/colorOnPrimary"
-            android:padding="@dimen/space_medium"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_large"
+            android:paddingTop="@dimen/space_medium"
+            android:textColor="?attr/colorPrimary"
+            android:text="@string/locked_in_total" />
+
+        <TextView
+            android:id="@+id/lock_apps_tv_locked_total_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_medium"
+            android:padding="@dimen/space_tiny"
             android:textColor="?attr/colorSecondary"
-            tools:text="Locked in total: 0" />
-    </FrameLayout>
+            tools:text="4 apps" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_medium"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lock_apps_recycler_view"
+            android:layout_width="match_parent"
+            android:scrollbars="vertical"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
 </layout>
 

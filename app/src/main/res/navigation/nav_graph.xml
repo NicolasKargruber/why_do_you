@@ -9,7 +9,11 @@
         android:id="@+id/PuzzleFragment"
         android:name="com.nicokarg.whydoyou.activities.games.PuzzleFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_puzzle"/>
+        tools:layout="@layout/fragment_puzzle">
+        <action
+            android:id="@+id/action_PuzzleFragment_to_MainFragment"
+            app:destination="@id/MainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/MainFragment"
         android:name="com.nicokarg.whydoyou.activities.main.MainFragment"
@@ -38,10 +42,18 @@
         android:id="@+id/notesFragment"
         android:name="com.nicokarg.whydoyou.activities.games.NotesFragment"
         android:label="fragment_notes"
-        tools:layout="@layout/fragment_notes" />
+        tools:layout="@layout/fragment_notes" >
+        <action
+            android:id="@+id/action_notesFragment_to_MainFragment"
+            app:destination="@id/MainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/activitiesFragment"
         android:name="com.nicokarg.whydoyou.activities.games.ActivitiesFragment"
         android:label="ActivitiesFragment"
-        tools:layout="@layout/fragment_activities" />
+        tools:layout="@layout/fragment_activities" >
+        <action
+            android:id="@+id/action_activitiesFragment_to_MainFragment"
+            app:destination="@id/MainFragment" />
+    </fragment>
 </navigation>

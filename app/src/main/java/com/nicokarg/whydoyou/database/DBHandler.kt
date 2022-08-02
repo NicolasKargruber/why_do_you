@@ -42,6 +42,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         private const val ICON_ID_COL = "icon_id"
         private const val ICON_COL = "icon"
         private const val PACKAGE_COL = "package"
+        private const val IS_SYSTEM_COL = "isSystem"
         private const val IS_LOCKED_COL = "isLocked"
         private const val LAST_LOCKED_COL = "lastLocked"
 
@@ -67,6 +68,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                 + ICON_ID_COL + " INTEGER,"
                 + ICON_COL + " BLOB,"
                 + PACKAGE_COL + " TEXT,"
+                + IS_SYSTEM_COL + " INTEGER,"
                 + IS_LOCKED_COL + " INTEGER,"
                 + LAST_LOCKED_COL + " TEXT)")
         val queryNotes = ("CREATE TABLE " + NOTES_TABLE_NAME + " ("
@@ -98,6 +100,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
             values.put(ICON_ID_COL, icon.first)
             values.putDrawable(ICON_COL, icon.second)
             values.put(PACKAGE_COL, packageName)
+            values.put(IS_SYSTEM_COL, isSystemApp)
             values.put(IS_LOCKED_COL, isLocked)
             values.put(LAST_LOCKED_COL, sdf.format(lastTimeLocked))
         }
@@ -137,7 +140,8 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
                         ),
                         cursorApps.getString(4),
                         cursorApps.getInt(5) > 0,
-                        sdf.parse(cursorApps.getString(6))!!
+                        cursorApps.getInt(6) > 0,
+                        sdf.parse(cursorApps.getString(7))!!
                     )
                 )
                 //ToDo check if id works
@@ -162,7 +166,12 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
             values.put(ICON_ID_COL, icon.first)
             values.putDrawable(ICON_COL, icon.second)
         }
-        db.update(APPS_TABLE_NAME, values, "$PACKAGE_COL=?", arrayOf(updatedApp.packageName)) // package name remains the sam always
+        db.update(
+            APPS_TABLE_NAME,
+            values,
+            "$PACKAGE_COL=?",
+            arrayOf(updatedApp.packageName)
+        ) // package name remains the sam always
         db.close()
 
         Log.d(logTag, "Updated app in DB: ${updatedApp.name}")
@@ -199,14 +208,15 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
         var appModal: AppModal? = null
         if (cursorApps.moveToFirst()) { // moving our cursor to first position.
             appModal = AppModal(
-                    cursorApps.getString(1),
-                    Pair(
-                        cursorApps.getInt(2), cursorApps.getDrawable(3)
-                    ),
-                    cursorApps.getString(4),
-                    cursorApps.getInt(5) > 0,
-                    sdf.parse(cursorApps.getString(6))!!
-                )
+                cursorApps.getString(1),
+                Pair(
+                    cursorApps.getInt(2), cursorApps.getDrawable(3)
+                ),
+                cursorApps.getString(4),
+                cursorApps.getInt(5) > 0,
+                cursorApps.getInt(6) > 0,
+                sdf.parse(cursorApps.getString(7))!!
+            )
             //ToDo check if id works
             appModal.id = cursorApps.getInt(0) // get id of in DB
         }

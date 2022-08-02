@@ -3,45 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/space_medium">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/item_app_icon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginVertical="@dimen/space_medium"
+        android:layout_marginStart="@dimen/space_medium"
         android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@mipmap/ic_launcher" />
+        tools:src="@mipmap/ic_why_do_you_launcher" />
 
     <TextView
         android:id="@+id/item_app_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/space_small"
+        android:layout_marginHorizontal="@dimen/space_medium_large"
+        android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/item_app_lock_switch"
+        app:layout_constraintBottom_toTopOf="@id/item_app_is_locked"
+        app:layout_constraintEnd_toStartOf="@id/item_app_lock_btn"
         app:layout_constraintStart_toEndOf="@id/item_app_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="App name" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Why do you" />
 
-    <TextView
-        android:id="@+id/item_app_package"
+    <CheckedTextView
+        android:id="@+id/item_app_is_locked"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_tiny"
+        android:checked="false"
+        android:textColor="@color/checked_text_view_text_color_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/item_app_name"
         app:layout_constraintStart_toStartOf="@id/item_app_name"
         app:layout_constraintTop_toBottomOf="@id/item_app_name"
-        tools:text="Package" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/locked" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/item_app_lock_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <View
+        android:id="@+id/item_app_divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/space_medium"
+        android:layout_marginEnd="1dp"
+        android:background="?attr/colorOutline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_app_lock_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/item_app_lock_btn"
+        android:layout_width="90dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/space_small"
+        android:background="?attr/selectableItemBackground"
+        android:checkable="true"
+        android:checked="false"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:paddingVertical="@dimen/space_small"
+        app:icon="@drawable/material_button_drawable_selector"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/item_app_name"
-        tools:checked="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
