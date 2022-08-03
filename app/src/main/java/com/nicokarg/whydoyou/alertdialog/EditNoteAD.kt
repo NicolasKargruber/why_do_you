@@ -31,8 +31,13 @@ class EditNoteAD(
                 hint = noteText // Set displayed hint
             }
 
+            val messageMap = mapOf(
+                true to "Respond with a reason in the text field beneath",
+                false to "Respond with the same reason"
+            )
 
             builder.setTitle("Note")
+                .setMessage(messageMap[noteText.isBlank()])
                 .setView(editText)
                 .setPositiveButton(R.string.ok) { _, _ -> }
                 .setNegativeButton(R.string.cancel) { dialog, _ ->

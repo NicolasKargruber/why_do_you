@@ -11,7 +11,7 @@ class ActivitiesViewModel : ViewModel() {
     var activitiesList: List<ListActivity>? = null
     var selectedActivityPosition = -1
     val selectedActivity: ListActivity?
-        get() = if (selectedActivityPosition==-1 || activitiesList == null) null
+        get() = if (selectedActivityPosition == -1 || activitiesList == null) null
         else activitiesList!![selectedActivityPosition]
     private var timePair: Pair<Int, Int> = Pair(0, 0) // in minutes
 
@@ -33,8 +33,9 @@ class ActivitiesViewModel : ViewModel() {
         return (timePair.first * 60 + timePair.second) * 1000
     }
 
-    fun getTimeString(): String? {
-        return "${timePair.first.takeIf { it > -1 } ?: return null}:${timePair.second.takeIf { it > 9 } ?: "0${timePair.second}"}"
+    fun getTimeString(): String? { // checks if timer is available, and adds '0' to a 0-value
+        if (timePair.first==0&&timePair.second==0) return null
+        return "${(timePair.first.takeIf { it > -1 } ?: return null).takeIf { it > 9 } ?: "0${timePair.first}"}:${timePair.second.takeIf { it > 9 } ?: "0${timePair.second}"}"
     }
 
     fun oneSecPassed(): String? {

@@ -14,6 +14,8 @@
         <!-- Customize your theme here. -->
         <item name="colorOutline">@color/white</item>
         <item name="errorIconTint">@color/onError_light</item>
+        <item name="android:colorBackground">@color/dark_theme</item>
+        <item name="colorSurface">@color/dark_theme</item>
     </style>
 
     <style name="Theme.TimeKeeper.NoActionBar">

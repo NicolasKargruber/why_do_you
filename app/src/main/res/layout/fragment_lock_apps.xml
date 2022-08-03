@@ -3,46 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.nicokarg.whydoyou.viewmodel.LockAppsViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/lock_apps_tv_locked_total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/text_large"
-            android:paddingTop="@dimen/space_medium"
-            android:textColor="?attr/colorPrimary"
-            android:text="@string/locked_in_total" />
+        android:scrollbars="vertical">
 
-        <TextView
-            android:id="@+id/lock_apps_tv_locked_total_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/text_medium"
-            android:padding="@dimen/space_tiny"
-            android:textColor="?attr/colorSecondary"
-            tools:text="4 apps" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/space_medium"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lock_apps_recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:scrollbars="vertical"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/lock_apps_tv_locked_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="@dimen/space_medium"
+                android:text="@string/locked_in_total"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="@dimen/text_large" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/lock_apps_tv_locked_total_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/space_tiny"
+                android:textColor="?attr/colorSecondary"
+                android:textSize="@dimen/text_medium"
+                tools:text="4 apps" />
+
+            <View
+                android:background="?attr/colorOutline" android:alpha="0.6"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="@dimen/space_small"
+                android:layout_height="1dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lock_apps_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:isScrollContainer="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
 

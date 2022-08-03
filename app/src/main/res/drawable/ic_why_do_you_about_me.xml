@@ -8,15 +8,11 @@
       android:strokeLineJoin="miter"
       android:strokeWidth="0"
       android:fillColor="?attr/colorSecondaryVariant"
-      android:fillType="nonZero"
-      android:strokeColor="#A9B6A1"
-      android:strokeLineCap="butt"/>
+      android:fillType="nonZero"/>
   <path
       android:pathData="M1286.7,643.5L272.7,643.5C765.9,580.2 1153.8,399.3 1286.7,170.1z"
       android:strokeLineJoin="miter"
       android:strokeWidth="0"
       android:fillColor="?attr/colorSecondary"
-      android:fillType="nonZero"
-      android:strokeColor="#A9B6A1"
-      android:strokeLineCap="butt"/>
+      android:fillType="nonZero"/>
 </vector>

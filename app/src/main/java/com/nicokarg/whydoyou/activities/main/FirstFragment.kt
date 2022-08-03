@@ -13,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.nicokarg.whydoyou.R
@@ -46,9 +48,7 @@ class FirstFragment : Fragment() {
         isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS).let { usGranted ->
             isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW).let { sawGranted ->
                 if (usGranted && sawGranted) {
-                    Toast.makeText(
-                        requireContext(), "Permissions already granted", Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d(logTag,"Permissions already granted")
                     findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
                 } else {
                     if (!usGranted) binding.firstPermissionPackageUsageStats.buttonPermission.apply {
@@ -100,7 +100,8 @@ class FirstFragment : Fragment() {
                     text = "Granted"
                     Log.d(logTag,"Manage Overlay granted")
                 }
-                binding.firstButtonGoNext.isEnabled = !pusBtn.isEnabled && !sawBtn.isEnabled
+                binding.firstPermissionsLayout.isGone = !pusBtn.isEnabled && !sawBtn.isEnabled
+                binding.firstButtonGoNext.isVisible = !pusBtn.isEnabled && !sawBtn.isEnabled
             }
         }
     }
@@ -110,17 +111,6 @@ class FirstFragment : Fragment() {
         _binding = null
         Log.d(logTag, "Fragment destroyed")
     }
-
-//    // checks the current status of the background service
-//    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-//        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-//        for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
-//            if (serviceClass.name.equals(service.service.className)) {
-//                return true
-//            }
-//        }
-//        return false
-//    }
 
     // Function to check and request permission.
     private fun checkPermission(action: String) {

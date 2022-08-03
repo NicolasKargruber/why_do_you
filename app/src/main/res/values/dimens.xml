@@ -1,5 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="space_mini">2dp</dimen>
     <dimen name="space_tiny">4dp</dimen>
     <dimen name="space_small">8dp</dimen>
     <dimen name="space_medium">16dp</dimen>
@@ -7,10 +8,13 @@
     <dimen name="space_large">32dp</dimen>
     <dimen name="space_large_huge">48dp</dimen>
     <dimen name="space_huge">64dp</dimen>
+    <dimen name="space_humongous">90dp</dimen>
     <dimen name="text_tiny">4sp</dimen>
     <dimen name="text_small">8sp</dimen>
     <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_medium_large">24sp</dimen>
     <dimen name="text_large">32sp</dimen>
+    <dimen name="text_large_huge">48sp</dimen>
     <dimen name="text_huge">64sp</dimen>
     <dimen name="number_button_corner_radius">16dp</dimen>
 </resources>

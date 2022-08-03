@@ -36,15 +36,15 @@
     </style>
 
     <style name="MyMaterialCard" parent="Widget.MaterialComponents.CardView">
-        <item name="strokeColor">@color/white_100_dark</item>
+        <item name="strokeColor">@color/checked_mat_card_stroke_color_selector</item>
         <item name="strokeWidth">1dp</item>
-        <item name="android:layout_width">120dp</item>
-        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
         <item name="elevation">4dp</item>
         <item name="android:clickable">true</item>
         <item name="android:checkable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:layout_margin">@dimen/space_medium</item>
+        <item name="android:layout_marginHorizontal">@dimen/space_small</item>
     </style>
 
 </resources>

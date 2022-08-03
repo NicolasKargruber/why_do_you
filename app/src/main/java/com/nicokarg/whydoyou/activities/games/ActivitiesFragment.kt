@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
@@ -138,12 +137,12 @@ class ActivitiesFragment : Fragment() {
     }
 
     private fun updateActivityMatCard() {
-        binding.let { b ->
+        binding.apply {
             viewModel.apply {
-                b.activitiesTvActivityInstruction.isInvisible = selectedActivity != null
-                b.activitiesIcon.setImageDrawable(selectedActivity!!.icon)
-                b.activitiesTvDescription.text = selectedActivity!!.text
-                b.activityBtnStartTimer.isVisible = activityIsSetUp
+                activitiesTvActivityInstruction.isInvisible = selectedActivity != null
+                activitiesActivityIcon.setImageDrawable(selectedActivity!!.icon)
+                activitiesActivityMessage.text = selectedActivity!!.text
+                activityBtnStartTimer.isEnabled = activityIsSetUp
             }
         }
     }
@@ -215,25 +214,25 @@ class ActivitiesFragment : Fragment() {
             ListActivity(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_directions_run_fill0_wght700_grad0_opsz48
+                    R.drawable.ic_directions_run
                 )!!, "Go for a run"
             ),
             ListActivity(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_laundry_fill0_wght700_grad0_opsz48
+                    R.drawable.ic_laundry
                 )!!, "Do laundry"
             ),
             ListActivity(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_auto_stories_fill0_wght700_grad0_opsz48
+                    R.drawable.ic_auto_stories
                 )!!, "Read book"
             ),
             ListActivity(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_dishwasher_gen_fill0_wght700_grad0_opsz48
+                    R.drawable.ic_dishwasher_gen
                 )!!, "Empty dish washer"
             ),
         )

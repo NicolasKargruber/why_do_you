@@ -49,15 +49,12 @@
     <string name="not_locked">Not locked</string>
     <string name="locked_in_total">Locked in total:</string>
 
-    <!--
-        <string-array name="pref_seek_values">
-            <item>5</item>
-            <item>10</item>
-            <item>15</item>
-            <item>20</item>
-            <item>30</item>
-        </string-array>
-    -->
+
+    <string name="not_lockable_system_app">System apps cannot be locked</string>
+    <string name="not_lockable_app_why_do_you">WhyDoYou itself cannot be locked</string>
+
+    <string name="game_numbers_first_instruction">Click grid to start</string>
+    <string name="game_numbers_second_instruction">Click the numbers in ascending order</string>
 
     <string-array name="pref_lock_time_interval">
         <item>1 min</item>

@@ -95,7 +95,8 @@ class PuzzleFragment() : Fragment() {
                 viewModel!!.currentNum.value = -2
                 resetTextColors()
                 it.isVisible = false
-                binding.puzzleTvInstruction.isVisible = true
+
+                binding.puzzleTvInstruction.text = getString(R.string.game_numbers_first_instruction)
             }
 
             // puzzleResetButton.isVisible = !parentIsLock
@@ -179,7 +180,7 @@ class PuzzleFragment() : Fragment() {
 
     private val onClick = View.OnClickListener {
         (it as MaterialButton).getNumber().let { num ->
-            binding.puzzleTvInstruction.isVisible = false
+            binding.puzzleTvInstruction.text = getString(R.string.game_numbers_second_instruction)
             viewModel!!.currentNum.apply {
                 //initially it is -2
                 if (value!! == -2) {

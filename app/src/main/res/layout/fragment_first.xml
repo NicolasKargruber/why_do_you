@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:paddingHorizontal="@dimen/space_medium"
-    tools:context=".activities.main.FirstFragment"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.main.FirstFragment">
 
-    <include
-        android:id="@+id/first_permission_package_usage_stats"
-        layout="@layout/permission_view_group"/>
+    <LinearLayout
+        android:id="@+id/first_permissions_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/space_medium">
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_large"/>
+        <include
+            android:id="@+id/first_permission_package_usage_stats"
+            layout="@layout/permission_view_group" />
 
-    <include
-        android:id="@+id/first_permission_system_alert_window"
-        layout="@layout/permission_view_group" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_huge" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_large"/>
+        <include
+            android:id="@+id/first_permission_system_alert_window"
+            layout="@layout/permission_view_group" />
+
+    </LinearLayout>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/first_button_go_next"
-        android:paddingVertical="@dimen/space_small"
-        android:textSize="@dimen/text_large"
-        android:text="Next"
-        android:enabled="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:paddingVertical="@dimen/space_small"
+        android:text="Next"
+        android:textSize="@dimen/text_medium" />
 
-</LinearLayout>
+</FrameLayout>

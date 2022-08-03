@@ -28,7 +28,7 @@ class LockAppsFragment : Fragment() {
 
     private val logTag = "LockAppsFragment"
 
-    companion object{
+    companion object {
         var systemAppsPrefChanged = false
     }
 
@@ -66,21 +66,19 @@ class LockAppsFragment : Fragment() {
                 { pack, il -> _viewModel!!.updateIsLockedOfApp(pack, il) },
                 requireActivity().packageName
             )
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            /*addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    (layoutManager as LinearLayoutManager).orientation
-                )
-            )*/
+            layoutManager = object :
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false // so that rv is not scrollable and shows additional shadow
+                }
+            }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        if(systemAppsPrefChanged) binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
+        if (systemAppsPrefChanged) binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
         systemAppsPrefChanged = false
     }
 

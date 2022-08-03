@@ -5,90 +5,97 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/select_game_text"
+        android:id="@+id/select_game_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/colorPrimary"
         android:text="Select the game"
-        app:layout_constraintBottom_toTopOf="@id/game_numbers"
-        android:layout_margin="@dimen/space_huge"
         android:textSize="@dimen/text_large"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/game_numbers"
-        style="@style/MyMaterialCard"
-        android:layout_margin="@dimen/space_small"
-        app:layout_constraintBottom_toTopOf="@id/game_activities"
-        app:layout_constraintEnd_toStartOf="@id/game_notes"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_game_text"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:layout_constraintBottom_toTopOf="@id/games_layout"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/space_medium"
-            android:drawablePadding="@dimen/space_tiny"
-            android:gravity="center"
-            android:text="Numbers"
-            app:drawableTint="?attr/colorPrimary"
-            app:drawableTopCompat="@drawable/ic_round_grid_on_48" />
+    <TextView
+        android:id="@+id/select_game_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_tiny"
+        android:layout_marginHorizontal="@dimen/space_huge"
+        android:gravity="center_horizontal"
+        android:text="This determines the displayed screen for a locked apps"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintTop_toBottomOf="@id/select_game_title" />
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/game_notes"
-        style="@style/MyMaterialCard"
-        app:layout_constraintBottom_toBottomOf="@id/game_numbers"
+    <LinearLayout
+        android:id="@+id/games_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_small"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/game_numbers"
-        app:layout_constraintTop_toTopOf="@id/game_numbers">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/space_medium"
-            android:drawablePadding="@dimen/space_tiny"
-            android:gravity="center"
-            android:text="Notes"
-            app:drawableTint="?attr/colorPrimary"
-            app:drawableTopCompat="@drawable/ic_round_edit_note_48" />
-    </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/game_numbers"
+            style="@style/MyMaterialCard">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/game_activities"
-        style="@style/MyMaterialCard"
-        app:layout_constraintEnd_toEndOf="@id/game_notes"
-        app:layout_constraintStart_toStartOf="@id/game_numbers"
-        app:layout_constraintTop_toBottomOf="@id/game_numbers">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/space_medium"
+                android:drawablePadding="@dimen/space_tiny"
+                android:gravity="center"
+                android:text="Numbers"
+                app:drawableTint="?attr/colorPrimary"
+                app:drawableTopCompat="@drawable/ic_round_grid_on_48" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/space_medium"
-            android:drawablePadding="@dimen/space_tiny"
-            android:gravity="center"
-            android:text="Activities"
-            app:drawableTint="?attr/colorPrimary"
-            app:drawableTopCompat="@drawable/ic_directions_run_fill0_wght700_grad0_opsz48" />
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/game_notes"
+            style="@style/MyMaterialCard">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/space_medium"
+                android:drawablePadding="@dimen/space_tiny"
+                android:gravity="center"
+                android:text="Notes"
+                app:drawableTint="?attr/colorPrimary"
+                app:drawableTopCompat="@drawable/ic_round_edit_note_48" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/game_activities"
+            style="@style/MyMaterialCard">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/space_medium"
+                android:drawablePadding="@dimen/space_tiny"
+                android:gravity="center"
+                android:text="Activities"
+                app:drawableTint="?attr/colorPrimary"
+                app:drawableTopCompat="@drawable/ic_directions_run" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/open_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Open"
-        android:visibility="gone"
         app:icon="@drawable/ic_round_open_in_new_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/space_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_activities" />
+        app:layout_constraintTop_toBottomOf="@id/games_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

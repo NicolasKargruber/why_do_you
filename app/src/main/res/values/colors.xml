@@ -14,7 +14,9 @@
     <color name="red_500">#f4511e</color>
     <color name="red_500_dark">#b91400</color>
     <color name="onError">#B00020</color>
-    <color name="onError_light">#EF5350</color>
-    <color name="black">#FF000000</color>
+    <color name="onError_light">#CF6679</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_theme">#121212</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

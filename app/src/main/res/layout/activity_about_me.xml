@@ -158,9 +158,10 @@
         android:layout_marginHorizontal="@dimen/space_medium"
         android:text="@string/app_name"
         android:textStyle="bold"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@id/about_me_app_version"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginVertical="@dimen/space_mini"
         app:layout_constraintStart_toEndOf="@id/about_me_app_icon"
         app:layout_constraintTop_toTopOf="@id/about_me_app_icon" />
 
@@ -168,6 +169,7 @@
         android:id="@+id/about_me_app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/space_mini"
         app:layout_constraintBottom_toBottomOf="@id/about_me_app_icon"
         app:layout_constraintStart_toStartOf="@id/about_me_app_name"
         app:layout_constraintTop_toBottomOf="@id/about_me_app_name"
