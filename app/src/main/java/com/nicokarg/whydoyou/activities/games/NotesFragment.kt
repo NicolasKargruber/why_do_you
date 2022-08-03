@@ -9,15 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.activities.lock.LockScreenActivity
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.FragmentNotesBinding
 import com.nicokarg.whydoyou.viewmodel.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.nicokarg.whydoyou.adapter.RecyclerAdapterActivities
+import com.nicokarg.whydoyou.adapter.RecyclerAdapterNotes
 import com.nicokarg.whydoyou.alertdialog.EditNoteAD
 
 
@@ -31,7 +38,7 @@ class NotesFragment : Fragment() {
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
-    private val viewModel get() = _viewModel
+    private val viewModel get() = _viewModel!!
 
     val minWords = 6
     val minChars = 33
@@ -55,15 +62,6 @@ class NotesFragment : Fragment() {
 
     private val logTag = "NotesFragment"
 
-    private val arrayAdapter by lazy {
-        ArrayAdapter(
-            requireContext(),
-            R.layout.item_note_layout,
-            R.id.mat_btn_note,
-            viewModel!!.getNotes()
-        )
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,15 +81,23 @@ class NotesFragment : Fragment() {
         } else _viewModel!!.updateDB = false
 
         binding.apply {
-            notesList.adapter = arrayAdapter
-            notesList.onItemClickListener = OnItemClickListener { arrayView, _, pos, _ ->
-                val txt = arrayView.getItemAtPosition(pos) as String
-                createAlertDialog(txt, pos)
+            // set up rv
+            notesRecyclerView.apply {
+                adapter = RecyclerAdapterNotes(viewModel!!) { content, pos   ->
+                    createAlertDialog(content,pos)
+                }
+                layoutManager = object :
+                    LinearLayoutManager(requireContext(), VERTICAL, false) {
+                    override fun canScrollVertically(): Boolean {
+                        return false // so that rv is not scrollable and shows additional shadow
+                    }
+                }
             }
             fabAddNote.setOnClickListener {
                 createAlertDialog()
             }
-            textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+            // textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+            textCreateFirstMemo.isVisible = viewModel.getNotes().isEmpty()
             if (parentIsLock) {
                 (requireActivity() as LockScreenActivity).initIcon(wdyInclude.wdyTextWhatApp)
             }
@@ -125,12 +131,16 @@ class NotesFragment : Fragment() {
                     errorMap[more_words]!!,
                     minWords - noteText.wordCount()
                 )
-                else addNote(noteText) // note is not yet in array
+                else {
+                    binding.notesRecyclerView.adapter!!.notifyItemInserted(pos+1)
+                    addNote(noteText) // note is not yet in array
+                }
             } else if (noteText.lowercase() != getNote(pos).lowercase()) return errorMap[incorrect] // did not enter the same text
             // else text was the same and task was completed
         }
-        arrayAdapter.notifyDataSetChanged()
-        binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+        // arrayAdapter.notifyDataSetChanged()
+        // binding.textCreateFirstMemo.isVisible = arrayAdapter.isEmpty
+        binding.textCreateFirstMemo.isVisible = viewModel.getNotes().isEmpty()
         showSuccessAndQuit() // show success
         return null // onPositive will cancel the dialog
     }
@@ -150,7 +160,8 @@ class NotesFragment : Fragment() {
     private fun disableViews() {
         binding.apply {
             fabAddNote.isEnabled = false
-            notesList.isEnabled = false
+            // notesList.isEnabled = false
+            notesRecyclerView.isEnabled = false
         }
     }
 

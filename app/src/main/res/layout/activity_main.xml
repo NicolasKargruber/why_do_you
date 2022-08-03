@@ -6,12 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.main.MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/activity_main_app_bar"
         android:layout_width="match_parent"
@@ -30,11 +24,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-        <include
-            layout="@layout/content_main"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp" />
+        <include layout="@layout/content_main" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -42,7 +32,7 @@
         android:paddingVertical="2dp"
         android:layout_width="match_parent"
         app:menu="@menu/bottom_menu"
-        android:layout_height="wrap_content"/>
-    </LinearLayout>
+        android:layout_gravity="bottom"
+        android:layout_height="@dimen/bottom_navigation_bar_size"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -29,17 +29,14 @@ class RecyclerAdapterLockApps(
     val logTag: String = "RecyclerAdapterLockApps"
     var showSystemApps = true
 
-    val notLockableStrings = mapOf(
+    private val notLockableStrings = mapOf(
         true to context.getString(R.string.not_lockable_system_app),
         false to context.getString(R.string.not_lockable_app_why_do_you),
     )
-    val lockedStrings = mapOf(
+    private val lockedStrings = mapOf(
         true to context.getString(R.string.locked),
         false to context.getString(R.string.not_locked),
     )
-    val lockableDrawables =
-        ContextCompat.getDrawable(context, R.drawable.material_button_drawable_selector)
-    val notLockableDrawable = ContextCompat.getDrawable(context, R.drawable.ic_outline_info_24)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val appIcon: ImageView = itemView.findViewById(R.id.item_app_icon)

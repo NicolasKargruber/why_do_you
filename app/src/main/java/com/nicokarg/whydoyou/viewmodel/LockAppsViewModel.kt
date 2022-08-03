@@ -1,5 +1,6 @@
 package com.nicokarg.whydoyou.viewmodel
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -10,7 +11,6 @@ import com.nicokarg.whydoyou.database.DBHandler
 class LockAppsViewModel:ViewModel() {
     var dbHandler: DBHandler? = null
     val dbAppList: MutableLiveData<MutableList<AppModal>> = MutableLiveData()
-    val test = "test"
     fun updateIsLockedOfApp(pack: String, il: Boolean) {
         dbHandler!!.updateIsLockedOfApp(pack,il)
         // update dbAppList

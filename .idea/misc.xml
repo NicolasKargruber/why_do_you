@@ -62,6 +62,7 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/material_button_drawable_selector.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/outlined_background.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/activity_about_me.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/activity_lock_screen.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/activity_settings.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/content_main.xml" value="0.22826086956521738" />
@@ -74,6 +75,7 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/fragment_puzzle.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/fragment_select_game.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/item_app_layout.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/item_note_layout.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/note_list_item.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/permission_view_group.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/select_activity_layout.xml" value="0.22826086956521738" />

@@ -100,6 +100,7 @@ class FirstFragment : Fragment() {
     }
 
     private fun goToNext() {
+        binding.firstButtonGoNext.isGone = true
         val sharedPreferences =
             requireActivity().getSharedPreferences(
                 resources.getString(R.string.MY_PREFS),

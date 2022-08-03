@@ -17,6 +17,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="@dimen/bottom_navigation_bar_size"
+            android:clipToPadding="false"
             android:orientation="vertical">
 
             <TextView

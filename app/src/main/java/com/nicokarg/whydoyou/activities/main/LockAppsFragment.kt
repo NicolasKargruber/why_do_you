@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,7 @@ class LockAppsFragment : Fragment() {
 
     private val logTag = "LockAppsFragment"
 
+
     companion object {
         var systemAppsPrefChanged = false
     }
@@ -43,7 +45,7 @@ class LockAppsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_lock_apps, container, false)
         return binding.root
@@ -53,6 +55,7 @@ class LockAppsFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(logTag,"Fragment onViewCreated")
 
         _viewModel = ViewModelProvider(requireActivity())[LockAppsViewModel::class.java]
 
@@ -89,11 +92,13 @@ class LockAppsFragment : Fragment() {
         super.onResume()
         if (systemAppsPrefChanged) binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
         systemAppsPrefChanged = false
+        Log.d(logTag,"Fragment resumed")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        Log.d(logTag,"Fragment destroyed")
     }
 
     private fun MutableList<AppModal>.sortByName() {

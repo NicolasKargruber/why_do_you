@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -42,6 +43,10 @@ class MainActivity : AppCompatActivity() {
     private val logTag = "MainActivity"
 
     private val navController get() = findNavController(R.id.content_main_nav_host_fragment)
+
+    companion object {
+        var rootViewLockApps: View?=null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
