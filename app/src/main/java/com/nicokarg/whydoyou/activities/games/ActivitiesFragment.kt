@@ -158,7 +158,7 @@ class ActivitiesFragment : Fragment() {
     private fun runCountdown(tim: Int) {
         object : CountDownTimer(tim.toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding.activityTvTimer.text = viewModel.oneSecPassed() ?: "-:--"
+                binding.activityTvTimer.text = viewModel.oneSecPassed() ?: "00:00" //
             }
             override fun onFinish() {
                 showSuccessAndQuit()
@@ -172,7 +172,7 @@ class ActivitiesFragment : Fragment() {
                 requireContext(),
                 { _, minute, seconds ->
                     viewModel.setTime(minute, seconds)
-                    activityTvTimer.text = viewModel.getTimeString() ?: "-:--"
+                    activityTvTimer.text = viewModel.getTimeString() ?: "00:00"
                     activityBtnStartTimer.isEnabled = activityIsSetUp
                 },
                 tp.first, // set minutes

@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,13 @@ class LockAppsFragment : Fragment() {
         var systemAppsPrefChanged = false
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {}
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,13 +58,14 @@ class LockAppsFragment : Fragment() {
 
         _viewModel!!.apply {
             lockedTotal.observe(viewLifecycleOwner) {
-                // binding.lockAppsTvLockedTotal.text = String.format("Locked in total: %d", it)
                 binding.lockAppsTvLockedTotalCount.text = String.format("%d apps", it)
             }
             // get apps from SQLite Database
             dbHandler = DBHandler(activity)
-            dbAppList.value = dbHandler!!.readApps()
-            dbAppList.value!!.sortByName()
+            if (dbAppList.value==null) {
+                dbAppList.value = dbHandler!!.readApps()
+                dbAppList.value!!.sortByName()
+            }
         }
 
         binding.lockAppsRecyclerView.apply {
@@ -67,7 +76,7 @@ class LockAppsFragment : Fragment() {
                 requireActivity().packageName
             )
             layoutManager = object :
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false) {
+                LinearLayoutManager(requireContext(), VERTICAL, false) {
                 override fun canScrollVertically(): Boolean {
                     return false // so that rv is not scrollable and shows additional shadow
                 }

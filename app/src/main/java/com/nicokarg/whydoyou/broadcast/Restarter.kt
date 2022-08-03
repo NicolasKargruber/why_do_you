@@ -17,7 +17,7 @@ class Restarter : BroadcastReceiver() {
     // override the built-in onReceive() method (in BroadcastReceiver) to add the statement which will restart the service.
     override fun onReceive(context: Context, intent: Intent?) {
         Log.i("Broadcast Listened", "Service tried to stop")
-        Toast.makeText(context, "Service restarted", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "Service restarted", Toast.LENGTH_SHORT).show()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // startService() only works as intended below Android Oreo 8.1
             // use the startForegroundService() for higher versions
             context.startForegroundService(Intent(context, YourService::class.java)) // show a continuous notification to keep the service running

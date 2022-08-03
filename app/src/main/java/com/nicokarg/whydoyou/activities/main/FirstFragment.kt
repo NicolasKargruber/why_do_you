@@ -12,21 +12,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.databinding.FragmentFirstBinding
-
-
+import com.nicokarg.whydoyou.services.YourService
+import com.nicokarg.whydoyou.viewmodel.FirstViewModel
 
 
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
+
+    private var _viewModel: FirstViewModel? = null
+
+    private val defaultItemId = R.id.lockAppsFragment
 
     // var requestMultiplePermissions: ActivityResultLauncher<Array<String>>? = null
 
@@ -45,11 +49,15 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(logTag, "Fragment created")
 
+
+        _viewModel =
+            ViewModelProvider(requireActivity())[FirstViewModel::class.java] // get viewModel
+
         isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS).let { usGranted ->
             isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW).let { sawGranted ->
                 if (usGranted && sawGranted) {
-                    Log.d(logTag,"Permissions already granted")
-                    findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
+                    Log.d(logTag, "Permissions already granted")
+                    goToNext()
                 } else {
                     if (!usGranted) binding.firstPermissionPackageUsageStats.buttonPermission.apply {
                         isEnabled = true
@@ -79,10 +87,32 @@ class FirstFragment : Fragment() {
             )
         }
 
-        binding.firstButtonGoNext.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_MainFragment)
-        }
+        binding.firstButtonGoNext.setOnClickListener { goToNext() }
+    }
 
+    private fun startService() {
+        _viewModel!!.apply {
+            mYourService =
+                YourService() // (this class checks if service is already running and will not start it twice)
+            mServiceIntent = Intent(requireActivity(), mYourService!!.javaClass)
+            requireActivity().startService(mServiceIntent) // start service by using startService()
+        }
+    }
+
+    private fun goToNext() {
+        val sharedPreferences =
+            requireActivity().getSharedPreferences(
+                resources.getString(R.string.MY_PREFS),
+                Context.MODE_PRIVATE
+            )
+        val bottomNavSelectItemId = sharedPreferences!!.getInt(
+            resources.getString(R.string.CURRENT_TAB_ID), defaultItemId
+        )
+        startService()
+        val action = // goes to previous fragment/tab when app was last closed
+            if (bottomNavSelectItemId == R.id.selectGameFragment) R.id.action_firstFragment_to_selectGameFragment
+            else R.id.action_firstFragment_to_lock_apps_fragment
+        findNavController().navigate(action)
     }
 
     override fun onResume() {
@@ -93,12 +123,12 @@ class FirstFragment : Fragment() {
                 if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS)) pusBtn.apply {
                     isEnabled = false
                     text = "Granted"
-                    Log.d(logTag,"Usage Stats granted")
+                    Log.d(logTag, "Usage Stats granted")
                 }
                 if (isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW)) sawBtn.apply {
                     isEnabled = false
                     text = "Granted"
-                    Log.d(logTag,"Manage Overlay granted")
+                    Log.d(logTag, "Manage Overlay granted")
                 }
                 binding.firstPermissionsLayout.isGone = !pusBtn.isEnabled && !sawBtn.isEnabled
                 binding.firstButtonGoNext.isVisible = !pusBtn.isEnabled && !sawBtn.isEnabled

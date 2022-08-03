@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,13 @@ class SelectGameFragment : Fragment() {
 
     private val logTag = "SelectGameFragment"
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {}
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,13 +53,13 @@ class SelectGameFragment : Fragment() {
 
         _viewModel!!.apply {
 
-        sharedPreferences = requireActivity().getSharedPreferences(
-            resources.getString(R.string.MY_PREFS), MODE_PRIVATE
-        )
-        _viewModel!!.lockGameId = sharedPreferences!!.getInt(
-            resources.getString(R.string.CHECKED_MC_CARD), -1
-        ) // -1 is default
-    }
+            sharedPreferences = requireActivity().getSharedPreferences(
+                resources.getString(R.string.MY_PREFS), MODE_PRIVATE
+            )
+            _viewModel!!.lockGameId = sharedPreferences!!.getInt(
+                resources.getString(R.string.CHECKED_MC_CARD), -1
+            ) // -1 is default
+        }
         binding.apply {
             gameNotes.setOnClickListener(onClickListener)
             gameNumbers.setOnClickListener(onClickListener)
@@ -62,11 +70,13 @@ class SelectGameFragment : Fragment() {
 
         // check MatCard
         if (_viewModel!!.lockGameId != -1)
-            try{ requireActivity().findViewById<MaterialCardView>(
-            _viewModel!!.lockGameId
-        ).performClick()}catch (e:Exception){
-            Log.e(logTag,"$e")
-        }
+            try {
+                requireActivity().findViewById<MaterialCardView>(
+                    _viewModel!!.lockGameId
+                ).performClick()
+            } catch (e: Exception) {
+                Log.e(logTag, "$e")
+            }
 
     }
 
@@ -92,14 +102,13 @@ class SelectGameFragment : Fragment() {
 
     private val goToNextFragment = View.OnClickListener {
         val action = when (_viewModel!!.lockGameId) {
-            R.id.game_numbers -> R.id.action_MainFragment_to_PuzzleFragment
-            R.id.game_notes -> R.id.action_MainFragment_to_notesFragment
-            R.id.game_activities -> R.id.action_MainFragment_to_activitiesFragment
+            R.id.game_numbers -> R.id.action_select_game_fragment_to_puzzleFragment
+            R.id.game_notes -> R.id.action_select_game_fragment_to_notesFragment
+            R.id.game_activities -> R.id.action_select_game_fragment_to_activitiesFragment
             else -> -1
         }
         if (action != -1) {
             findNavController().navigate(action)
-            Log.e(logTag,"No applicable material card id was found")
-        }
+        } else Log.e(logTag, "No applicable material card id was found")
     }
 }

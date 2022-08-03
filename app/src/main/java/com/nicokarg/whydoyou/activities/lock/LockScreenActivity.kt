@@ -26,6 +26,11 @@ class LockScreenActivity : AppCompatActivity() {
     val LOCK_SCREEN_FRAGMENT_TAG = "LOCK_SCREEN_FRAGMENT_TAG"
     var lockScreenFragment:Fragment? = null
 
+    private val puzzleFragment = PuzzleFragment()
+    private val notesFragment = NotesFragment()
+    private val activitiesFragment = ActivitiesFragment()
+    private val defaultLockFragment = puzzleFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,9 +59,8 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
         // Adding a Fragment instance to the FragmentContainerView
-        lockScreenFragment = getLockScreenFragment
-        if(lockScreenFragment!=null) supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container_lock_screen, lockScreenFragment!!,LOCK_SCREEN_FRAGMENT_TAG)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container_lock_screen, getLockScreenFragment, LOCK_SCREEN_FRAGMENT_TAG)
             .commit()
     }
 
@@ -64,12 +68,12 @@ class LockScreenActivity : AppCompatActivity() {
         tv.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,_viewModel!!.appIcon,null)
     }
 
-    private val getLockScreenFragment: Fragment?
+    private val getLockScreenFragment: Fragment
         get() = when (_viewModel!!.lockGameId) {
-            R.id.game_numbers -> PuzzleFragment()
-            R.id.game_notes -> NotesFragment()
-            R.id.game_activities -> ActivitiesFragment()
-            else -> null
+            R.id.game_numbers -> puzzleFragment
+            R.id.game_notes -> notesFragment
+            R.id.game_activities -> activitiesFragment
+            else -> defaultLockFragment
         }
 
     // closes the application and shows the home screen of the device:

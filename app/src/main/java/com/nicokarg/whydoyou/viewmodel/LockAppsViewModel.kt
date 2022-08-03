@@ -8,8 +8,6 @@ import com.nicokarg.whydoyou.model.AppModal
 import com.nicokarg.whydoyou.database.DBHandler
 
 class LockAppsViewModel:ViewModel() {
-
-
     var dbHandler: DBHandler? = null
     val dbAppList: MutableLiveData<MutableList<AppModal>> = MutableLiveData()
     val test = "test"

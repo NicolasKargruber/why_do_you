@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/lock_apps"
+        android:id="@+id/lockAppsFragment"
         android:icon="@drawable/bottom_menu_tab_drawable_selector_apps"
         android:title="@string/apps" />
     <item
-        android:id="@+id/select_game"
+        android:id="@+id/selectGameFragment"
         android:icon="@drawable/bottom_menu_tab_drawable_selector_games"
         android:title="@string/games" />
 </menu>

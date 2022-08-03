@@ -3,57 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/firstFragment">
 
     <fragment
-        android:id="@+id/PuzzleFragment"
+        android:id="@+id/puzzleFragment"
         android:name="com.nicokarg.whydoyou.activities.games.PuzzleFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_puzzle">
-        <action
-            android:id="@+id/action_PuzzleFragment_to_MainFragment"
-            app:destination="@id/MainFragment" />
     </fragment>
     <fragment
-        android:id="@+id/MainFragment"
-        android:name="com.nicokarg.whydoyou.activities.main.MainFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_MainFragment_to_PuzzleFragment"
-            app:destination="@id/PuzzleFragment" />
-        <action
-            android:id="@+id/action_MainFragment_to_notesFragment"
-            app:destination="@id/notesFragment" />
-        <action
-            android:id="@+id/action_MainFragment_to_activitiesFragment"
-            app:destination="@id/activitiesFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/firstFragment"
         android:name="com.nicokarg.whydoyou.activities.main.FirstFragment"
         android:label="fragment_first"
         tools:layout="@layout/fragment_first" >
         <action
-            android:id="@+id/action_FirstFragment_to_MainFragment"
-            app:destination="@id/MainFragment" />
+            android:id="@+id/action_firstFragment_to_lock_apps_fragment"
+            app:destination="@id/lockAppsFragment" />
+        <action
+            android:id="@+id/action_firstFragment_to_selectGameFragment"
+            app:destination="@id/selectGameFragment" />
     </fragment>
     <fragment
         android:id="@+id/notesFragment"
         android:name="com.nicokarg.whydoyou.activities.games.NotesFragment"
         android:label="fragment_notes"
         tools:layout="@layout/fragment_notes" >
-        <action
-            android:id="@+id/action_notesFragment_to_MainFragment"
-            app:destination="@id/MainFragment" />
     </fragment>
     <fragment
         android:id="@+id/activitiesFragment"
         android:name="com.nicokarg.whydoyou.activities.games.ActivitiesFragment"
         android:label="ActivitiesFragment"
         tools:layout="@layout/fragment_activities" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/lockAppsFragment"
+        android:name="com.nicokarg.whydoyou.activities.main.LockAppsFragment"
+        tools:layout="@layout/fragment_lock_apps"
+        android:label="LockAppsFragment" >
+    </fragment>
+    <fragment
+        android:id="@+id/selectGameFragment"
+        tools:layout="@layout/fragment_select_game"
+        android:name="com.nicokarg.whydoyou.activities.main.SelectGameFragment"
+        android:label="SelectGameFragment" >
         <action
-            android:id="@+id/action_activitiesFragment_to_MainFragment"
-            app:destination="@id/MainFragment" />
+            android:id="@+id/action_select_game_fragment_to_puzzleFragment"
+            app:destination="@id/puzzleFragment" />
+        <action
+            android:id="@+id/action_select_game_fragment_to_activitiesFragment"
+            app:destination="@id/activitiesFragment" />
+        <action
+            android:id="@+id/action_select_game_fragment_to_notesFragment"
+            app:destination="@id/notesFragment" />
     </fragment>
 </navigation>
