@@ -9,16 +9,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
@@ -29,7 +26,6 @@ import com.nicokarg.whydoyou.broadcast.Restarter
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.ActivityMainBinding
 import com.nicokarg.whydoyou.model.AppModal
-import com.nicokarg.whydoyou.services.YourService
 import com.nicokarg.whydoyou.viewmodel.MainActivityViewModel
 import java.util.*
 
@@ -43,10 +39,6 @@ class MainActivity : AppCompatActivity() {
     private val logTag = "MainActivity"
 
     private val navController get() = findNavController(R.id.content_main_nav_host_fragment)
-
-    companion object {
-        var rootViewLockApps: View?=null
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,10 +114,10 @@ class MainActivity : AppCompatActivity() {
             // apps in database
             dbAppList = dbHandler!!.readApps()
 
-            // read packageInfo of installed apps
+            // read applicationInfo of installed apps
             val installedApps = getPackages().toApps() // get installed Apps
-            var updateAppAtIndex = listOf(0) // index of installed apps
-            var removeAppAtIndex = listOf(0) // index of database apps
+            var updateAppAtIndex = listOf<String>() // index of installed apps
+            var removeAppAtIndex = listOf<String>() // index of database apps
 
             if (dbAppList.isNullOrEmpty()) {
                 installedApps.forEach {
@@ -137,21 +129,21 @@ class MainActivity : AppCompatActivity() {
                 removeAppAtIndex = appIndicesToRemove(dbAppList!!, installedApps)
             }
 
-            if (updateAppAtIndex.sum() > 0) { // installed apps list has updated
+            if (updateAppAtIndex.any { it != "nothing" }) { // installed apps list has updated
                 updateAppAtIndex.forEachIndexed { index, i ->
                     installedApps[index].let { instApp ->
                         when (i) {
-                            1 -> dbHandler!!.addNewApp(instApp)
-                            2 -> dbHandler!!.updateApp(instApp)
+                            "add" -> dbHandler!!.addNewApp(instApp)
+                            "update" -> dbHandler!!.updateApp(instApp)
                             // else app remained the same (i==0)
                         }
                     }
                 }
             }
-            if (removeAppAtIndex.sum() > 0) { // got apps to delete: installed apps list has updated
+            if (removeAppAtIndex.any { it != "nothing" }) { // got apps to delete: installed apps list has updated
                 removeAppAtIndex.forEachIndexed { index, i ->
                     dbAppList!![index].let { dbApp ->
-                        if (i == 1) dbHandler!!.deleteApp(dbApp.packageName)
+                        if (i == "remove") dbHandler!!.deleteApp(dbApp.packageName)
                     }
                 }
             }
@@ -162,12 +154,14 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("QueryPermissionsNeeded")
     private fun getPackages(): MutableList<ApplicationInfo> {
         val pm = this.packageManager
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
         val packages =
             pm.getInstalledApplications(PackageManager.GET_META_DATA) //get a list of installed apps.
 
         Log.d(logTag, "Found ${packages.size} packages in total")
         val apps =
-            packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns system apps and user apps
+            packages.filter { pm.getLaunchIntentForPackage(it.packageName) != null } // returns only launchable apps
                 .toMutableList()
         Log.d(logTag, "Of which ${apps.size} apps have an intent")
         return apps
@@ -215,18 +209,18 @@ class MainActivity : AppCompatActivity() {
     private fun appIndicesToUpdate(
         dbApps: List<AppModal>,
         instApps: MutableList<AppModal>
-    ): List<Int> {
-        val updateIndexList = mutableListOf<Int>()
+    ): List<String> {
+        val updateIndexList = mutableListOf<String>()
         // if (dbApps.size != instApps.size) return updateIndexList
         instApps.forEach { instApp ->
             val apps = dbApps.filter { dbApp -> dbApp.packageName == instApp.packageName }
-            if (apps.isEmpty()) updateIndexList.add(1)
+            if (apps.isEmpty()) updateIndexList.add("add") // not in the list
             else if (!appsAreEqual(
                     apps.first(),
                     instApp
                 )
-            ) updateIndexList.add(2) // apps should hold only one app
-            else updateIndexList.add(0)
+            ) updateIndexList.add("update") // apps should hold only instance, update it
+            else updateIndexList.add("nothing") // nothing of both
         }
         return updateIndexList // index of installed apps
     }
@@ -234,13 +228,11 @@ class MainActivity : AppCompatActivity() {
     private fun appIndicesToRemove(
         dbApps: List<AppModal>,
         instApps: MutableList<AppModal>
-    ): List<Int> {
-        val removeIndexList = mutableListOf<Int>()
-        dbApps.forEach {
-            if (instApps.none { instApp -> instApp.packageName == it.packageName }) removeIndexList.add(
-                -1
-            )
-            else removeIndexList.add(0)
+    ): List<String> {
+        val removeIndexList = mutableListOf<String>()
+        dbApps.forEach { dbApp ->
+            if (instApps.none { it.packageName == dbApp.packageName }) removeIndexList.add("remove") // not installed anymore
+            else removeIndexList.add("nothing") // do nothing
         }
         return removeIndexList // index of database apps
     }

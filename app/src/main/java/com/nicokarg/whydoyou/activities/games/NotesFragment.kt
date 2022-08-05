@@ -83,7 +83,7 @@ class NotesFragment : Fragment() {
         binding.apply {
             // set up rv
             notesRecyclerView.apply {
-                adapter = RecyclerAdapterNotes(viewModel!!) { content, pos   ->
+                adapter = RecyclerAdapterNotes(viewModel) { content, pos   ->
                     createAlertDialog(content,pos)
                 }
                 layoutManager = object :

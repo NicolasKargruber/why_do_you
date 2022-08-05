@@ -1,8 +1,10 @@
 package com.nicokarg.whydoyou.activities.main
 
 import android.app.AppOpsManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -74,7 +77,7 @@ class FirstFragment : Fragment() {
         binding.firstPermissionPackageUsageStats.textViewPermission.text =
             "Please grant access to your usage access"
         binding.firstPermissionPackageUsageStats.buttonPermission.setOnClickListener {
-            checkPermission(
+            requestPermissionManually(
                 Settings.ACTION_USAGE_ACCESS_SETTINGS
             )
         }
@@ -82,7 +85,7 @@ class FirstFragment : Fragment() {
         binding.firstPermissionSystemAlertWindow.textViewPermission.text =
             "Please grant access to display over other apps"
         binding.firstPermissionSystemAlertWindow.buttonPermission.setOnClickListener {
-            checkPermission(
+            requestPermissionManually(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION
             )
         }
@@ -121,16 +124,26 @@ class FirstFragment : Fragment() {
         Log.d(logTag, "Fragment resume")
         binding.firstPermissionPackageUsageStats.buttonPermission.let { pusBtn ->
             binding.firstPermissionSystemAlertWindow.buttonPermission.let { sawBtn ->
-                if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS)) pusBtn.apply {
+                pusBtn.apply {
+                    if (isAccessGranted(AppOpsManager.OPSTR_GET_USAGE_STATS))  {
                     isEnabled = false
                     text = "Granted"
                     Log.d(logTag, "Usage Stats granted")
-                }
-                if (isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW)) sawBtn.apply {
+                } else {
+                    isEnabled = true
+                    text = "Grant"
+                    Log.d(logTag, "Usage Stats not granted")
+                } }
+                sawBtn.apply {if (isAccessGranted(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW))  {
                     isEnabled = false
                     text = "Granted"
                     Log.d(logTag, "Manage Overlay granted")
+                } else{
+                    isEnabled = true
+                    text = "Grant"
+                    Log.d(logTag, "Manage Overlay not granted")
                 }
+            }
                 binding.firstPermissionsLayout.isGone = !pusBtn.isEnabled && !sawBtn.isEnabled
                 binding.firstButtonGoNext.isVisible = !pusBtn.isEnabled && !sawBtn.isEnabled
             }
@@ -144,22 +157,29 @@ class FirstFragment : Fragment() {
     }
 
     // Function to check and request permission.
-    private fun checkPermission(action: String) {
+    private fun requestPermissionManually(action: String) {
         val intent = Intent(action)
         val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
         intent.data = uri
-        startActivity(intent) // Requesting the permission
+        try { // apparently samsung s8 with Android 9 cannot do this
+            startActivity(intent) // Requesting the permission
+        } catch (e:ActivityNotFoundException) {
+            Toast.makeText(requireContext(),"Not able to open settings, please do it manually",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun isAccessGranted(op: String): Boolean {
         val appOps = requireContext().getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appOps.unsafeCheckOpNoThrow(
-                op, Process.myUid(), requireContext().packageName
-            )
-        } else {
-            TODO("VERSION.SDK_INT < Q")
-        }
+                appOps.unsafeCheckOpNoThrow(
+                    op, Process.myUid(), requireContext().packageName
+                )
+            } else {
+                appOps.checkOpNoThrow(op,
+                    Process.myUid(), requireContext().packageName
+                )
+            }
+
         return mode == AppOpsManager.MODE_ALLOWED
     }
 }

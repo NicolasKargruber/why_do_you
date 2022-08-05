@@ -59,6 +59,7 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/ic_round_lock_clock_24.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/ic_round_settings_24.xml" value="0.5265" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/ic_why_do_you_about_me.xml" value="0.2385" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/ic_why_do_you_launcher_foreground.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/material_button_drawable_selector.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/drawable/outlined_background.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/layout/activity_about_me.xml" value="0.22826086956521738" />
@@ -85,6 +86,9 @@
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/menu/top_app_bar.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/menu/top_app_bar_main.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/menu/top_app_bar_settings.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2385" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/mipmap-anydpi-v26/ic_why_do_you_launcher.xml" value="0.2385" />
+        <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/mipmap-anydpi-v26/ic_why_do_you_launcher_round.xml" value="0.2385" />
         <entry key="..\:/Users/nicol/AndroidStudioProjects/why_do_you/app/src/main/res/xml/preferences.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/nicol/Downloads/TimeKeeper/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5265" />
         <entry key="..\:/Users/nicol/Downloads/TimeKeeper/app/src/main/res/drawable/btn_top_left_round.xml" value="0.5255" />

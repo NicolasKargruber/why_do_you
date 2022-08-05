@@ -1,6 +1,7 @@
 package com.nicokarg.whydoyou.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ class RecyclerAdapterLockApps(
     val context: Context,
     private val appList: List<AppModal>,
     val setIsLockedInDB: (String, Boolean) -> Unit,
-    val applicationPackage: String
+    private val applicationPackage: String
 ) :
     RecyclerView.Adapter<RecyclerAdapterLockApps.ViewHolder>() {
 
@@ -57,6 +58,7 @@ class RecyclerAdapterLockApps(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d(logTag,"onBindViewHolder start")
         holder.apply {
             appList[position].let { app -> // app is either from nsAppList or appList
                 appIcon.setImageDrawable(app.icon.second)
@@ -94,14 +96,13 @@ class RecyclerAdapterLockApps(
                 }
             }
         }
+        Log.d(logTag,"onBindViewHolder finished")
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
-        holder.lockButton.apply {
-            clearOnCheckedChangeListeners() // prevent this from calling the previous listener
-            setOnClickListener { } // prevent this from calling the previous listener
-        }
+        holder.lockButton.clearOnCheckedChangeListeners() // prevent this from calling the previous listener
+        holder.infoButton.setOnClickListener(null) // prevent this from calling the previous listener
     }
 
     override fun getItemCount(): Int {
@@ -119,7 +120,7 @@ class RecyclerAdapterLockApps(
 
     private fun getSystemAppsPref(): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-            context.getString(R.string.key_system_apps_switch), true
+            context.getString(R.string.key_system_apps_switch), false
         )
     }
 

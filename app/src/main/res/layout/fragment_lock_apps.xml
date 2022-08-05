@@ -9,11 +9,6 @@
             type="com.nicokarg.whydoyou.viewmodel.LockAppsViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,15 +39,13 @@
             <View
                 android:background="?attr/colorOutline" android:alpha="0.6"
                 android:layout_width="match_parent"
-                android:layout_marginVertical="@dimen/space_small"
+                android:layout_marginTop="@dimen/space_small"
                 android:layout_height="1dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lock_apps_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:isScrollContainer="false" />
+                android:layout_height="match_parent" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 </layout>
 

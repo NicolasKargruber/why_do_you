@@ -78,12 +78,7 @@ class LockAppsFragment : Fragment() {
                 { pack, il -> _viewModel!!.updateIsLockedOfApp(pack, il) },
                 requireActivity().packageName
             )
-            layoutManager = object :
-                LinearLayoutManager(requireContext(), VERTICAL, false) {
-                override fun canScrollVertically(): Boolean {
-                    return false // so that rv is not scrollable and shows additional shadow
-                }
-            }
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
     }
 
