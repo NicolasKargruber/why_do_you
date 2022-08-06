@@ -91,28 +91,28 @@ class MainActivity : AppCompatActivity() {
             binding.apply {
                 when (destination.id) {
                     R.id.firstFragment -> { // permissions screen
-                        Log.d(logTag,"Destination is firstFragment")
+                        Log.d(logTag, "Destination is firstFragment")
                         toolbar.navigationIcon = null
                         toolbar.menu.clear()
                         // toolbar.menu.findItem(R.id.refresh).isVisible = false
                         activityMainBottomNavigation.isGone = true
                     }
                     R.id.lockAppsFragment -> { // lock apps screen
-                        Log.d(logTag,"Destination is lockAppsFragment")
+                        Log.d(logTag, "Destination is lockAppsFragment")
                         _viewModel!!.apply { bottomNavSelectItemId = destination.id }
                         toolbar.navigationIcon = null
                         // toolbar.menu.findItem(R.id.refresh).isVisible = true
                         activityMainBottomNavigation.isVisible = true
                     }
                     R.id.selectGameFragment -> { // select game screen
-                        Log.d(logTag,"Destination is selectGameFragment")
+                        Log.d(logTag, "Destination is selectGameFragment")
                         _viewModel!!.apply { bottomNavSelectItemId = destination.id }
                         toolbar.navigationIcon = null
                         // toolbar.menu.findItem(R.id.refresh).isVisible = false
                         activityMainBottomNavigation.isVisible = true
                     }
                     else -> { // must be a game
-                        Log.d(logTag,"Destination is 'else'")
+                        Log.d(logTag, "Destination is 'else'")
                         toolbar.navigationIcon = ContextCompat.getDrawable(
                             this@MainActivity,
                             R.drawable.ic_round_arrow_back_24
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     suspend fun updateDbIfNecessary() {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             _viewModel!!.apply {
                 // apps in database
                 dbAppList = dbHandler!!.readApps()
@@ -194,6 +194,7 @@ class MainActivity : AppCompatActivity() {
                     it.loadIcon(this@MainActivity.packageManager)
                 ), // icon id and drawable
                 it.packageName,
+                it.category,
                 it.isSystemApp(),
                 it.getIsLocked(),
                 dateOneDayAgo
@@ -232,10 +233,8 @@ class MainActivity : AppCompatActivity() {
         instApps.forEach { instApp ->
             val apps = dbApps.filter { dbApp -> dbApp.packageName == instApp.packageName }
             if (apps.isEmpty()) updateIndexList.add("add") // not in the list
-            else if (!appsAreEqual(
-                    apps.first(),
-                    instApp
-                )
+            else if (
+                apps.first().isEqualTo(instApp)
             ) updateIndexList.add("update") // apps should hold only instance, update it
             else updateIndexList.add("nothing") // nothing of both
         }
@@ -255,7 +254,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun appsAreEqual(dbApp: AppModal, instApp: AppModal): Boolean {
-        return instApp.name == dbApp.name && instApp.icon.first == dbApp.icon.first
+        return instApp.name == dbApp.name && instApp.icon.first == dbApp.icon.first && instApp.category == dbApp.category
     }
 
     override fun onDestroy() {

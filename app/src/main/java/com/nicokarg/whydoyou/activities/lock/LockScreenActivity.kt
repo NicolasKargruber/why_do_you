@@ -12,6 +12,7 @@ import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.activities.games.ActivitiesFragment
 import com.nicokarg.whydoyou.activities.games.NotesFragment
 import com.nicokarg.whydoyou.activities.games.PuzzleFragment
+import com.nicokarg.whydoyou.activities.main.MainActivity
 import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.ActivityLockScreenBinding
 import com.nicokarg.whydoyou.viewmodel.LockScreenActivityViewModel
@@ -24,7 +25,6 @@ class LockScreenActivity : AppCompatActivity() {
 
     private val logTag = "LockScreenActivity"
     val LOCK_SCREEN_FRAGMENT_TAG = "LOCK_SCREEN_FRAGMENT_TAG"
-    var lockScreenFragment:Fragment? = null
 
     private val puzzleFragment = PuzzleFragment()
     private val notesFragment = NotesFragment()
@@ -88,7 +88,9 @@ class LockScreenActivity : AppCompatActivity() {
     // makes sure main activity appears when app is clicked
     override fun onPause() {
         super.onPause()
-        this.finish() // close lock screen activity
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // close lock screen activity
     }
 
     fun updateLastLocked() {

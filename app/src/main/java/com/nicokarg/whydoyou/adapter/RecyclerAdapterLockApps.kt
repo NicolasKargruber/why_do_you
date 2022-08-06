@@ -1,6 +1,8 @@
 package com.nicokarg.whydoyou.adapter
 
+import android.app.Application
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +24,7 @@ import com.nicokarg.whydoyou.viewmodel.LockAppsViewModel
 
 class RecyclerAdapterLockApps(
     val context: Context,
-    val viewModel:LockAppsViewModel,
+    val viewModel: LockAppsViewModel,
     val setIsLockedInDB: (String, Boolean) -> Unit,
     private val applicationPackage: String
 ) :
@@ -30,8 +32,20 @@ class RecyclerAdapterLockApps(
 
     val logTag: String = "RecyclerAdapterLockApps"
     var showSystemApps = true
+    val lockableCategories = setOf(ApplicationInfo.CATEGORY_GAME, ApplicationInfo.CATEGORY_SOCIAL)
 
-    private val appList get() = viewModel.dbAppList.value?: listOf()
+    // CATEGORY_ACCESSIBILITY = 8
+    // CATEGORY_AUDIO = 1
+    // CATEGORY_GAME = 0
+    // CATEGORY_IMAGE = 3
+    // CATEGORY_MAPS = 6
+    // CATEGORY_NEWS = 5
+    // CATEGORY_PRODUCTIVITY = 7
+    // CATEGORY_SOCIAL = 4
+    // CATEGORY_UNDEFINED = -1
+    // CATEGORY_VIDEO = 2
+
+    private val appList get() = viewModel.dbAppList.value ?: listOf()
 
     private val notLockableStrings = mapOf(
         true to context.getString(R.string.not_lockable_system_app),
@@ -66,36 +80,34 @@ class RecyclerAdapterLockApps(
                 appIcon.setImageDrawable(app.icon.second)
                 appName.text = app.name
                 appIsLocked.setLocked(app.isLocked)
-                if (app.isWhyDoYou() || app.isSystemApp) infoButton.apply {
-                    if (!showSystemApps && app.isSystemApp) {
-                        itemView.isGone = true
-                        itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
-                        return // stop doing the rest of here
-                    } // else app is WhyDoYou
-                    itemView.isVisible = true
-                    itemView.layoutParams =
-                        RecyclerView.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
+                // first check if app should be showed
+                if (/*lockableCategories.contains(app.category) || */!showSystemApps && app.isSystemApp) {
+                    itemView.isGone = true
+                    itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+                    return // stop doing the rest of here
+                } // else do this:
+                itemView.isVisible = true
+                itemView.layoutParams =
+                    RecyclerView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+
+                if (app.isWhyDoYou() || (app.isSystemApp&&app.category==-1)) infoButton.apply {
                     isVisible = true
                     lockButton.isInvisible = true
                     setOnClickListener {
+                        Log.d(logTag,"This app category: ${app.category}")
                         createDialog(notLockableStrings[app.isSystemApp]!!)
                     }
 
                 } else lockButton.apply { // is normal app
-                    itemView.isVisible = true
-                    itemView.layoutParams =
-                        RecyclerView.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
                     // make lockButton visible
                     isVisible = true
                     infoButton.isInvisible = true
                     isChecked = app.isLocked // this sets the drawable
                     addOnCheckedChangeListener { _, b ->
+                        Log.d(logTag,"This app category: ${app.category}")
                         appIsLocked.setLocked(b)
                         setIsLockedInDB(app.packageName, b)
                         app.isLocked = b // now rv remembers
