@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,6 +28,9 @@ import com.nicokarg.whydoyou.database.DBHandler
 import com.nicokarg.whydoyou.databinding.ActivityMainBinding
 import com.nicokarg.whydoyou.model.AppModal
 import com.nicokarg.whydoyou.viewmodel.MainActivityViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 
@@ -71,7 +75,9 @@ class MainActivity : AppCompatActivity() {
         _viewModel!!.apply {
             // SQLite Database
             dbHandler = DBHandler(this@MainActivity) // creating a new DBHandler class
-            updateDbIfNecessary()
+            lifecycleScope.launch {
+                updateDbIfNecessary()
+            }
 
             // shared Preferences
             sharedPreferences =
@@ -85,69 +91,80 @@ class MainActivity : AppCompatActivity() {
             binding.apply {
                 when (destination.id) {
                     R.id.firstFragment -> { // permissions screen
+                        Log.d(logTag,"Destination is firstFragment")
                         toolbar.navigationIcon = null
+                        toolbar.menu.clear()
+                        // toolbar.menu.findItem(R.id.refresh).isVisible = false
                         activityMainBottomNavigation.isGone = true
                     }
                     R.id.lockAppsFragment -> { // lock apps screen
+                        Log.d(logTag,"Destination is lockAppsFragment")
                         _viewModel!!.apply { bottomNavSelectItemId = destination.id }
                         toolbar.navigationIcon = null
+                        // toolbar.menu.findItem(R.id.refresh).isVisible = true
                         activityMainBottomNavigation.isVisible = true
                     }
                     R.id.selectGameFragment -> { // select game screen
+                        Log.d(logTag,"Destination is selectGameFragment")
                         _viewModel!!.apply { bottomNavSelectItemId = destination.id }
                         toolbar.navigationIcon = null
+                        // toolbar.menu.findItem(R.id.refresh).isVisible = false
                         activityMainBottomNavigation.isVisible = true
                     }
                     else -> { // must be a game
+                        Log.d(logTag,"Destination is 'else'")
                         toolbar.navigationIcon = ContextCompat.getDrawable(
                             this@MainActivity,
                             R.drawable.ic_round_arrow_back_24
                         )
+                        // toolbar.menu.findItem(R.id.refresh).isVisible = false
                         activityMainBottomNavigation.isGone = true
                     }
                 }
             }
         }
 
-    private fun updateDbIfNecessary() {
-        _viewModel!!.apply {
-            // apps in database
-            dbAppList = dbHandler!!.readApps()
+    suspend fun updateDbIfNecessary() {
+        withContext(Dispatchers.IO){
+            _viewModel!!.apply {
+                // apps in database
+                dbAppList = dbHandler!!.readApps()
 
-            // read applicationInfo of installed apps
-            val installedApps = getPackages().toApps() // get installed Apps
-            var updateAppAtIndex = listOf<String>() // index of installed apps
-            var removeAppAtIndex = listOf<String>() // index of database apps
+                // read applicationInfo of installed apps
+                val installedApps = getPackages().toApps() // get installed Apps
+                var updateAppAtIndex = listOf<String>() // index of installed apps
+                var removeAppAtIndex = listOf<String>() // index of database apps
 
-            if (dbAppList.isNullOrEmpty()) {
-                installedApps.forEach {
-                    dbHandler!!.addNewApp(it)
+                if (dbAppList.isNullOrEmpty()) {
+                    installedApps.forEach {
+                        dbHandler!!.addNewApp(it)
+                    }
+                    dbAppList = installedApps
+                } else {
+                    updateAppAtIndex = appIndicesToUpdate(dbAppList!!, installedApps)
+                    removeAppAtIndex = appIndicesToRemove(dbAppList!!, installedApps)
                 }
-                dbAppList = installedApps
-            } else {
-                updateAppAtIndex = appIndicesToUpdate(dbAppList!!, installedApps)
-                removeAppAtIndex = appIndicesToRemove(dbAppList!!, installedApps)
-            }
 
-            if (updateAppAtIndex.any { it != "nothing" }) { // installed apps list has updated
-                updateAppAtIndex.forEachIndexed { index, i ->
-                    installedApps[index].let { instApp ->
-                        when (i) {
-                            "add" -> dbHandler!!.addNewApp(instApp)
-                            "update" -> dbHandler!!.updateApp(instApp)
-                            // else app remained the same (i==0)
+                if (updateAppAtIndex.any { it != "nothing" }) { // installed apps list has updated
+                    updateAppAtIndex.forEachIndexed { index, i ->
+                        installedApps[index].let { instApp ->
+                            when (i) {
+                                "add" -> dbHandler!!.addNewApp(instApp)
+                                "update" -> dbHandler!!.updateApp(instApp)
+                                // else app remained the same (i==0)
+                            }
                         }
                     }
                 }
-            }
-            if (removeAppAtIndex.any { it != "nothing" }) { // got apps to delete: installed apps list has updated
-                removeAppAtIndex.forEachIndexed { index, i ->
-                    dbAppList!![index].let { dbApp ->
-                        if (i == "remove") dbHandler!!.deleteApp(dbApp.packageName)
+                if (removeAppAtIndex.any { it != "nothing" }) { // got apps to delete: installed apps list has updated
+                    removeAppAtIndex.forEachIndexed { index, i ->
+                        dbAppList!![index].let { dbApp ->
+                            if (i == "remove") dbHandler!!.deleteApp(dbApp.packageName)
+                        }
                     }
                 }
+                // else do nothing as apps have not changed
             }
-            // else do nothing as apps have not changed
         }
     }
 

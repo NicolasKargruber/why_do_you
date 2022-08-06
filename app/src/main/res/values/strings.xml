@@ -34,10 +34,10 @@
     <string name="settings">Settings</string>
     <string name="more">More</string>
     <string name="about">About</string>
-    <string name="favorite">Favorite</string>
-    <string name="content_description_favorite">Find favourites, Image View, tap to find</string>
-    <string name="content_description_settings">Open settings, Image View, tap to open</string>
-    <string name="content_description_more">Open menu, Image View, tap to inflate menu</string>
+    <string name="refresh">Refresh</string>
+    <string name="content_description_favorite">Refresh apps, Image View, tap to refresh</string>
+    <string name="content_description_settings">Open menu, Image View, tap to open settings</string>
+    <string name="content_description_more">Open menu, Image View, tap to open about me screen</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="task_completed">Task  completed</string>

@@ -17,6 +17,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_why_do_you_launcher"
         android:label="@string/app_name"
+        android:noHistory = "true"
         android:roundIcon="@mipmap/ic_why_do_you_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeKeeper"

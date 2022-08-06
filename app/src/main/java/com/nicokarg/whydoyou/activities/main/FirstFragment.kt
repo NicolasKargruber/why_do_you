@@ -20,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.databinding.FragmentFirstBinding
 import com.nicokarg.whydoyou.services.YourService
@@ -121,6 +122,7 @@ class FirstFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         Log.d(logTag, "Fragment resume")
         binding.firstPermissionPackageUsageStats.buttonPermission.let { pusBtn ->
             binding.firstPermissionSystemAlertWindow.buttonPermission.let { sawBtn ->

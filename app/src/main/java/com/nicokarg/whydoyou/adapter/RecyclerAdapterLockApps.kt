@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.model.AppModal
+import com.nicokarg.whydoyou.viewmodel.LockAppsViewModel
 
 class RecyclerAdapterLockApps(
     val context: Context,
-    private val appList: List<AppModal>,
+    val viewModel:LockAppsViewModel,
     val setIsLockedInDB: (String, Boolean) -> Unit,
     private val applicationPackage: String
 ) :
@@ -29,6 +30,8 @@ class RecyclerAdapterLockApps(
 
     val logTag: String = "RecyclerAdapterLockApps"
     var showSystemApps = true
+
+    private val appList get() = viewModel.dbAppList.value?: listOf()
 
     private val notLockableStrings = mapOf(
         true to context.getString(R.string.not_lockable_system_app),
@@ -58,7 +61,6 @@ class RecyclerAdapterLockApps(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d(logTag,"onBindViewHolder start")
         holder.apply {
             appList[position].let { app -> // app is either from nsAppList or appList
                 appIcon.setImageDrawable(app.icon.second)
@@ -69,7 +71,13 @@ class RecyclerAdapterLockApps(
                         itemView.isGone = true
                         itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
                         return // stop doing the rest of here
-                    }
+                    } // else app is WhyDoYou
+                    itemView.isVisible = true
+                    itemView.layoutParams =
+                        RecyclerView.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
                     isVisible = true
                     lockButton.isInvisible = true
                     setOnClickListener {
@@ -96,7 +104,6 @@ class RecyclerAdapterLockApps(
                 }
             }
         }
-        Log.d(logTag,"onBindViewHolder finished")
     }
 
     override fun onViewRecycled(holder: ViewHolder) {

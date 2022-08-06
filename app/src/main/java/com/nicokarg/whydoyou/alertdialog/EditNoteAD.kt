@@ -33,7 +33,7 @@ class EditNoteAD(
 
             val messageMap = mapOf(
                 true to "Respond with a reason in the text field beneath",
-                false to "Respond with the same reason"
+                false to "Respond with the same reason as listed below"
             )
 
             builder.setTitle("Note")

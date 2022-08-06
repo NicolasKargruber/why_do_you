@@ -24,6 +24,20 @@ class LockAppsViewModel:ViewModel() {
         else apps.map { it.isLocked }.count { it }
     }
 
+    fun readApps() {
+        dbAppList.value = dbHandler!!.readApps()
+        dbAppList.value!!.sortByName()
+    }
+
+    fun readAppsInBG() {
+        val apps = dbHandler!!.readApps()
+        apps.sortByName()
+        dbAppList.postValue(apps)
+    }
+
+    private fun MutableList<AppModal>.sortByName() {
+        this.sortWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+    }
 
 
 

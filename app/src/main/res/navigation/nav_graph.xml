@@ -41,6 +41,9 @@
         android:name="com.nicokarg.whydoyou.activities.main.LockAppsFragment"
         tools:layout="@layout/fragment_lock_apps"
         android:label="LockAppsFragment" >
+        <action
+            android:id="@+id/action_lockAppsFragment_to_selectGameFragment"
+            app:destination="@id/selectGameFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectGameFragment"
@@ -56,5 +59,8 @@
         <action
             android:id="@+id/action_select_game_fragment_to_notesFragment"
             app:destination="@id/notesFragment" />
+        <action
+            android:id="@+id/action_selectGameFragment_to_lockAppsFragment"
+            app:destination="@id/lockAppsFragment" />
     </fragment>
 </navigation>

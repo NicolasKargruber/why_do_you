@@ -118,7 +118,7 @@ class NotesFragment : Fragment() {
 
     // onPositive will cancel the dialog when true and will not if false is returned
     private fun onPositive(noteText: String, pos: Int): String? {
-        viewModel!!.apply {
+        viewModel.apply {
             Log.d(logTag, "${noteText.length} chars long and ${noteText.wordCount()} words")
             if (noteText.isBlank()) return errorMap[empty]
             else if (pos == -1) {
