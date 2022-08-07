@@ -9,11 +9,15 @@
             type="com.nicokarg.whydoyou.viewmodel.LockAppsViewModel" />
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:id="@+id/lock_app_coord_layout"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/bottom_navigation_bar_size">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/bottom_navigation_bar_size"
-            android:clipToPadding="false"
             android:orientation="vertical">
 
             <TextView
@@ -37,15 +41,18 @@
                 tools:text="4 apps" />
 
             <View
-                android:background="?attr/colorOutline" android:alpha="0.6"
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:layout_marginTop="@dimen/space_small"
-                android:layout_height="1dp" />
+                android:alpha="0.6"
+                android:background="?attr/colorOutline" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lock_apps_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>
 

@@ -176,7 +176,7 @@ class DBHandler(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null
             values,
             "$PACKAGE_COL=?",
             arrayOf(updatedApp.packageName)
-        ) // package name remains the sam always
+        ) // package name is unique
         db.close()
 
         Log.d(logTag, "Updated app in DB: ${updatedApp.name}")

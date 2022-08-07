@@ -31,6 +31,10 @@ class LockScreenActivity : AppCompatActivity() {
     private val activitiesFragment = ActivitiesFragment()
     private val defaultLockFragment = puzzleFragment
 
+    companion object{
+        var taskIsCompleted = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,12 +64,18 @@ class LockScreenActivity : AppCompatActivity() {
 
         // Adding a Fragment instance to the FragmentContainerView
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container_lock_screen, getLockScreenFragment, LOCK_SCREEN_FRAGMENT_TAG)
+            .add(
+                R.id.fragment_container_lock_screen,
+                getLockScreenFragment,
+                LOCK_SCREEN_FRAGMENT_TAG
+            )
             .commit()
+
+        taskIsCompleted = false
     }
 
-    fun initIcon(tv:TextView) {
-        tv.setCompoundDrawablesRelativeWithIntrinsicBounds(null,null,_viewModel!!.appIcon,null)
+    fun initIcon(tv: TextView) {
+        tv.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, _viewModel!!.appIcon, null)
     }
 
     private val getLockScreenFragment: Fragment
@@ -86,11 +96,13 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     // makes sure main activity appears when app is clicked
-    override fun onPause() {
+    override fun onPause() { // when task was not completed and this app was closed
         super.onPause()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish() // close lock screen activity
+        revertToMainActivity()
+    }
+
+    fun revertToMainActivity() {
+        finishAffinity() // close all opened activities lock screen activity
     }
 
     fun updateLastLocked() {

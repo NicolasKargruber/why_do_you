@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
             val apps = dbApps.filter { dbApp -> dbApp.packageName == instApp.packageName }
             if (apps.isEmpty()) updateIndexList.add("add") // not in the list
             else if (
-                apps.first().isEqualTo(instApp)
+                !apps.first().isEqualTo(instApp)
             ) updateIndexList.add("update") // apps should hold only instance, update it
             else updateIndexList.add("nothing") // nothing of both
         }
@@ -251,10 +251,6 @@ class MainActivity : AppCompatActivity() {
             else removeIndexList.add("nothing") // do nothing
         }
         return removeIndexList // index of database apps
-    }
-
-    private fun appsAreEqual(dbApp: AppModal, instApp: AppModal): Boolean {
-        return instApp.name == dbApp.name && instApp.icon.first == dbApp.icon.first && instApp.category == dbApp.category
     }
 
     override fun onDestroy() {

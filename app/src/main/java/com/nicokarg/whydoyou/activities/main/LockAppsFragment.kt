@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.nicokarg.whydoyou.R
 import com.nicokarg.whydoyou.adapter.RecyclerAdapterLockApps
 import com.nicokarg.whydoyou.database.DBHandler
@@ -122,10 +123,11 @@ class LockAppsFragment : Fragment() {
                     progressCircle!!.show()
                 }
                 updateDbIfNecessary()
-                _viewModel!!.readAppsInBG()
+                //_viewModel!!.readAppsInBG()
                 runOnUiThread {
                     progressCircle!!.dismiss()
-                    binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
+                    // binding.lockAppsRecyclerView.adapter!!.notifyDataSetChanged()
+                    Snackbar.make(requireView(),"List of installed apps refreshed",Snackbar.LENGTH_SHORT).show()
                 }
             }
         }

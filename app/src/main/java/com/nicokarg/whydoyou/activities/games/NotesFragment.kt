@@ -175,7 +175,7 @@ class NotesFragment : Fragment() {
             disableViews()
             (activity as LockScreenActivity).updateLastLocked()
             Handler(Looper.getMainLooper()).postDelayed({
-                requireActivity().finishAffinity()
+                (requireActivity() as LockScreenActivity).revertToMainActivity()
             }, 3000)
         }
     }
