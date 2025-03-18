@@ -1,5 +1,11 @@
-﻿# why_do_you
+### 🔒 WhyDoYou 🔒
+An app designed to make you pause and reflect before diving into social media and other distractions. Instead of outright blocking apps, **WhyDoYou** challenges you to ask yourself:
 
-This is a project i am currently working on. The result should be an application that features a lock screen that opens when using a social media (and other) application.
+*"Why do you want to open this?"* 🤔
 
-The user must do the displayed task on the lock screen to continue and open the desired application. My goal is to not permit the usage of scial media, but make the user ask himself: " WHY DO YOU want to use ...".
+### 🚀 How It Works
+- A lock screen appears when opening a selected app. 🔐
+- Complete the displayed task to proceed. ✅
+- Build awareness of your app usage habits. 🧠
+- Reduce mindless scrolling and stay intentional. 🎯
+- Instead of restriction, why_do_you encourages mindful choices. 💡
